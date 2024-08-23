@@ -1,0 +1,9 @@
+[submodule "ham-nft/lib/forge-std"]
+	path = ham-nft/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "ham-nft/lib/openzeppelin-contracts"]
+	path = ham-nft/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "ham-nft/lib/solmate"]
+	path = ham-nft/lib/solmate
+	url = https://github.com/transmissions11/solmate

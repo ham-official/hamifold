@@ -1,0 +1,217 @@
+<template>
+  <main class="container mx-auto py-6">
+    <section
+      class="flex flex-col w-full bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6"
+      :class="{
+        'gap-4': numberOfContracts > 0,
+        'gap-2': numberOfContracts === 0,
+      }">
+      <h2 class="font-display text-display-sm uppercase font-semibold" :class="{
+        'text-center': numberOfContracts === 0,
+        'mb-4': numberOfContracts > 0,
+      }">
+        contracts
+      </h2>
+      <ul v-if="contracts" class="flex flex-wrap items-center gap-3">
+        <li v-for="(item, index) in contracts" :key="index"
+          class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px]" :class="{
+            'mr-auto': index === numberOfContracts - 1,
+            'ham-shadow': item.label === 'ERC-721',
+          }">
+          <template v-if="item.label === 'ERC-721'">
+            <NuxtLink :to="`/new-contract/${item.contractAddress}`">
+              <p class="text-gray-900 font-semibold">
+                {{ truncate(item.contractAddress) }}
+              </p>
+              <p class="text-gray-500 mb-3 line-clamp-1">{{ item.name }}</p>
+              <div class="flex justify-between items-center">
+                <Badge color="primary" size="sm" :label="item.label" />
+                <p class="text-sm">{{ item.symbol }}</p>
+              </div>
+            </NuxtLink>
+          </template>
+          <template v-else>
+            <p class="text-gray-900 font-semibold">
+              {{ truncate(item.contractAddress) }}
+            </p>
+            <p class="text-gray-500 mb-3 line-clamp-1">{{ item.name }}</p>
+            <div class="flex justify-between items-center">
+              <Badge color="primary" size="sm" :label="item.label" />
+              <p class="text-sm">{{ item.symbol }}</p>
+            </div>
+          </template>
+        </li>
+      </ul>
+      <template v-if="numberOfContracts === 0">
+        <p class="text-center text-gray-400">
+          Once you create a contract, it will be displayed here
+        </p>
+      </template>
+    </section>
+    <section v-if="tokens">
+      <TokensList :token-cards="tokens.map((t) => t.metadata)" />
+    </section>
+  </main>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import navbarRoutes from "@/data/navbar.json";
+import {
+  hamERC721ListOfContracts,
+  hamERC721EditionListOfContracts,
+  listERC721ByOwner,
+  getContractType,
+  listNfts,
+} from "@/utils/contractListingUtilities.js";
+import { metadataNormalizer } from "@/utils/normalizers/metadataNormalizer";
+import { truncateAddress } from "@/utils/truncateAddress";
+
+definePageMeta({
+  middleware: ["auth"],
+});
+export default {
+  data() {
+    return {
+      inventory: null,
+      contracts: null,
+      numberOfContracts: null,
+      tokens: null,
+      newTokens: null,
+      newContracts: null,
+      selectedContract: null,
+    };
+  },
+  computed: {
+    ...mapGetters(["isConnected", "wallet"]),
+    navbarRoutes() {
+      return navbarRoutes.routes;
+    },
+    numberOfContracts() {
+      return (this.contracts && this.contracts.length) ?? 0;
+    },
+  },
+  async mounted() {
+    const localStorageContracts = JSON.parse(
+      localStorage.getItem("contractInventory")
+    );
+    this.newContracts = [];
+    this.contracts = localStorageContracts ? localStorageContracts : [];
+
+    hamERC721ListOfContracts(this.wallet).then((res) => {
+      res.forEach((c) => this.newContracts.push({ ...c, label: "ERC-721" }));
+      localStorage.setItem(
+        "contractInventory",
+        JSON.stringify(this.newContracts)
+      );
+      if (this.newContracts.length >= this.contracts.length) {
+        this.contracts = this.newContracts;
+      }
+    });
+    hamERC721EditionListOfContracts(this.wallet).then((res) => {
+      res.forEach((c) => this.newContracts.push({ ...c, label: "ERC-721-EDITION" }));
+      localStorage.setItem(
+        "contractInventory",
+        JSON.stringify(this.newContracts)
+      );
+      if (this.newContracts.length >= this.contracts.length) {
+        this.contracts = this.newContracts;
+      }
+    });
+
+    this.numberOfContracts = this.contracts.length;
+
+    const tokenInventory = JSON.parse(localStorage.getItem("tokenInventory"));
+    this.tokens = tokenInventory ? tokenInventory : [];
+    this.newTokens = [];
+
+    if (tokenInventory && tokenInventory.length) {
+      this.tokens = tokenInventory;
+      const tokens = await listNfts(this.wallet);
+      localStorage.setItem("tokenInventory", JSON.stringify(tokens));
+      this.tokens = tokens;
+    } else {
+      this.getNfts();
+    }
+  },
+  methods: {
+    truncate(address) {
+      return truncateAddress(address);
+    },
+    async getNfts() {
+      try {
+        const BLOCK_EXPLORER_URL = import.meta.env.VITE_BLOCK_EXPLORER_URL;
+        const getNftsUrl = `${BLOCK_EXPLORER_URL}/api/v2/addresses/${this.wallet}/nft?type=ERC-721%2CERC-404%2CERC-1155`;
+
+        const request = await fetch(getNftsUrl);
+        const jsonPromise = await request.json();
+        const tokens = jsonPromise.items;
+        const contracts = new Map();
+        const tokenInventory = [];
+        for (let i = 0; i < tokens.length; i++) {
+          const token = tokens[i];
+          if (!contracts.has(token.token.address)) {
+            const contractType = await getContractType(token.token.address);
+            if (contractType === "ERC-721") {
+              contracts.set(token.token.address, contractType);
+              const nfts = await listERC721ByOwner(
+                this.wallet,
+                token.token.address
+              );
+              nfts.forEach((nft) => {
+                fetch(nft.uri).then((res) => {
+                  res.json().then((metadata) => {
+                    this.newTokens.push({
+                      ...tokens[i],
+                      contract: token.token.address,
+                      metadata: metadataNormalizer(metadata),
+                    });
+                    localStorage.setItem(
+                      "tokenInventory",
+                      JSON.stringify(this.newTokens)
+                    );
+                    if (tokenInventory.length >= this.tokens.length) {
+                      this.tokens = this.newTokens;
+                    }
+                  });
+                });
+              });
+            }
+            if (contractType === "ERC-721-EDITION") {
+              const nft = {
+                tokenId: token.id,
+                typeId: token.attributes
+                  ? token.attributes[0].value
+                  : token.metadata.attributes[0].value,
+                metadata: {
+                  description: token.metadata.description,
+                  name: token.metadata.name,
+                  type: "ERC-721-EDITION",
+                  image: token.metadata.image,
+                  imageUrl: token.metadata.image,
+                },
+                type: "ERC-721-EDITION",
+                contract: {
+                  contractAddress: token.token.address,
+                  name: token.token.name,
+                  symbol: token.token.symbol,
+                },
+              };
+              this.newTokens.push(nft);
+              localStorage.setItem(
+                "tokenInventory",
+                JSON.stringify(this.newTokens)
+              );
+              if (tokenInventory.length >= this.tokens.length) {
+                this.tokens = this.newTokens;
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+};
+</script>

@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @variants responsive {
+      .masonry {
+          column-gap: 1.5em;
+          column-count: 1;
+      }
+      .masonry-sm {
+          column-gap: 1.5em;
+          column-count: 2;
+      }
+      .masonry-md {
+          column-gap: 1.5em;
+          column-count: 3;
+      }
+      .break-inside {
+          break-inside: avoid;
+      }
+
+  }
+}
+
+@font-face {
+  font-family: 'Instrument';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Instrument Sans Regular'), local('Instrument-Sans-Regular'),
+    url(../fonts/Instrument/Instrument-Sans-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Instrument Sans Medium'), local('Instrument-Sans-Medium'),
+    url(../fonts/Instrument/Instrument-Sans-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Instrument Sans Semibold'), local('Instrument-Sans-Semibold'),
+    url(../fonts/Instrument/Instrument-Sans-Semibold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Instrument Sans Bold'), local('Instrument-Sans-Bold'),
+    url(../fonts/Instrument/Instrument-Sans-Bold.ttf) format('truetype');
+}
+
+
+
+
+@font-face {
+  font-family: 'Instrument Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Instrument Sans Condensed Regular'), local('Instrument-Sans-Condensed-Regular'),
+    url(../fonts/Instrument/Instrument-Sans-Condensed-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Condensed';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Instrument Sans Condensed Medium'), local('Instrument-Sans-Condensed-Medium'),
+    url(../fonts/Instrument/Instrument-Sans-Condensed-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Condensed';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Instrument Sans Condensed Semibold'), local('Instrument-Sans-Condensed-Semibold'),
+    url(../fonts/Instrument/Instrument-Sans-Condensed-Semibold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Instrument Sans Condensed Bold'), local('Instrument-Sans-Condensed-Bold'),
+    url(../fonts/Instrument/Instrument-Sans-Condensed-Bold.ttf) format('truetype');
+}
+
+html, body { height: 100%;}
+
+body footer {
+  position: sticky;
+  top: 100vh;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.body-overflow-hidden {
+  overflow: hidden;
+}
+
+.ham-shadow:not([disabled]):hover {
+  box-shadow: 0 4px 0 0 #121926 ;
+  transform: translate(0px, -4px);
+}
+.ham-shadow--active {
+  box-shadow: 0 4px 0 0 #121926;
+}
+
+.ham-shadow:not([disabled]):focus {
+  box-shadow: 0 0 0 0 #121926;
+  transform: translate(0px, 0px);
+}

@@ -1,0 +1,1 @@
+export const lambdasPath = '/.netlify/functions'

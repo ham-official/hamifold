@@ -1,0 +1,32 @@
+{
+  "name": "nifty-boilerplate",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "nifty": "netlify dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@types/node": "^18",
+    "nuxt": "^3.6.1"
+  },
+  "dependencies": {
+    "@nuxtjs/svg": "^0.4.0",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "@pinata/sdk": "2.1.0",
+    "@tailwindcss/typography": "^0.5.10",
+    "@web3modal/ethers5": "^5.0.4",
+    "axios": "^1.7.2",
+    "busboy": "^1.6.0",
+    "crypto-js": "^4.2.0",
+    "ethers": "5.7.2",
+    "form-data": "^4.0.0",
+    "formdata-node": "^6.0.3",
+    "netlify-cli": "^15.8.0",
+    "vuex": "^4.1.0"
+  }
+}
