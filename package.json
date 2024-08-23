@@ -19,7 +19,7 @@
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@pinata/sdk": "2.1.0",
     "@tailwindcss/typography": "^0.5.10",
-    "@web3modal/ethers5": "^5.0.4",
+    "@web3modal/ethers5": "~5.0.4",
     "axios": "^1.7.2",
     "busboy": "^1.6.0",
     "crypto-js": "^4.2.0",
