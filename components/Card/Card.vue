@@ -1,12 +1,12 @@
 <template>
-  <div class="h-full border-2 hover:border-2 border-gray-900 rounded-lg overflow-hidden">
+  <div class="flex flex-col h-full border-2 hover:border-2 border-gray-900 rounded-lg overflow-hidden">
     <div class="h-[224px] border-b border-gray-950">
       <IMG :image="image" class="h-full w-full object-cover" />
     </div>
-    <div class="p-4">
+    <div class="p-4 flex flex-col flex-1">
       <p class="text-md font-semibold">{{ name }}</p>
-      <p class="text-md text-gray-500 mb-3 line-clamp-2">{{ description }}</p>
-      <Badge color="primary" size="sm" :label="type" />
+      <p class="text-md text-gray-500 line-clamp-2 mb-3">{{ description }}</p>
+      <Badge class="mt-auto" color="primary" size="sm" :label="type" />
     </div>
   </div>
 </template>
