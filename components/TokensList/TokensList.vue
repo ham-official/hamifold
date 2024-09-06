@@ -20,7 +20,7 @@
       </div>
       <ul class="grid grid-cols-4 gap-4">
         <li v-for="(tokenCard, index) in visibleTokens" :key="`token-card-${index}`">
-          <TokenCard :name="tokenCard.name" :description="tokenCard.description" :image="tokenCard.image"
+          <Card :name="tokenCard.name" :description="tokenCard.description" :image="tokenCard.image"
             :type="tokenCard.type ?? '-'" />
         </li>
       </ul>
