@@ -100,9 +100,9 @@ export default {
         "cursor-not-allowed bg-gray-300 text-gray-400 stroke-current font-display uppercase font-semibold":
           this.color === "white" && this.disabled,
 
-        "bg-gray-200 text-gray-800 hover:bg-gray-400 hover:text-gray-900 focus:bg-gray-200":
+        "bg-gray-200 border border-gray-200 text-gray-800 hover:bg-gray-400 hover:border-gray-400 hover:text-gray-900 focus:bg-gray-200 focus:border-gray-200":
           this.color === "gray" && !this.disabled,
-        "cursor-not-allowed bg-gray-100 text-gray-400 stroke-current":
+        "cursor-not-allowed bg-gray-100 border border-gray-100 text-gray-400 stroke-current":
           this.color === "gray" && this.disabled,
 
         "bg-gray-900 text-white border border-gray-900 hover:text-gray-900 focus:text-gray-900 hover:bg-white hover:text-gray-900 focus:bg-white font-display uppercase font-semibold":
