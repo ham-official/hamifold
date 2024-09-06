@@ -18,10 +18,10 @@
           <li v-for="(item, index) in creations" :key="`creation-${index}`">
             <template v-if="item.url">
               <NuxtLink :to="`/c/${item.url}`">
-                <TokenCard v-bind="item" class="ham-shadow" />
+                <Card v-bind="item" class="ham-shadow" />
               </NuxtLink>
             </template>
-            <TokenCard v-else v-bind="item" />
+            <Card v-else v-bind="item" />
           </li>
         </ul>
         <div v-else class="text-center">
