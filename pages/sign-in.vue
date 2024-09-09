@@ -17,7 +17,6 @@ export default {
     ...mapGetters(['isConnected'])
   },
   beforeRouteEnter(to, from, next) {
-    console.log(to, from)
     if (from) {
       next(vm => {
         if (vm.isConnected) {
@@ -28,7 +27,7 @@ export default {
     }
   },
   watch: {
-    isConnected(newValue, oldValue) {
+    isConnected(newValue) {
       if (newValue) {
         this.$router.push('/home')
       }
