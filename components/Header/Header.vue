@@ -11,10 +11,6 @@
         </NuxtLink>
       </nav>
       <div class="flex gap-2 lg:gap-4">
-        <CTA v-if="isConnected" size="lg" :color="$route && $route.path === '/inventory' ? '' : 'gray'"
-          class="uppercase font-semibold font-display">
-          <NuxtLink to="/inventory">Assets</NuxtLink>
-        </CTA>
         <CTA v-if="isConnected" size="lg" color="primary" iconLeft="plus" @click="handleShowCreateModal">Create</CTA>
         <DropdownMenu :closeCTA="{ icon: '', label: 'Connect wallet', color: 'primary' }"
           :openCTA="{ icon: 'user-03', label: truncate(wallet), color: 'white' }" />
