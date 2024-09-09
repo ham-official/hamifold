@@ -48,21 +48,20 @@
         </p>
       </template>
     </section>
-    <section v-if="tokens">
-      <TokensList :token-cards="tokens.map((t) => t.metadata)" />
+    <section v-if="creations">
+      <CardsList :cards="creations.map((t) => t.metadata)" title="creations" @click="handleClick($event)" />
     </section>
   </main>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import navbarRoutes from "@/data/navbar.json";
 import {
   hamERC721ListOfContracts,
   hamERC721EditionListOfContracts,
   listERC721ByOwner,
-  getContractType,
-  listNfts,
+  getContractType
 } from "@/utils/contractListingUtilities.js";
 import { metadataNormalizer } from "@/utils/normalizers/metadataNormalizer";
 import { truncateAddress } from "@/utils/truncateAddress";
@@ -73,13 +72,13 @@ definePageMeta({
 export default {
   data() {
     return {
-      inventory: null,
       contracts: null,
+      isFetching: false,
       numberOfContracts: null,
-      tokens: null,
-      newTokens: null,
+      newTokens: [],
       newContracts: null,
       selectedContract: null,
+      creations: null,
     };
   },
   computed: {
@@ -92,6 +91,7 @@ export default {
     },
   },
   async mounted() {
+    // 1. First, fetch contracts
     const localStorageContracts = JSON.parse(
       localStorage.getItem("contractInventory")
     );
@@ -120,23 +120,44 @@ export default {
     });
 
     this.numberOfContracts = this.contracts.length;
-
+    // 2. Second, fetch tokens and Claim pages
     const tokenInventory = JSON.parse(localStorage.getItem("tokenInventory"));
-    this.tokens = tokenInventory ? tokenInventory : [];
-    this.newTokens = [];
-
     if (tokenInventory && tokenInventory.length) {
-      this.tokens = tokenInventory;
-      const tokens = await listNfts(this.wallet);
-      localStorage.setItem("tokenInventory", JSON.stringify(tokens));
-      this.tokens = tokens;
+      // If there are tokens in local storage, load them
+      const claimPagesInventory = JSON.parse(localStorage.getItem("claimPagesInventory"));
+      if (claimPagesInventory) {
+        this.creations = [...tokenInventory, ...claimPagesInventory]
+      } else {
+        this.creations = tokenInventory;
+      }
     } else {
-      this.getNfts();
+      this.creations = []
     }
+    // 3. Renew Tokens and ClaimPages in background
+    this.getNfts()
+      .then(async () => {
+        const claimPages = await this.getERC721ClaimPages()
+        claimPages.forEach(page => {
+          if (this.creations.filter(c => c.url === page.url).length === 0) {
+            this.creations.push(page)
+          }
+        })
+        localStorage.setItem(
+          "claimPagesInventory",
+          JSON.stringify(claimPages)
+        );
+      })
+      .catch(err => console.error(err))
+
   },
   methods: {
+    ...mapActions(['setModalData', 'setShowGeneralModal']),
     truncate(address) {
       return truncateAddress(address);
+    },
+    async getERC721ClaimPages() {
+      const pages = await getClaimPages(this.wallet);
+      return pages.map(p => { p.metadata.type = p.type; p.metadata.badgeColor = 'primary-invert'; return { ...p } })
     },
     async getNfts() {
       try {
@@ -145,33 +166,34 @@ export default {
 
         const request = await fetch(getNftsUrl);
         const jsonPromise = await request.json();
-        const tokens = jsonPromise.items;
+        const creations = jsonPromise.items;
         const contracts = new Map();
         const tokenInventory = [];
-        for (let i = 0; i < tokens.length; i++) {
-          const token = tokens[i];
-          if (!contracts.has(token.token.address)) {
-            const contractType = await getContractType(token.token.address);
+        for (let i = 0; i < creations.length; i++) {
+          const token = creations[i];
+          const tokenAddress = token.token.address
+          if (!contracts.has(tokenAddress)) {
+            const contractType = await getContractType(tokenAddress);
             if (contractType === "ERC-721") {
-              contracts.set(token.token.address, contractType);
+              contracts.set(tokenAddress, contractType);
               const nfts = await listERC721ByOwner(
                 this.wallet,
-                token.token.address
+                tokenAddress
               );
               nfts.forEach((nft) => {
                 fetch(nft.uri).then((res) => {
                   res.json().then((metadata) => {
                     this.newTokens.push({
-                      ...tokens[i],
-                      contract: token.token.address,
+                      ...creations[i],
+                      contract: tokenAddress,
                       metadata: metadataNormalizer(metadata),
                     });
                     localStorage.setItem(
                       "tokenInventory",
                       JSON.stringify(this.newTokens)
                     );
-                    if (tokenInventory.length >= this.tokens.length) {
-                      this.tokens = this.newTokens;
+                    if (tokenInventory.length >= this.creations.length) {
+                      this.creations = this.newTokens;
                     }
                   });
                 });
@@ -192,7 +214,7 @@ export default {
                 },
                 type: "ERC-721-EDITION",
                 contract: {
-                  contractAddress: token.token.address,
+                  contractAddress: tokenAddress,
                   name: token.token.name,
                   symbol: token.token.symbol,
                 },
@@ -202,8 +224,8 @@ export default {
                 "tokenInventory",
                 JSON.stringify(this.newTokens)
               );
-              if (tokenInventory.length >= this.tokens.length) {
-                this.tokens = this.newTokens;
+              if (tokenInventory.length >= this.creations.length) {
+                this.creations = this.newTokens;
               }
             }
           }
@@ -212,6 +234,21 @@ export default {
         console.error(error);
       }
     },
+    async handleClick(data) {
+      const creation = this.creations[data.index]
+      const pageUrl = creation.url
+      if (pageUrl) {
+        this.$router.push(`/c/${pageUrl}`)
+      } else {
+        const data = creation.metadata
+        this.setModalData({
+          title: 'token',
+          components: ["Token"],
+          data
+        });
+        this.setShowGeneralModal(true);
+      }
+    }
   },
 };
 </script>

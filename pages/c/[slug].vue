@@ -28,10 +28,9 @@
                   </div>
                   <div class="border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl">
                     <p class="text-center uppercase text-display font-semibold text-gray-500">Total minted</p>
-                    <p class="text-center uppercase text-display font-semibold">{{ claimPageData.mintRules.totalSupply
-                      }}
-                      / {{
-                        claimPageData.mintRules.maxSupply === 0 ? '∞' : claimPageData.mintRules.maxSupply }}</p>
+                    <p class="text-center uppercase text-display font-semibold">
+                      {{ claimPageData.mintRules.totalSupply }} / {{ (maxSupply === 0 || maxSupply === '0') ? '∞' :
+                        maxSupply }}</p>
                   </div>
                   <div class="border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl">
                     <p class="text-center uppercase text-display font-semibold text-gray-500">Type</p>
@@ -149,33 +148,52 @@ export default {
             description: this.tokenEditionMetadata[2]
           },
           mintRules: {
-            startDate: this.tokenEditionMetadata[3].toNumber(),
-            endDate: this.tokenEditionMetadata[4].toNumber(),
-            maxSupply: this.tokenEditionMetadata[5].toNumber(),
-            isLimited: this.tokenEditionMetadata[5].toNumber() > 0,
-            totalSupply: this.tokenEditionMetadata[6].toNumber(),
-            price: utils.formatUnits(this.tokenEditionMetadata[7], 'ether'),
-            maxTokensPerWallet: this.tokenEditionMetadata[8].toNumber()
+            startDate: this.tokenEditionMetadata[3],
+            endDate: this.tokenEditionMetadata[4],
+            maxSupply: this.tokenEditionMetadata[5],
+            isLimited: this.tokenEditionMetadata[5] > 0,
+            totalSupply: this.tokenEditionMetadata[6],
+            price: this.tokenEditionMetadata[7],
+            maxTokensPerWallet: this.tokenEditionMetadata[8]
           }
         }
       }
       return null
     },
     startDate() {
-      if (this.claimPageData.mintRules.startDate) {
-        return new Date(this.claimPageData.mintRules.startDate * 1000)
+      if (this.claimPageData.mintRules.startDate && this.claimPageData.mintRules.startDate > 0) {
+        return new Date(parseInt(this.claimPageData.mintRules.startDate) * 1000)
       }
       return null
     },
     endDate() {
-      if (this.claimPageData.mintRules.endDate) {
+      if (this.claimPageData.mintRules.endDate && this.claimPageData.mintRules.endDate > 0) {
         return new Date(this.claimPageData.mintRules.endDate * 1000)
       }
       return null
     },
+    maxSupply() {
+      if (this.claimPageData.mintRules.maxSupply && this.claimPageData.mintRules.maxSupply > 0) {
+        return this.claimPageData.mintRules.maxSupply
+      } else {
+        return 0
+      }
+    }
   },
   async mounted() {
-    this.getPageData()
+
+    const claimPage = localStorage.getItem(this.slug)
+    if (claimPage) {
+      this.isFetching = true
+      const claimPageObj = JSON.parse(claimPage)
+      this.contract = claimPageObj.contract
+      this.nextTokenTypeId = claimPageObj.nextTokenTypeId
+      this.tokenEditionMetadata = claimPageObj.tokenEditionMetadata
+      this.isFetching = false
+      this.formatTokenMetadata(this.contractAddressFromURL, this.tokenTypeFromURL)
+    } else {
+      this.getPageData()
+    }
   },
   methods: {
     closeCheckoutModal() {
@@ -195,12 +213,30 @@ export default {
           this.contract = await getContractInfo(this.contractAddressFromURL)
           const tokenType = await nextTokenTypeId(this.contractAddressFromURL)
           this.nextTokenTypeId = tokenType.toNumber();
-          this.tokenEditionMetadata = await getTokenEditionMetadata(this.contractAddressFromURL, this.tokenTypeFromURL)
+          await this.formatTokenMetadata()
         } catch (error) {
           console.log(error)
         }
         this.isFetching = false
       }
+    },
+    async formatTokenMetadata() {
+      const tokenEditionMetadata = await getTokenEditionMetadata(this.contractAddressFromURL, this.tokenTypeFromURL)
+      this.tokenEditionMetadata = tokenEditionMetadata.map((val, index) => {
+        console.log(Object.hasOwn('_isBigNumber', val), val['_isBigNumber'], val)
+        if (val['_isBigNumber'] && index !== 7) {
+          return val.toNumber()
+        } if (val['_isBigNumber'] && index === 7) {
+          return utils.formatUnits(val, 'ether')
+        } else {
+          return val
+        }
+      })
+      localStorage.setItem(this.slug, JSON.stringify({
+        contract: this.contract,
+        nextTokenTypeId: this.nextTokenTypeId,
+        tokenEditionMetadata: this.tokenEditionMetadata
+      }))
     },
     async handleClaim(itemsToBeMinted) {
       this.isMinting = true
