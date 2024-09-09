@@ -6,7 +6,7 @@
     <div class="p-4 flex flex-col flex-1">
       <p class="text-md font-semibold">{{ name }}</p>
       <p class="text-md text-gray-500 line-clamp-2 mb-3">{{ description }}</p>
-      <Badge class="mt-auto" color="primary" size="sm" :label="type" />
+      <Badge class="mt-auto" :color="badgeColor" size="sm" :label="type" />
     </div>
   </div>
 </template>
@@ -29,6 +29,10 @@ export default {
     type: {
       type: String,
       default: 'type'
+    },
+    badgeColor: {
+      type: String,
+      default: 'primary'
     }
   },
 }
