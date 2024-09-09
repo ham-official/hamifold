@@ -5,7 +5,7 @@
       maxTokensPerWallet === 0 ?
         'No limit' :
         maxTokensPerWallet }}</span></p>
-    <p><span class="font-semibold">Tokens minted by you:</span> <span class="float-right">{{ totalSupply }}</span></p>
+    <p><span class="font-semibold">Minted tokens:</span> <span class="float-right">{{ totalSupply }}</span></p>
     <p><span class="font-semibold">Total Tokens:</span> <span class="float-right">{{ totalTokens }}</span></p>
     <p><span class="font-semibold">Available Tokens:</span> <span class="float-right">{{ availableTokens === Infinity ?
       'Limitless' : availableTokens }}</span></p>
