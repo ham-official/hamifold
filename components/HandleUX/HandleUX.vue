@@ -3,7 +3,7 @@
     <Modal v-if="showGeneralModal" :show-default-buttons="true" :confirmCancel="false" size="xl" class="min-h-[419px]">
       <template #header class="relative">
         <p v-if="modalData && modalData.title" class="font-display font-semibold uppercase text-display-sm">{{
-      modalData.title }}</p>
+          modalData.title }}</p>
         <Icon @click="closeGeneralModal" icon="x-close"
           class="absolute top-4 right-4 rounded-full border border-gray-900 p-2.5 cursor-pointer hover:bg-black hover:text-white" />
       </template>
@@ -12,6 +12,7 @@
           <CreateList v-if="modalData.components.includes('CreateList')" />
           <MintList v-if="modalData.components.includes('MintList')" />
           <PublishProgress v-if="modalData.components.includes('PublishProgress')" v-bind="modalData.data" />
+          <Token v-if="modalData.components.includes('Token')" v-bind="modalData.data" />
         </template>
       </template>
       <template #footer>
