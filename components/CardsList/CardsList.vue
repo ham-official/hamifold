@@ -13,8 +13,8 @@
         </ul>
       </div>
       <ul class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <li v-for="(card, index) in visibleTokens" :key="`token-card-${index}`">
-          <Card class="ham-shadow cursor-pointer" v-bind="card" @click="$emit('click', { index })" />
+        <li v-for="(card, index) in visibleTokens" :key="`token-card-${index}`" @click="$emit('click', { index })">
+          <Card class="ham-shadow cursor-pointer" v-bind="card" />
         </li>
       </ul>
     </template>

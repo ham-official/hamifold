@@ -12,8 +12,12 @@
         <p class="font-display text-display-sm font-semibold">{{ name }}</p>
       </li>
       <li>
+        <p class="font-semibold">Token Id</p>
+        <p class="text-gray-500">{{ tokenId }}</p>
+      </li>
+      <li>
         <p class="font-semibold">Description</p>
-        <p>{{ description }}</p>
+        <p class="line-clamp-3 text-gray-500">{{ description }}</p>
       </li>
       <li>
         <Badge color="primary" size="sm" :label="type"></Badge>
@@ -38,7 +42,7 @@ export default {
       default: null
     },
     imageDetails: {
-      type: [String, null],
+      type: [Object, null],
       default: null
     },
     name: {
@@ -47,6 +51,10 @@ export default {
     },
     type: {
       type: [String, null],
+      default: null
+    },
+    tokenId: {
+      type: [Number, null],
       default: null
     },
   },
