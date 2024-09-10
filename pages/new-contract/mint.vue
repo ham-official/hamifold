@@ -20,6 +20,7 @@
       <h2 class="text-gray-600 mb-4">Let's mint your new Token!!!</h2>
       <section class="w-full flex justify-center items-center">
         <div class="w-3/4 h-auto rounded-lg overflow-hidden">
+          <p v-if="!imageIsLoaded" class="text-center">Loading your NFT media</p>
           <IMG v-if="imgUrl" :image="imgUrl" class="w-full h-full object-cover" @load="imageIsLoaded = true" />
         </div>
       </section>
