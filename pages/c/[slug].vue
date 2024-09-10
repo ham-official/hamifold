@@ -14,7 +14,7 @@
             <div class="flex flex-col gap-4">
               <p class="text-display-sm uppercase font-semibold font-display">{{
                 claimPageData.tokenMetadata.title
-              }}
+                }}
                 <span class="lowercase font-medium text-lg"><span class="mx-1">by</span> {{
                   truncate(claimPageData.contract.owner) }}</span>
               </p>
@@ -223,7 +223,6 @@ export default {
     async formatTokenMetadata() {
       const tokenEditionMetadata = await getTokenEditionMetadata(this.contractAddressFromURL, this.tokenTypeFromURL)
       this.tokenEditionMetadata = tokenEditionMetadata.map((val, index) => {
-        console.log(Object.hasOwn('_isBigNumber', val), val['_isBigNumber'], val)
         if (val['_isBigNumber'] && index !== 7) {
           return val.toNumber()
         } if (val['_isBigNumber'] && index === 7) {
