@@ -14,23 +14,10 @@
       </h2>
       <ul v-if="contracts" class="flex flex-wrap items-center gap-3">
         <li v-for="(item, index) in contracts" :key="index"
-          class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px]" :class="{
+          class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px] ham-shadow" :class="{
             'mr-auto': index === numberOfContracts - 1,
-            'ham-shadow': item.label === 'ERC-721',
           }">
-          <template v-if="item.label === 'ERC-721'">
-            <NuxtLink :to="`/new-contract/${item.contractAddress}`">
-              <p class="text-gray-900 font-semibold">
-                {{ truncate(item.contractAddress) }}
-              </p>
-              <p class="text-gray-500 mb-3 line-clamp-1">{{ item.name }}</p>
-              <div class="flex justify-between items-center">
-                <Badge color="primary" size="sm" :label="item.label" />
-                <p class="text-sm">{{ item.symbol }}</p>
-              </div>
-            </NuxtLink>
-          </template>
-          <template v-else>
+          <NuxtLink :to="`/contract/${item.contractAddress}`">
             <p class="text-gray-900 font-semibold">
               {{ truncate(item.contractAddress) }}
             </p>
@@ -39,7 +26,7 @@
               <Badge color="primary" size="sm" :label="item.label" />
               <p class="text-sm">{{ item.symbol }}</p>
             </div>
-          </template>
+          </NuxtLink>
         </li>
       </ul>
       <template v-if="numberOfContracts === 0">
@@ -74,7 +61,6 @@ export default {
     return {
       contracts: null,
       isFetching: false,
-      numberOfContracts: null,
       newTokens: [],
       newContracts: null,
       selectedContract: null,
@@ -235,18 +221,21 @@ export default {
       }
     },
     async handleClick(data) {
-      const creation = this.creations[data.index]
-      const pageUrl = creation.url
-      if (pageUrl) {
-        this.$router.push(`/c/${pageUrl}`)
-      } else {
-        const data = creation.metadata
-        this.setModalData({
-          title: 'token',
-          components: ["Token"],
-          data
-        });
-        this.setShowGeneralModal(true);
+      const index = data.index
+      if (index !== undefined) {
+        const creation = this.creations[index]
+        const pageUrl = creation.url
+        if (pageUrl) {
+          this.$router.push(`/c/${pageUrl}`)
+        } else {
+          const data = creation.metadata
+          this.setModalData({
+            title: 'token',
+            components: ["Token"],
+            data: { ...data, tokenId: creation.tokenId ? creation.tokenId : creation.id }
+          });
+          this.setShowGeneralModal(true);
+        }
       }
     }
   },
