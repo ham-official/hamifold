@@ -3,12 +3,12 @@
     @click="handleBackdropClick">
 
     <div
-      class="relative flex flex-col w-[760px] items-center gap-y-8 bg-white rounded-xl p-6 border border-gray-900 ham-shadow--active z-30 text-center"
+      class="relative flex flex-col w-[760px] items-center gap-y-8 bg-white overflow-hidden rounded-xl p-6 border border-gray-900 ham-shadow--active z-30 text-center"
       :class="{
-      'w-80 sm:w-100': size === 'md',
-      'w-100 sm:w-141.75': size === 'lg',
-      'w-141.75 sm:[760px]': size === 'xl',
-    }" @click.stop>
+        'w-80 sm:w-100': size === 'md',
+        'w-100 sm:w-141.75': size === 'lg',
+        'w-141.75 sm:[760px]': size === 'xl',
+      }" @click.stop>
 
       <slot name="header"></slot>
       <slot name="body"></slot>
