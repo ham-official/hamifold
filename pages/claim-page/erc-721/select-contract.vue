@@ -74,9 +74,7 @@ import navbarRoutes from "@/data/navbar.json";
 import { patterns, testRegex } from "@/utils/regex.js";
 import {
   hamERC721EditionListOfContracts,
-  listERC721ByOwner,
 } from "@/utils/contractListingUtilities.js";
-import { metadataNormalizer } from "@/utils/normalizers/metadataNormalizer";
 import { truncateAddress } from "@/utils/truncateAddress";
 import steps from "@/data/stepper.json"
 definePageMeta({
@@ -96,35 +94,19 @@ export default {
       isSubmitting: false,
       contracts: null,
       tokens: null,
-      selectedContract: null,
       selectedContractIndex: -1
     };
   },
   async mounted() {
-    const contracts = await hamERC721EditionListOfContracts(this.wallet);
-    this.contracts = contracts;
-
-    const tokens = [];
-    for (let i = 0; i < this.numberOfContracts; i++) {
-      const contractTokens = await listERC721ByOwner(
-        this.wallet,
-        contracts[i].contractAddress
-      );
-      const numberOfTokens = contractTokens.length;
-      for (let j = 0; j < numberOfTokens; j++) {
-        const request = await fetch(contractTokens[j].uri);
-        const metadata = await request.json();
-        contractTokens[j] = {
-          ...contractTokens[j],
-          contract: contracts[i],
-          metadata: metadataNormalizer(metadata),
-        };
-      }
-
-      tokens.push(...contractTokens);
+    const contractFromLocalStorage = localStorage.getItem('claimPageContract')
+    if (contractFromLocalStorage) {
+      const contract = JSON.parse(contractFromLocalStorage)
+      this.contracts = [contract]
+      this.handleSelectContract(0)
+    } else {
+      const contracts = await hamERC721EditionListOfContracts(this.wallet);
+      this.contracts = contracts;
     }
-
-    this.tokens = tokens;
   },
   computed: {
     ...mapGetters(["isConnected", "wallet"]),
@@ -151,7 +133,6 @@ export default {
     }
   },
   methods: {
-
     truncate(address) {
       return truncateAddress(address)
     },
