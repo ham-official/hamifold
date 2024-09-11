@@ -14,7 +14,7 @@
             <div class="flex flex-col gap-4">
               <p class="text-display-sm uppercase font-semibold font-display">{{
                 claimPageData.tokenMetadata.title
-                }}
+              }}
                 <span class="lowercase font-medium text-lg"><span class="mx-1">by</span> {{
                   truncate(claimPageData.contract.owner) }}</span>
               </p>
@@ -71,13 +71,19 @@
     </template>
   </main>
   <div class="absolute top-0 left-0 z-50">
-    <Modal v-if="mintModalIsOpen" :show-default-buttons="true" :confirmCancel="false" size="xl" class="min-h-[419px]">
+    <Modal v-if="mintModalIsOpen" :show-default-buttons="true" :confirmCancel="false" size="xl"
+      class="min-h-[419px] relative">
       <template #header class="relative">
         <p class="font-display font-semibold uppercase text-display-sm">Checkout</p>
         <Icon @click="closeCheckoutModal" icon="x-close"
-          class="absolute top-4 right-4 rounded-full border border-gray-900 p-2.5 cursor-pointer hover:bg-black hover:text-white" />
+          class="absolute top-4 right-4 rounded-full z-20 border bg-white border-gray-900 p-2.5 cursor-pointer hover:bg-black hover:text-white" />
       </template>
       <template #body>
+        <div v-if="isMinting"
+          class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full flex flex-col gap-2 items-center justify-center text-black bg-slate-300 bg-opacity-90">
+          <span>Waiting for Wallet</span>
+          <Icon icon="refresh-cw-03" class="animate-spin" />
+        </div>
         <Checkout v-if="!transactionFinished" :is-limited="claimPageData.mintRules.isLimited"
           :total-tokens="claimPageData.mintRules.maxSupply" :price="claimPageData.mintRules.price" @claim="handleClaim"
           :is-minting="isMinting" :max-tokens-per-wallet="claimPageData.mintRules.maxTokensPerWallet"
