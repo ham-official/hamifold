@@ -2,6 +2,7 @@ import { providers, Contract } from "ethers";
 import { abi as contractDeployerABI } from "@/data/abi/ERC721Deployer";
 import { abi as erc721ABI } from "@/data/abi/HamERC721";
 import { abi as erc721EditionABI } from "@/data/abi/HamERC721Edition";
+import { nextTokenTypeId } from "./erc721EditionUtils";
 
 const ERC721_CONTRACT_DEPLOYER = import.meta.env.VITE_ERC721_CONTRACT_DEPLOYER;
 const ERC721_EDITION_CONTRACT_DEPLOYER = import.meta.env
@@ -16,7 +17,6 @@ const network = {
   chainId: parseInt(import.meta.env.VITE_CHAIN_ID),
 };
 const rpcProvider = new providers.JsonRpcProvider(rpcURL, network);
-
 
 const editionDeployerContract = new Contract(
   ERC721_EDITION_CONTRACT_DEPLOYER,
@@ -138,6 +138,54 @@ export const getMetadataFromTokenUri = (uri) => {
         },
         type: "ERC-721",
       });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getClaimPages = (contractAddress) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const pages = [];
+      const numberOfTokenTypeIds = await nextTokenTypeId(contractAddress);
+      pages.push({
+        contractAddress,
+        tokenTypes: Array.apply(
+          null,
+          Array(numberOfTokenTypeIds.toNumber())
+        ).map(function (x, i) {
+          return i;
+        }),
+      });
+
+      const claimPages = [];
+      pages.forEach((page) =>
+        page.tokenTypes.forEach((t) =>
+          claimPages.push({
+            url: `${page.contractAddress}-${t}`,
+            c: page.contractAddress,
+            tokenId: t,
+          })
+        )
+      );
+      const numberOfPages = claimPages.length;
+      for (let index = 0; index < numberOfPages; index++) {
+        const page = claimPages[index];
+        const metadata = await getTokenEditionMetadata(page.c, page.tokenId);
+        claimPages[index].type = "CLAIM PAGE";
+        claimPages[index].metadata = {
+          description: metadata[2],
+          name: metadata[0],
+          type: "ERC-721-EDITION",
+          image: metadata[1],
+          imageUrl: metadata[1],
+        };
+        claimPages[index].contract = {
+          contractAddress: page.c,
+        };
+      }
+      resolve(claimPages);
     } catch (error) {
       reject(error);
     }
