@@ -78,10 +78,9 @@
         </template>
         <template v-if="contractType === 'ERC-721'">
           <span class="mb-4">Regular ERC-721 contracts are not suitable to have Claim Pages, which allow people to mint
-            your NFTs
-            own NFTs
-            <br />You can use this type of contract <span class="font-semibold">to mint your own NFTs</span>, without
-            sharing with others</span>
+            your NFTs.
+            <br />You can use the ERC-721 contract <span class="font-semibold">to mint your own NFTs</span>, although no
+            one else will be able to mint any.</span>
         </template>
       </p>
       <ul v-if="claimPages" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -133,8 +132,8 @@ export default {
       const claims = localStorage.getItem(`claims-${this.contractAddress}`)
       if (claims) {
         this.claimPages = JSON.parse(claims)
-        this.fetchingClaimPages = false
       }
+      this.fetchingClaimPages = false
       const tokens = localStorage.getItem(`tokens-${this.contractAddress}`)
       if (tokens) {
         this.tokenInventory = JSON.parse(tokens)
@@ -149,20 +148,20 @@ export default {
       const contractType = await getContractType(this.contractAddress)
       this.contract['label'] = contractType
       localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
-      if (contractType === 'ERC-721-EDITION') {
-        getClaimPages(this.contract.owner).then(pages => {
-          this.fetchingClaimPages = false;
-          if (pages) {
-            const contractPages = pages.filter(p => p.contract.contractAddress === this.contractAddress)
-            if (contractPages && contractPages.length && (!this.claimPages || this.claimPages.length !== contractPages.length)) {
-              this.claimPages = contractPages.map(p => { p.metadata.type = p.type; p.metadata.badgeColor = 'primary-invert'; return { ...p } })
-              localStorage.setItem(`claims-${this.contractAddress}`, JSON.stringify(this.claimPages))
-            }
-          }
-        })
-      } else {
+    }
+    if (this.contract['label'] === 'ERC-721-EDITION') {
+      getClaimPages(this.contract.owner).then(pages => {
         this.fetchingClaimPages = false;
-      }
+        if (pages) {
+          const contractPages = pages.filter(p => p.contract.contractAddress === this.contractAddress)
+          if (contractPages && contractPages.length && (!this.claimPages || this.claimPages.length !== contractPages.length)) {
+            this.claimPages = contractPages.map(p => { p.metadata.type = p.type; p.metadata.badgeColor = 'primary-invert'; return { ...p } })
+            localStorage.setItem(`claims-${this.contractAddress}`, JSON.stringify(this.claimPages))
+          }
+        }
+      })
+    } else {
+      this.fetchingClaimPages = false;
     }
     this.getTokenNFTsForWallet()
   },
@@ -188,7 +187,6 @@ export default {
           }
         } else {
           const erc721Tokens = []
-          this.fetchingTokens = false
           tokens.forEach((token) => {
             getStandardTokenUri(this.contractAddress, token.id).then(
               (uri) => {
@@ -203,6 +201,9 @@ export default {
                     },
                   };
                   erc721Tokens.push(nft)
+                  if (this.fetchingTokens) {
+                    this.fetchingTokens = false
+                  }
                   if (erc721Tokens.length === tokens.length) {
                     if (!this.tokenInventory || this.tokenInventory.length !== erc721Tokens.length) {
                       this.tokenInventory = [...erc721Tokens]
@@ -214,7 +215,6 @@ export default {
             );
           });
         }
-        this.fetchingTokens = false
       } else {
         this.fetchingTokens = false
       }
