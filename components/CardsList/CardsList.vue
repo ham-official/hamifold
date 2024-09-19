@@ -3,7 +3,11 @@
     <h2 class="font-display text-display-sm uppercase font-semibold mb-4" :class="{
       'text-center': noTokens,
     }">{{ title }}</h2>
-    <template v-if="!noTokens">
+      <p v-if="isFetching" class="flex gap-2">
+        <span>Fetching Tokens</span>
+        <Icon icon="refresh-cw-03" class="animate-spin" />
+      </p>
+    <template v-if="!noTokens && !isFetching">
       <div class="flex justify-between items-center mb-4">
         <ul class="flex justify-between gap-x-2">
           <li v-for="filter in filters" :key="`filter-${filter}`">
@@ -32,6 +36,10 @@ export default {
     title: {
       type: String,
       default: 'tokens'
+    },
+    isFetching: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
