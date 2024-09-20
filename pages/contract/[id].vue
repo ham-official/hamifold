@@ -163,7 +163,11 @@ export default {
     } else {
       this.fetchingClaimPages = false;
     }
-    this.getTokenNFTsForWallet()
+    if (this.wallet) {
+      this.getTokenNFTsForWallet()
+    } else {
+      this.fetchingTokens = false
+    }
   },
   methods: {
     ...mapActions(['setModalData', 'setShowGeneralModal']),
