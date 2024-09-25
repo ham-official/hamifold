@@ -22,7 +22,7 @@
         <div v-if="wallet === contractOwner"
           class="absolute top-1/2 -translate-y-1/2 right-4 max-w-72 flex flex-col items-center text-gray-600">
           <template v-if="contractType === 'ERC-721-EDITION'">
-            <CTA color="primary" @click="handleCreate">
+            <CTA color="primary" @click="handleCreate" size="lg">
               Create a Claim Page
             </CTA>
             <p class="mt-2 text-sm">
@@ -36,7 +36,7 @@
             </p>
           </template>
           <template v-if="contractType === 'ERC-721'">
-            <CTA color="primary" @click="handleCreate">
+            <CTA color="primary" @click="handleCreate" size="lg">
               Mint your own token
             </CTA>
             <p class="mt-2 text-sm">
@@ -219,6 +219,7 @@ export default {
             );
           });
         }
+        this.fetchingTokens = false
       } else {
         this.fetchingTokens = false
       }
