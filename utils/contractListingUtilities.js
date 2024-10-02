@@ -153,7 +153,7 @@ export const getContractInfo = (address) => {
   });
 };
 
-export const getClaimPages = (address) => {
+export const listClaimPages = (address) => {
   return new Promise(async (resolve, reject) => {
     try {
       const erc721EditionContracts = await hamERC721EditionListOfContracts(
