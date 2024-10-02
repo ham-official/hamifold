@@ -96,7 +96,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { getContractInfo, getContractType, getClaimPages } from "@/utils/contractListingUtilities";
+import { getContractInfo, getContractType, listClaimPages } from "@/utils/contractListingUtilities";
 import { getStandardTokenUri, getMetadataFromTokenUri } from '@/utils/contractUtilities.js'
 import stepper from "@/data/stepper.json"
 export default {
@@ -150,7 +150,7 @@ export default {
       localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
     }
     if (this.contract['label'] === 'ERC-721-EDITION') {
-      getClaimPages(this.contract.owner).then(pages => {
+      listClaimPages(this.contract.owner).then(pages => {
         this.fetchingClaimPages = false;
         if (pages) {
           const contractPages = pages.filter(p => p.contract.contractAddress === this.contractAddress)
