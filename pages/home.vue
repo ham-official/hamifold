@@ -5,15 +5,11 @@
       :class="{
         'gap-4': numberOfContracts > 0,
         'gap-2': numberOfContracts === 0,
-      }"
-    >
-      <h2
-        class="font-display text-display-sm uppercase font-semibold"
-        :class="{
-          'text-center': numberOfContracts === 0,
-          'mb-4': numberOfContracts > 0,
-        }"
-      >
+      }">
+      <h2 class="font-display text-display-sm uppercase font-semibold" :class="{
+        'text-center': numberOfContracts === 0,
+        'mb-4': numberOfContracts > 0,
+      }">
         contracts
       </h2>
       <p v-if="!isNotEditionContractOwner && !isNotStandardContractOwner && !contracts.length" class="flex gap-2">
@@ -22,14 +18,11 @@
       </p>
       <template v-if="numberOfContracts > 0">
         <ul v-if="contracts" class="flex flex-wrap items-center gap-3">
-          <li
-            v-for="(item, index) in contracts"
-            :key="index"
+          <li v-for="(item, index) in contracts" :key="index"
             class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px] ham-shadow"
             :class="{
               'mr-auto': index === numberOfContracts - 1,
-            }"
-          >
+            }">
             <NuxtLink :to="`/contract/${item.contractAddress}`">
               <p class="text-gray-900 font-semibold">
                 {{ truncate(item.contractAddress) }}
@@ -50,16 +43,10 @@
       </template>
     </section>
     <section>
-      <CardsList
-        :cards="tokens && tokens.map((t) => t.metadata)"
-        :isFetching="isFetchingTokens && !isNotTokenOwner"
-        title="Tokens"
-        @click="handleClick($event)"
-      />
+      <CardsList :cards="tokens && tokens.map((t) => t.metadata)" :isFetching="isFetchingTokens && !isNotTokenOwner"
+        title="Tokens" @view="handleClick($event)" />
     </section>
-    <section
-      class="bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6"
-    >
+    <section class="bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6">
       <h3 class="font-display font-semibold text-display-sm uppercase mb-4">
         Claim Pages
       </h3>
@@ -68,17 +55,11 @@
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
       <p v-else class="mb-4">
-        <span v-if="claimPages && claimPages.length" class="font-semibold"
-          >Visiting these Claim Pages you can mint the tokens</span
-        >
-        <span v-if="isNotClaimPageOwner" class="font-semibold"
-          >There are no claim pages</span
-        >
+        <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint the
+          tokens</span>
+        <span v-if="isNotClaimPageOwner" class="font-semibold">There are no claim pages</span>
       </p>
-      <ul
-        v-if="claimPages"
-        class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-      >
+      <ul v-if="claimPages" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <li v-for="(c, i) in claimPages" :key="`claim-page-${i}`">
           <NuxtLink :to="`/c/${c.url}`">
             <Card class="ham-shadow cursor-pointer" v-bind="c.metadata" />
@@ -137,12 +118,6 @@ export default {
       return (this.contracts && this.contracts.length) ?? 0;
     },
     isNotClaimPageOwner() {
-      console.log(
-        "claimPage",
-        this.isNotEditionContractOwner,
-        this.isFetchingContracts,
-        this.claimPages.length
-      );
       return (
         this.isNotEditionContractOwner ||
         (!this.isFetchingContracts && !this.claimPages.length)
@@ -195,7 +170,6 @@ export default {
     },
     async getClaimPagesForContract(address) {
       const claimPages = await listClaimPages(address);
-      console.log({ claimPages });
       claimPages.forEach((e) => this.updateClaimPages(e));
     },
     getContracts() {
@@ -210,6 +184,7 @@ export default {
 
       if (allNfts.length === 0) {
         this.isNotTokenOwner = true;
+        this.isFetchingTokens = false;
       }
 
       uniqueContracts.forEach((e) => {
@@ -312,16 +287,31 @@ export default {
       }
       return null;
     },
+    async handleClick(data) {
+      const index = data.index
+      if (index !== undefined) {
+        const token = this.tokens[index]
+        const pageUrl = token.url
+        if (pageUrl) {
+          this.$router.push(`/c/${pageUrl}`)
+        } else {
+          const data = token.metadata
+          this.setModalData({
+            title: 'token',
+            components: ["Token"],
+            data: { ...data, tokenId: token.tokenId ? token.tokenId : token.id }
+          });
+          this.setShowGeneralModal(true);
+        }
+      }
+    },
     updateClaimPages(claimPage) {
       const isNewClaimPage = !this.claimPages.some(
         (element) => element.url === claimPage.url
       );
 
       if (isNewClaimPage) {
-        console.log({ claimPage });
         this.claimPages.push(claimPage);
-
-        console.log(this.claimPages);
         localStorage.setItem(
           "claimPagesInventory",
           JSON.stringify(this.claimPages)
@@ -343,7 +333,6 @@ export default {
       }
 
       if (contract.label === "ERC-721-EDITION") {
-        console.log({ contract });
         this.getClaimPagesForContract(contract.contractAddress);
       }
 
@@ -360,7 +349,6 @@ export default {
       );
       if (isNewNft) {
         this.tokens.push(nft);
-
         localStorage.setItem("tokenInventory", JSON.stringify(this.tokens));
       }
     },

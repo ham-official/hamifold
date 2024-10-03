@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex gap-8">
-    <div class="w-[400px] h-[400px] object-cover rounded-lg overflow-hidden bg-slate-400">
+    <div class="min-w-[400px] h-[400px] object-cover rounded-lg overflow-hidden bg-slate-400">
       <img v-if="image" class="h-full w-full" :src="image" />
     </div>
     <ul class="text-left flex flex-col justify-center gap-4">

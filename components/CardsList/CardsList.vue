@@ -3,10 +3,10 @@
     <h2 class="font-display text-display-sm uppercase font-semibold mb-4" :class="{
       'text-center': noTokens,
     }">{{ title }}</h2>
-      <p v-if="isFetching" class="flex gap-2">
-        <span>Fetching Tokens</span>
-        <Icon icon="refresh-cw-03" class="animate-spin" />
-      </p>
+    <p v-if="isFetching" class="flex gap-2">
+      <span>Fetching Tokens</span>
+      <Icon icon="refresh-cw-03" class="animate-spin" />
+    </p>
     <template v-if="!noTokens && !isFetching">
       <div class="flex justify-between items-center mb-4">
         <ul class="flex justify-between gap-x-2">
@@ -17,7 +17,7 @@
         </ul>
       </div>
       <ul class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <li v-for="(card, index) in visibleTokens" :key="`token-card-${index}`" @click="$emit('click', { index })">
+        <li v-for="(card, index) in visibleTokens" :key="`token-card-${index}`" @click="$emit('view', { index })">
           <Card class="ham-shadow cursor-pointer" v-bind="card" />
         </li>
       </ul>
