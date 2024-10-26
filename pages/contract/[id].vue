@@ -1,14 +1,15 @@
 <template>
-  <main class="container mx-auto pb-8">
-    <section class="relative bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6">
+  <main class="lg:container mx-auto pb-8">
+    <section
+      class="relative bg-white border-2 border-gray-900 ham-shadow--active p-3 lg:p-6 rounded-3xl text-gray-900 mt-6 mx-2 lg:mx-0">
       <h1 class="font-display font-semibold text-display-sm uppercase mb-4">Contract</h1>
-      <div v-if="contract" class="grid grid-cols-2 gap-4">
+      <div v-if="contract" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div>
           <p class="flex items-center">
             <span class="font-semibold mr-2">Contract Address</span>
             <a :href="`https://explorer.ham.fun/address/${contractAddress}`" target="_blank"
               class="text-gray-500 hover:text-black flex items-center gap-2">
-              <span>{{ contractAddress }}</span>
+              <span>{{ truncate(contractAddress) }}</span>
               <Icon icon="link-external-01" />
             </a>
           </p>
@@ -20,7 +21,7 @@
           <p><span class="font-semibold mr-2">Type</span><span class="text-gray-500">{{ contract.label }}</span></p>
         </div>
         <div v-if="wallet === contractOwner"
-          class="absolute top-1/2 -translate-y-1/2 right-4 max-w-72 flex flex-col items-center text-gray-600">
+          class="lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-4 lg:max-w-72 flex flex-col items-center text-gray-600">
           <template v-if="contractType === 'ERC-721-EDITION'">
             <CTA color="primary" @click="handleCreate" size="lg">
               Create a Claim Page
@@ -49,13 +50,15 @@
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
     </section>
-    <section class="bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6">
-      <h2 class="font-display font-semibold text-display-sm uppercase mb-4">Your Tokens</h2>
-      <p v-if="fetchingTokens" class="flex gap-2"><span>Fetching the contract tokens</span>
+    <section
+      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6">
+      <h2 class="font-display font-semibold text-display-sm uppercase mb-4 ml-2 lg:pl-6">Your Tokens</h2>
+      <p v-if="fetchingTokens" class="flex gap-2 ml-2"><span>Fetching the contract tokens</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
       <template v-else>
-        <ul v-if="tokenInventory && tokenInventory.length" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <ul v-if="tokenInventory && tokenInventory.length"
+          class="flex overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 pl-2 lg:px-6">
           <li v-for="(card, index) in tokenInventory" :key="`token-card-${index}`" @click="handleClick(index)">
             <Card class="ham-shadow cursor-pointer" v-bind="card.metadata" />
           </li>
@@ -65,12 +68,13 @@
         </template>
       </template>
     </section>
-    <section class="bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6">
-      <h3 class="font-display font-semibold text-display-sm uppercase mb-4">Claim Pages</h3>
-      <p v-if="fetchingClaimPages" class="flex gap-2"><span>Checking if claim pages exits to mint some ...</span>
+    <section
+      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6">
+      <h3 class="font-display font-semibold text-display-sm uppercase mb-4 ml-2 lg:pl-6">Claim Pages</h3>
+      <p v-if="fetchingClaimPages" class="flex gap-2 ml-2"><span>Checking if claim pages exits to mint some ...</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
-      <p v-else class="mb-4">
+      <p v-else class="mb-4 ml-2">
         <template v-if="contractType === 'ERC-721-EDITION'">
           <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint the
             tokens</span>
@@ -83,7 +87,7 @@
             one else will be able to mint any.</span>
         </template>
       </p>
-      <ul v-if="claimPages" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <ul v-if="claimPages" class="flex overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 pl-2 lg:px-6">
         <li v-for="c, i in claimPages" :key="`claim-page-${i}`">
           <NuxtLink :to="`/c/${c.url}`">
             <Card class="ham-shadow cursor-pointer" v-bind="c.metadata" />
@@ -98,6 +102,7 @@
 import { mapGetters, mapActions } from "vuex";
 import { getContractInfo, getContractType, listClaimPages } from "@/utils/contractListingUtilities";
 import { getStandardTokenUri, getMetadataFromTokenUri } from '@/utils/contractUtilities.js'
+import { truncateAddress } from "@/utils/truncateAddress";
 import stepper from "@/data/stepper.json"
 export default {
   data() {
@@ -111,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["wallet"]),
+    ...mapGetters(['wallet', 'currentTokenIndex']),
     contractAddress() {
       return this.$route && this.$route.params.id
     },
@@ -121,6 +126,12 @@ export default {
     contractOwner() {
       return this.contract && this.contract.owner
     },
+  },
+  watch: {
+    currentTokenIndex(newValue, oldValue) {
+      console.log({ newValue })
+      this.handleClick(newValue)
+    }
   },
   async mounted() {
     this.fetchingContract = true
@@ -137,6 +148,7 @@ export default {
       const tokens = localStorage.getItem(`tokens-${this.contractAddress}`)
       if (tokens) {
         this.tokenInventory = JSON.parse(tokens)
+        this.setVisibleTokens(this.tokenInventory)
         this.fetchingTokens = false
       }
     } else {
@@ -170,7 +182,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setModalData', 'setShowGeneralModal']),
+    ...mapActions(['setModalData', 'setShowGeneralModal', 'setCurrentTokenIndex', 'setSlideOverData', 'setShowSlideOver', 'setVisibleTokens']),
     async getTokenNFTsForWallet() {
       const BLOCK_EXPLORER_URL = import.meta.env.VITE_BLOCK_EXPLORER_URL;
       const getNFTsURL = `${BLOCK_EXPLORER_URL}/api/v2/addresses/${this.wallet}/nft?type=ERC-721`;
@@ -227,12 +239,19 @@ export default {
     async handleClick(index) {
       const creation = this.tokenInventory[index]
       const data = creation.metadata
-      this.setModalData({
+      const modalData = {
         title: 'token',
         components: ["Token"],
         data: { ...data, tokenId: creation.tokenId ? creation.tokenId : creation.id }
-      });
-      this.setShowGeneralModal(true);
+      }
+      if (this.isDesktop) {
+        this.setModalData(modalData);
+        this.setShowGeneralModal(true);
+      } else {
+        this.setSlideOverData(modalData);
+        this.setShowSlideOver(true);
+      }
+      this.setCurrentTokenIndex(index);
     },
     handleCreate() {
       if (this.contractType === 'ERC-721-EDITION') {
@@ -248,7 +267,10 @@ export default {
         localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
         this.$router.push(`/new-contract/${this.contractAddress}`)
       }
-    }
+    },
+    truncate(address) {
+      return truncateAddress(address);
+    },
   },
 }
 </script>

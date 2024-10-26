@@ -109,7 +109,7 @@ export default {
       this.setChainId(null);
       this.setIsConnected(false);
       this.setWallet(null);
-      this.$router.push("/sign-in");
+      this.$router.push("/");
     },
     handleChainSwitch() {
       if (!isDevEnv && !this.isNetworkSwitchRequested) {

@@ -99,10 +99,7 @@ html {
   overflow: hidden;
 }
 
-.ham-shadow:not([disabled]):hover {
-  box-shadow: 0 4px 0 0 #121926 ;
-  transform: translate(0px, -4px);
-}
+
 .ham-shadow--active {
   box-shadow: 0 4px 0 0 #121926;
 }
@@ -110,4 +107,15 @@ html {
 .ham-shadow:not([disabled]):focus {
   box-shadow: 0 0 0 0 #121926;
   transform: translate(0px, 0px);
+}
+
+.ham-shadow:not([disabled]):hover {
+  box-shadow: 0 4px 0 0 #121926 ;
+  transform: translate(0px, -4px);
+}
+
+@media only screen and (min-width: 1024px) {
+  .ham-shadow--active--desktop {
+    box-shadow: 0 4px 0 0 #121926;
+  }
 }

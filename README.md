@@ -1,6 +1,6 @@
-# HAM NFT Project FE with Nifty Boilerplate Starter
+# HAMIFOLD with Nifty Boilerplate Starter
 
-Look at the [documentation](https://nifty-boilerplate.netlify.app/) to learn more.
+It uses Nuxt3, tailwind and netlify lambdas.
 
 ## Setup
 

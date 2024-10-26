@@ -1,5 +1,6 @@
 <template>
-  <div class="flex flex-col h-full border-2 hover:border-2 border-gray-900 rounded-lg overflow-hidden">
+  <div
+    class="flex flex-col h-full border-2 hover:border-2 bg-white border-gray-900 rounded-lg overflow-hidden min-w-[200px]">
     <div class="h-[224px] border-b border-gray-950">
       <IMG :image="image" class="h-full w-full object-cover" />
     </div>

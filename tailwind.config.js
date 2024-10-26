@@ -117,6 +117,13 @@ module.exports = {
           lineHeight: '1.75rem',
         },
       ],
+      md: [
+        '1rem',
+        {
+          letterSpacing: '0',
+          lineHeight: '1.25rem',
+        },
+      ],
       base: [
         '1rem',
         {
@@ -125,19 +132,26 @@ module.exports = {
         },
       ],
       sm: [
-        '0.75rem',
-        {
-          letterSpacing: '0',
-          lineHeight: '1.125rem',
-        },
-      ],
-      xs: [
-        '0.625rem',
+        '0.875rem',
         {
           letterSpacing: '0',
           lineHeight: '1rem',
         },
       ],
+      xs: [
+        '0.75rem',
+        {
+          letterSpacing: '0',
+          lineHeight: '0.875rem',
+        },
+      ],
+    },
+    screens: {
+      "xs-only": { max: "639px" },
+      sm: { min: "640px" },
+      md: { min: "768px" },
+      lg: { min: "1024px" },
+      xl: { min: "1280px" },
     },
     extend: {
       borderRadius: {

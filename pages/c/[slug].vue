@@ -1,5 +1,5 @@
 <template>
-  <main class="container mx-auto pb-16">
+  <main class="container mx-auto pb-0 lg:pb-16">
     <section v-if="isFetching"
       class="flex flex-col w-full gap-4 bg-white border-2 border-gray-900 ham-shadow--active p-12 rounded-3xl text-gray-900 mt-6">
       <p class="font-display font-semibold text-center">
@@ -9,61 +9,49 @@
     <template v-else>
       <template v-if="claimPageData">
         <section
-          class="flex flex-col w-full gap-4 bg-white border-2 border-gray-900 ham-shadow--active p-12 rounded-3xl text-gray-900 mt-6">
-          <div class="flex flex-wrap lg:grid lg:grid-cols-2 gap-2">
-            <div class="flex flex-col gap-4">
-              <p class="text-display-sm uppercase font-semibold font-display">{{
-                claimPageData.tokenMetadata.title
-              }}
-                <span class="lowercase font-medium text-lg"><span class="mx-1">by</span> {{
-                  truncate(claimPageData.contract.owner) }}</span>
-              </p>
-              <p class="text-display text-lg font-semibold">{{ claimPageData.tokenMetadata.description }}</p>
-              <div class="flex flex-col justify-between h-full gap-4">
-                <div class="grid grid-cols-3 gap-2">
-                  <div class="border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl">
-                    <p class="text-center uppercase text-display font-semibold text-gray-500">Minting price</p>
-                    <p class="text-center uppercase text-display font-semibold">{{ claimPageData.mintRules.price }} ETH
-                    </p>
-                  </div>
-                  <div class="border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl">
-                    <p class="text-center uppercase text-display font-semibold text-gray-500">Total minted</p>
-                    <p class="text-center uppercase text-display font-semibold">
-                      {{ claimPageData.mintRules.totalSupply }} / {{ (maxSupply === 0 || maxSupply === '0') ? '∞' :
-                        maxSupply }}</p>
-                  </div>
-                  <div class="border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl">
-                    <p class="text-center uppercase text-display font-semibold text-gray-500">Type</p>
-                    <p v-html="claimPageData.mintRules.isLimited ? 'Limited' : 'Unlimited'"
-                      class="text-center uppercase text-display font-semibold"></p>
-                  </div>
-                </div>
-                <div class="flex flex-col gap-8">
-                  <div class="text-center">
-                    <p class="uppercase text-display font-semibold text-gray-500 flex items-center justify-center">
-                      <Icon icon="calendar" class="mr-1" />Claiming Starting Date
-                    </p>
-                    <p class="mt-1">
-                      {{ startDate ?? 'Not set' }}</p>
-                  </div>
-                  <div class="text-center">
-                    <p class="uppercase text-display font-semibold text-gray-500 flex items-center justify-center">
-                      <Icon icon="calendar" class="mr-1" />Claiming Ending Date
-                    </p>
-                    <p class="mt-1">
-                      {{ endDate ?? 'Not set' }}</p>
-                  </div>
-                </div>
-                <CTA :disabled="!wallet" @click="mintModalIsOpen = true" size="xl" color="primary">
-                  <span v-if="wallet">claim now - {{ claimPageData.mintRules.price }} ETH</span>
-                  <span v-else>connect your wallet to claim</span>
-                </CTA>
-              </div>
-            </div>
-            <div class="border-2 border-gray-900 rounded-3xl w-[425px] h-[425px] overflow-hidden ml-auto">
-              <IMG v-if="claimPageData.tokenMetadata.imgURL" :image="claimPageData.tokenMetadata.imgURL" alt="NFT Image"
-                class="h-full w-full object-cover" />
-            </div>
+          class="w-full bg-white border-0 lg:border-2 border-gray-900 ham-shadow--active p-4 lg:p-6 rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 flex flex-col lg:flex-row justify-between gap-4 lg:gap-8">
+
+          <div class="border-2 border-gray-900 rounded-2xl w-full lg:w-1/2 h-auto overflow-hidden">
+            <IMG v-if="claimPageData.tokenMetadata.imgURL" :image="claimPageData.tokenMetadata.imgURL" alt="NFT Image"
+              class="h-full w-full object-cover" />
+          </div>
+          <div class="flex flex-col w-full lg:w-1/2">
+            <p class="text-lg lg:text-display-sm uppercase font-semibold font-display mb-1">{{
+              claimPageData.tokenMetadata.title
+            }}</p>
+            <p class="text-sm lg:text-md text-gray-500 mb-4">{{ truncate(claimPageData.contract.owner) }}</p>
+            <p class="text-sm lg:text-lg text-gray-900 mb-4">{{ claimPageData.tokenMetadata.description }}</p>
+            <ul class="flex flex-col gap-1 xs-only:pb-4">
+              <li class="text-sm lg:text-md flex justify-between">
+                <p class="text-gray-500">Minting price:</p>
+                <p class="text-gray-900 font-semibold">{{ claimPageData.mintRules.price }} ETH</p>
+              </li>
+              <li class="text-sm lg:text-md flex justify-between">
+                <p class="text-gray-500">Total minted:</p>
+                <p class="text-gray-900 font-semibold"> {{ claimPageData.mintRules.totalSupply }} / {{ (maxSupply ===
+                  0 || maxSupply === '0') ? '∞' :
+                  maxSupply }}</p>
+              </li>
+              <li class="text-sm lg:text-md flex justify-between">
+                <p class="text-gray-500">Type:</p>
+                <p v-html="claimPageData.mintRules.isLimited ? 'Limited' : 'Unlimited'"
+                  class="text-gray-900 font-semibold"></p>
+              </li>
+              <li class="text-sm lg:text-md flex justify-between">
+                <p class="text-gray-500">Claiming Starting Date</p>
+                <p class="text-gray-900 font-semibold"> {{ startDate ?? 'Not set' }}</p>
+              </li>
+              <li class="text-sm lg:text-md flex justify-between">
+                <p class="text-gray-500">Claiming Ending Date</p>
+                <p class="text-gray-900 font-semibold"> {{ endDate ?? 'Not set' }}</p>
+              </li>
+
+            </ul>
+            <CTA :disabled="!wallet" @click="mintModalIsOpen = true" size="lg" color="primary"
+              class="mt-auto xs-only:-order-1 xs-only:mb-4">
+              <span v-if="wallet">claim now - {{ claimPageData.mintRules.price }} ETH</span>
+              <span v-else>connect your wallet to claim</span>
+            </CTA>
           </div>
         </section>
       </template>
@@ -150,7 +138,7 @@ export default {
           contract: this.contract,
           tokenMetadata: {
             title: this.tokenEditionMetadata[0],
-            imgURL: this.tokenEditionMetadata[1],
+            imgURL: this.tokenEditionMetadata[1].replace('//ipfs', '/ipfs'),
             description: this.tokenEditionMetadata[2]
           },
           mintRules: {
@@ -228,6 +216,7 @@ export default {
     },
     async formatTokenMetadata() {
       const tokenEditionMetadata = await getTokenEditionMetadata(this.contractAddressFromURL, this.tokenTypeFromURL)
+      console.log(tokenEditionMetadata, 'GetTOKENS')
       this.tokenEditionMetadata = tokenEditionMetadata.map((val, index) => {
         if (val['_isBigNumber'] && index !== 7) {
           return val.toNumber()
