@@ -1,22 +1,28 @@
 <template>
   <main class="lg:container mx-auto py-0 lg:py-6">
     <section
-      class="flex flex-col bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 pb-6 lg:mt-6 gap-2"
-      :class="{
-        'lg:gap-4': numberOfContracts > 0
-      }">
-      <h2 class="font-display text-display-sm uppercase font-semibold pl-6 pt-6" :class="{
-        'text-center': numberOfContracts === 0,
-        'mb-2 lg:mb-4': numberOfContracts > 0,
-      }">
+      class="flex flex-col bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 pb-6 lg:mt-6 gap-2 lg:gap-4">
+      <h2 class="font-display text-display-sm uppercase font-semibold pl-6 pt-6 mb-2 lg:mb-4">
         contracts
       </h2>
-      <p v-if="!isNotEditionContractOwner && !isNotStandardContractOwner && !contracts.length" class="flex gap-2">
-        <span>Fetching Contracts</span>
-        <Icon icon="refresh-cw-03" class="animate-spin" />
-      </p>
-      <template v-if="numberOfContracts > 0">
-        <ul v-if="contracts" class="flex flex-row lg:flex-wrap items-center gap-3 overflow-x-auto px-6 pt-1">
+      <template v-if="isFetchingContracts">
+        <p
+          class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-100">
+          <span>Fetching Contracts</span>
+          <Icon icon="refresh-cw-03" class="animate-spin" />
+        </p>
+      </template>
+      <template v-else>
+        <template v-if="numberOfContracts === 0">
+          <p class="text-center text-gray-400">
+            Once you create a contract, it will be displayed here
+          </p>
+          <CTA v-if="numberOfContracts === 0" color="primary" size="lg" iconLeft="plus" class="max-w-fit mx-auto"
+            @click="handleShowCreateModal">
+            Create
+          </CTA>
+        </template>
+        <ul v-else class="flex max-h-[300px] overflow-y-auto lg:flex-wrap items-center gap-3 overflow-x-auto px-6 pt-1">
           <li v-for="(item, index) in contracts" :key="index"
             class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px] ham-shadow"
             :class="{
@@ -28,33 +34,22 @@
               </p>
               <p class="text-gray-500 mb-3 line-clamp-1">{{ item.name }}</p>
               <div class="flex justify-between items-center">
-                <Badge color="primary" size="sm" :label="item.label" />
+                <Badge :color="item.label === 'ERC 721 EDITION' ? 'indigo' : 'success'" size="sm" :label="item.label" />
                 <p class="text-xs">{{ item.symbol }}</p>
               </div>
             </NuxtLink>
           </li>
         </ul>
-        <template v-if="numberOfContracts === 0">
-          <p class="text-center text-gray-400">
-            Once you create a contract, it will be displayed here
-          </p>
-        </template>
       </template>
-      <CTA v-else color="primary" size="lg" iconLeft="plus" class="max-w-fit mx-auto" @click="handleShowCreateModal">
-        Create
-      </CTA>
-    </section>
-    <section>
-      <CardsList :cards="tokens && tokens.map((t) => t.metadata)" :isFetching="isFetchingTokens && !isNotTokenOwner"
-        title="Tokens" @view="handleClick($event)" />
     </section>
     <section
-      class="bg-transparent lg:bg-white border-b-1 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 pb-6">
+      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 pb-6">
       <h3 class="font-display font-semibold text-display-sm pt-6 pl-6 uppercase mb-4">
         Claim Pages
       </h3>
-      <p v-if="fetchingClaimPages" class="flex gap-2">
-        <span>Checking if claim pages exits to mint some ...</span>
+      <p v-if="isFetchingClaimPages"
+        class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-100">
+        <span>Checking if claim pages exist for any of your contracts...</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
       <p v-else class="mb-4 pl-6">
@@ -62,13 +57,19 @@
           tokens</span>
         <span v-if="isNotClaimPageOwner" class="font-semibold">There are no claim pages</span>
       </p>
-      <ul v-if="claimPages" class="flex overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 px-6">
+      <ul v-if="claimPages"
+        class="flex max-h-[1000px] overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 px-6">
         <li v-for="(c, i) in claimPages" :key="`claim-page-${i}`">
           <NuxtLink :to="`/c/${c.url}`">
-            <Card class="ham-shadow cursor-pointer" v-bind="c.metadata" />
+            <Card class="ham-shadow cursor-pointer" v-bind="{ ...c.metadata, badgeColor: 'warning' }" />
           </NuxtLink>
         </li>
       </ul>
+    </section>
+    <section
+      class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop pb-6 rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6">
+      <CardsList :cards="tokens && tokens.map((t) => { return { ...t.metadata, tokenId: t.tokenId } })"
+        :isFetching="isFetchingTokens && !isNotTokenOwner" title="Tokens" @view="handleClick($event)" />
     </section>
   </main>
 </template>
@@ -103,6 +104,7 @@ export default {
       claimPages: [],
       ethersRPCProvider: null,
       ethersRPCSigner: null,
+      isFetchingClaimPages: true,
       isFetchingContracts: false,
       isFetchingTokens: false,
       isNotTokenOwner: false,
@@ -151,6 +153,9 @@ export default {
 
     // Claim pages are fetched at this.getContracts()
     this.claimPages = localClaimPages ? localClaimPages : [];
+    if (this.claimPages.length > 0) {
+      this.isFetchingClaimPages = false
+    }
   },
   methods: {
     ...mapActions(["setCurrentTokenIndex", "setModalData", "setShowGeneralModal", "setSlideOverData", "setShowSlideOver"]),
@@ -176,6 +181,7 @@ export default {
     },
     async getClaimPagesForContract(address) {
       const claimPages = await listClaimPages(address);
+      this.isFetchingClaimPages = false;
       claimPages.forEach((e) => this.updateClaimPages(e));
     },
     getContracts() {
@@ -184,31 +190,33 @@ export default {
       this.getStandardContractsForWallet(this.wallet);
     },
     async getTokens() {
+      console.log('getting tokens')
       this.isFetchingTokens = !this.tokens.length;
       const allNfts = await getAllNftsForWallet(this.wallet);
-
+      console.log({ allNfts })
       if (allNfts) {
         const uniqueContracts = allNfts && allNfts.length && allNfts.map((e) => e.token.address);
         if (allNfts.length === 0) {
           this.isNotTokenOwner = true;
           this.isFetchingTokens = false;
         }
-
+        console.log({ uniqueContracts })
         uniqueContracts.forEach((e) => {
           getContractType(e).then((res) => {
             const contractType = res;
             const collection = allNfts.find(
               (collection) => collection.token.address === e
             );
-
-            if (contractType === "ERC-721-EDITION") {
+            console.log({ collection, contractType })
+            if (contractType === "ERC 721 EDITION") {
               collection.token_instances.forEach((token) => {
+                console.log({ token })
                 this.totalNumberOfTokens++;
                 const nft = editionNormalizer(collection, token);
                 this.updateTokens(nft);
               });
             }
-            if (contractType === "ERC-721") {
+            if (contractType === "ERC 721") {
               collection.token_instances.forEach((token) => {
                 this.totalNumberOfTokens++;
                 getStandardTokenUri(collection.token.address, token.id).then(
@@ -256,7 +264,7 @@ export default {
                   contractAddress,
                   name,
                   symbol,
-                  label: "ERC-721-EDITION",
+                  label: "ERC 721 EDITION",
                 });
               });
             });
@@ -286,7 +294,7 @@ export default {
                   contractAddress,
                   name,
                   symbol,
-                  label: "ERC-721",
+                  label: "ERC 721",
                 });
               });
             });
@@ -316,6 +324,7 @@ export default {
             });
             this.setShowGeneralModal(true);
           } else {
+            console.log({ token })
             this.setSlideOverData({
               title: 'token',
               components: ["Token"],
@@ -358,7 +367,7 @@ export default {
         );
       }
 
-      if (contract.label === "ERC-721-EDITION") {
+      if (contract.label === "ERC 721 EDITION") {
         this.getClaimPagesForContract(contract.contractAddress);
       }
 
@@ -368,6 +377,7 @@ export default {
     },
     updateTokens(nft) {
       this.isFetchingTokens = false;
+      console.log({ nft })
       const isNewNft = !this.tokens.some(
         ({ contract: { contractAddress }, tokenId }) =>
           contractAddress === nft.contract.contractAddress &&

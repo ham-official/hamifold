@@ -1,6 +1,7 @@
 <template>
-  <main class="container mx-auto py-8">
-    <div class="mx-auto border border-gray-900 rounded-xl p-6 bg-white ham-shadow--active relative overflow-hidden">
+  <main class="container mx-auto py-8 px-2 lg:px-0">
+    <div
+      class="mx-auto lg:max-w-200 border border-gray-900 rounded-xl p-6 bg-white ham-shadow--active relative overflow-hidden">
       <div v-if="isSubmitting"
         class="absolute top-0 left-0 right-0 bottom-0 z-20 w-full h-full flex flex-col gap-2 items-center justify-center text-black bg-slate-300 bg-opacity-75">
         <span>Waiting for Wallet</span>
@@ -11,7 +12,9 @@
         <Badge label="edition" size="md" color="secondary" />
       </h1>
       <h2 class="text-gray-600 font-display font-semibold mt-4">
-        Create an ERC-721 edition contract to mint your tokens on your own claim page.
+        Create an ERC-721 edition contract to mint your tokens on your own claim page.<br /> You can use the same
+        contract for
+        multiple claim pages.
       </h2>
       <form @submit.prevent="handleSubmit" class="my-4 text-gray-700 flex flex-col gap-4">
         <div class="flex flex-col gap-2">
@@ -24,11 +27,6 @@
           <input id="contract-symbol" type="text" v-model="symbol" placeholder="e.g. HAMEDITCON"
             class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
         </div>
-        <!-- <div class="flex flex-col gap-2">
-          <label for="ascii-mark" class="">ASCII Mark</label>
-          <input id="ascii-mark" type="text" v-model="asciiMark" placeholder="e.g. Bad Ass Contract"
-            class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
-        </div> -->
         <CTA :disabled="!formIsValid" color="primary" cta-type="submit" class="mt-6">Create</CTA>
       </form>
     </div>

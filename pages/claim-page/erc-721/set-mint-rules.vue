@@ -1,37 +1,24 @@
 <template>
-  <main class="container mx-auto pb-16">
-    <ol class="flex items-center gap-6 justify-center my-6">
-      <li>1. Select contract</li>
-      <li>2. Set up Media</li>
-      <li>
-        <NuxtLink to="/claim-page/erc-721/set-up-mint-page">
-          3. Set up Mint Page
-        </NuxtLink>
-      </li>
-      <li class="font-bold">4. Set mint rules</li>
-      <li>
-        <NuxtLink to="/claim-page/erc-721/set-audience">
-          5. Set Audience
-        </NuxtLink>
-      </li>
-    </ol>
-    <Stepper :steps="stepper.steps" :currentStep="3" class="mb-6" />
-    <div class="flex flex-col gap-y-8 bg-white rounded-xl p-6 border border-gray-900 ham-shadow--active mx-auto">
+  <main class="container mx-auto pb-8 px-2 lg:px-0">
+    <Stepper :steps="stepper.steps" :currentStep="3" class="my-6" />
+    <div
+      class="flex flex-col gap-y-8 bg-white rounded-2xl p-4 lg:p-6 border border-gray-900 ham-shadow--active mx-auto">
       <form @submit.prevent="handleSubmit" class="my-4 text-gray-700 flex flex-col gap-8 relative">
         <div>
           <p class="text-display-sm font-semibold uppercase font-display">Set mint rules</p>
           <p class="text-md text-gray-500">Customize options such as price, supply, and date</p>
         </div>
-        <div class="flex gap-4">
+        <div class="flex flex-wrap gap-2">
           <div class="flex flex-col gap-2 flex-1">
             <label for="price" class="text-lg text-gray-500 uppercase font-display font-semibold">edition price</label>
-            <div class="flex items-center gap-1">
-              <div class="flex gap-x-1">
+            <div class="flex items-center gap-2 flex-1">
+              <div class="flex flex-1 gap-x-1">
                 <input id="price" type="number" v-model="price"
-                  class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl text-base" step="0.00001" />
+                  class="max-w-32 bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl text-base"
+                  step="0.00001" />
                 <Badge v-if="price === 0" color="green" label="free" />
               </div>
-              <select name="currency" id="currency" disabled class="border border-gray-900 rounded-xl p-2"
+              <select name="currency" id="currency" disabled class="flex-1 border border-gray-900 rounded-xl p-2"
                 v-model="currency">
                 <option value="eth">ETH</option>
                 <option value="usd">USD</option>
@@ -105,11 +92,12 @@
             </p>
           </div>
         </div>
-        <div class="flex justify-end items-center gap-4">
-          <NuxtLink to="/claim-page/erc-721/set-up-mint-page">
-            <CTA size="lg" color="gray">Previous</CTA>
+        <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
+          <NuxtLink to="/claim-page/erc-721/set-up-mint-page" class="flex-1 lg:flex-initial">
+            <CTA size="lg" color="gray" class="w-full">Previous </CTA>
           </NuxtLink>
-          <CTA :disabled="!formIsValid" size="lg" cta-type="submit" color="primary">Save & Next</CTA>
+          <CTA class="flex-1 lg:flex-initial" :disabled="!formIsValid" size="lg" cta-type="submit" color="primary">Save
+            & Next</CTA>
         </div>
       </form>
     </div>

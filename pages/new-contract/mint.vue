@@ -43,7 +43,7 @@
           </template>
           <p class="border border-black rounded-lg p-4 mt-auto mb-4 flex items-center">
             <span>{{ contractName ? contractName : contractAddress && contractAddress.replaceAll('"', '') }}</span>
-            <Badge class="ml-auto" color="primary-invert" label="erc-721" />
+            <Badge class="ml-auto" color="success" label="ERC 721" />
           </p>
           <CTA class="w-full" @click="handleMint"
             :disabled="!imageIsLoaded || !imgUrl || !contractAddress || !uri || isMinting" color="primary" size="lg">

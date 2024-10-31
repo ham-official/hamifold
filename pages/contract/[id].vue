@@ -1,16 +1,24 @@
 <template>
   <main class="lg:container mx-auto pb-8">
     <section
-      class="relative bg-white border-2 border-gray-900 ham-shadow--active p-3 lg:p-6 rounded-3xl text-gray-900 mt-6 mx-2 lg:mx-0">
+      class="relative bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6 p-2 lg:p-6">
       <h1 class="font-display font-semibold text-display-sm uppercase mb-4">Contract</h1>
-      <div v-if="contract" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div>
+      <h2 class="text-gray-600 mb-4"><span v-if="!claimPages">
+          To enable minting for this contract and upload your NFT media
+          you'll need to create a
+          claim page for people to mint
+        </span>
+        <span v-else>You can use the same contract to enable minting for different NFTs through several Claim
+          Pages</span>
+      </h2>
+      <div v-if="contract" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="">
           <p class="flex items-center">
             <span class="font-semibold mr-2">Contract Address</span>
             <a :href="`https://explorer.ham.fun/address/${contractAddress}`" target="_blank"
               class="text-gray-500 hover:text-black flex items-center gap-2">
               <span>{{ truncate(contractAddress) }}</span>
-              <Icon icon="link-external-01" />
+              <Icon icon="link-external-01" :no-size="true" class="w-4 h-4" />
             </a>
           </p>
           <p><span class="font-semibold mr-2">Name</span><span class="text-gray-500">{{ contract.name }}</span></p>
@@ -20,29 +28,16 @@
               }}</span></p>
           <p><span class="font-semibold mr-2">Type</span><span class="text-gray-500">{{ contract.label }}</span></p>
         </div>
-        <div v-if="wallet === contractOwner"
-          class="lg:absolute lg:top-1/2 lg:-translate-y-1/2 lg:right-4 lg:max-w-72 flex flex-col items-center text-gray-600">
+        <div v-if="wallet === contractOwner" class="lg:ml-auto">
           <template v-if="contractType === 'ERC-721-EDITION'">
-            <CTA color="primary" @click="handleCreate" size="lg">
+            <CTA color="primary" @click="handleCreate" size="lg" class="w-full lg:w-auto">
               Create a Claim Page
             </CTA>
-            <p class="mt-2 text-sm">
-              <span v-if="!claimPages">
-                To enable minting for this contract and upload your NFT media
-                you'll need to create a
-                claim page for people to mint
-              </span>
-              <span v-else>You can use the same contract to enable minting for different NFTs through several Claim
-                Pages</span>
-            </p>
           </template>
           <template v-if="contractType === 'ERC-721'">
-            <CTA color="primary" @click="handleCreate" size="lg">
+            <CTA color="primary" @click="handleCreate" size="lg" class="w-full lg:w-auto">
               Mint your own token
             </CTA>
-            <p class="mt-2 text-sm">
-              <span>You can use the same ERC-721 contract to mint NFTs for yourself</span>
-            </p>
           </template>
         </div>
       </div>
@@ -51,30 +46,13 @@
       </p>
     </section>
     <section
-      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6">
-      <h2 class="font-display font-semibold text-display-sm uppercase mb-4 ml-2 lg:pl-6">Your Tokens</h2>
-      <p v-if="fetchingTokens" class="flex gap-2 ml-2"><span>Fetching the contract tokens</span>
+      class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6">
+      <h3 class="font-display font-semibold text-display-sm uppercase mb-4 pl-2 lg:px-6">Claim Pages</h3>
+      <p v-if="fetchingClaimPages" class="flex gap-2 pl-2 lg:px-6"><span>Checking if claim pages exits to mint some
+          ...</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
-      <template v-else>
-        <ul v-if="tokenInventory && tokenInventory.length"
-          class="flex overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 pl-2 lg:px-6">
-          <li v-for="(card, index) in tokenInventory" :key="`token-card-${index}`" @click="handleClick(index)">
-            <Card class="ham-shadow cursor-pointer" v-bind="card.metadata" />
-          </li>
-        </ul>
-        <template v-else>
-          <p>You don't own tokens of this contract</p>
-        </template>
-      </template>
-    </section>
-    <section
-      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6">
-      <h3 class="font-display font-semibold text-display-sm uppercase mb-4 ml-2 lg:pl-6">Claim Pages</h3>
-      <p v-if="fetchingClaimPages" class="flex gap-2 ml-2"><span>Checking if claim pages exits to mint some ...</span>
-        <Icon icon="refresh-cw-03" class="animate-spin" />
-      </p>
-      <p v-else class="mb-4 ml-2">
+      <p v-else class="mb-4 pl-2 lg:px-6">
         <template v-if="contractType === 'ERC-721-EDITION'">
           <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint the
             tokens</span>
@@ -94,6 +72,24 @@
           </NuxtLink>
         </li>
       </ul>
+    </section>
+    <section
+      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-6 gap-2 py-6">
+      <h2 class="font-display font-semibold text-display-sm uppercase mb-4 pl-2 lg:px-6">Your Tokens</h2>
+      <p v-if="fetchingTokens" class="flex gap-2 pl-2"><span>Fetching the contract tokens</span>
+        <Icon icon="refresh-cw-03" class="animate-spin" />
+      </p>
+      <template v-else>
+        <ul v-if="tokenInventory && tokenInventory.length"
+          class="flex overflow-x-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 pl-2 lg:px-6">
+          <li v-for="(card, index) in tokenInventory" :key="`token-card-${index}`" @click="handleClick(index)">
+            <Card class="ham-shadow cursor-pointer" v-bind="card.metadata" />
+          </li>
+        </ul>
+        <template v-else>
+          <p class="pl-2 lg:pl-6">You don't own tokens of this contract</p>
+        </template>
+      </template>
     </section>
   </main>
 </template>
@@ -200,6 +196,9 @@ export default {
               return { ...t }
             })
             localStorage.setItem(`tokens-${this.contractAddress}`, JSON.stringify(tokens))
+            if (!this.contract.label) {
+              this.contract.label = 'ERC-721-EDITION'
+            }
           }
         } else {
           const erc721Tokens = []
@@ -230,7 +229,11 @@ export default {
               }
             );
           });
+          if (!this.contract.label) {
+            this.contract.label = 'ERC-721'
+          }
         }
+        localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
         this.fetchingTokens = false
       } else {
         this.fetchingTokens = false

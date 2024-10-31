@@ -1,13 +1,8 @@
 <template>
   <main class="container mx-auto pb-16">
-    <section class="max-w-100 mx-auto my-6">
-      <ul class="flex items-center gap-2 justify-between text-gray-600">
-        <li>1. Create contract</li>
-        <li class="text-gray-950 font-bold">2. Set up media</li>
-        <li>3. Mint</li>
-      </ul>
-    </section>
-    <div class="mx-auto border border-gray-900 rounded-xl relative p-6 bg-white overflow-hidden">
+    <Stepper title="1 of 1" description="Create a contract to mint your own tokens" icon="layer-single" :steps="steps"
+      :currentStep="1" class="my-6 mx-auto" />
+    <div class="mx-auto 0 border border-gray-900 rounded-xl relative p-6 bg-white overflow-hidden">
       <div v-if="isPinningImg || isPinningJson"
         class="absolute top-0 left-0 right-0 bottom-0 z-20 w-full h-full flex flex-col gap-2 items-center justify-center text-black bg-slate-300 bg-opacity-75">
         <span v-if="isPinningImg">Uploading Image</span>
@@ -55,6 +50,7 @@ import { ref } from "vue";
 import { lambdasPath } from "@/utils/netlify.js";
 import { patterns, testRegex } from "@/utils/regex.js";
 import axios from "axios";
+import steps from "@/data/stepper.json"
 definePageMeta({
   middleware: ["auth"],
 });
@@ -106,6 +102,9 @@ export default {
         testRegex(patterns.notEmptyString, this.createdBy)
       );
     },
+    steps() {
+      return steps['erc-721']
+    }
   },
   methods: {
     async handleSave() {

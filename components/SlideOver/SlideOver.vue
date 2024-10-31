@@ -1,18 +1,23 @@
 <template>
-  <div class="fixed w-screen h-screen backdrop-filter backdrop-blur-sm z-20" @click="handleBackdropClick">
-    <div
-      class="appear absolute bottom-0 left-0 right-0 top-0 bg-white/95 z-50 rounded-t-3xl px-4 pt-4 pb-8 flex flex-col gap-y-4"
-      @click.stop>
-      <div class="flex">
-        <slot name="header"></slot>
+  <div class="fixed w-screen h-screen backdrop-grayscale bg-[#1219261A] backdrop-blur-sm z-20 pt-16"
+    @click="handleBackdropClick">
+    <div class="appear z-50 rounded-t-3xl flex h-full flex-col bg-white" @click.stop>
+      <!-- <div class="bg-red-400">a</div>
+      <div class="bg-blue-400 flex-1 overflow-auto text-display-sm">aslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfas
+        aslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfasaslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd
+        adsfasaslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfasaslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd
+        adsfasaslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfas aslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfas
+        aslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfas aslfkjasldkfjalsdfkjaslkdjfasdfasdfasdfasd adsfas</div>
+      <div class="bg-green-400">c</div> -->
+      <div class="z-60 flex">
         <Icon @click="handleClose" icon="x-close"
-          class="ml-auto rounded-full border border-gray-900 p-2.5 cursor-pointer hover:bg-black hover:text-white" />
+          class="ml-auto mt-3 mr-4 mb-2 rounded-full border border-gray-900 p-1.5 cursor-pointer hover:bg-black hover:text-white" />
       </div>
-      <div class="flex-1 overflow-auto">
+      <div class="flex-1 overflow-auto px-4 pt-1">
         <slot name="body">
         </slot>
       </div>
-      <div class="fixed bottom-0 left-0 right-0 px-4 py-2">
+      <div class="p-4 bg-white/95">
         <slot name="footer">
         </slot>
       </div>

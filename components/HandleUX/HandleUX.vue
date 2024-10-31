@@ -13,7 +13,7 @@
           <CreateList v-if="modalData.components.includes('CreateList')" />
           <MintList v-if="modalData.components.includes('MintList')" />
           <PublishProgress v-if="modalData.components.includes('PublishProgress')" v-bind="modalData.data" />
-          <Token v-if="modalData.components.includes('Token')" v-bind="modalData.data" />
+          <Token v-if="modalData.components.includes('Token')" v-bind="modalData.data" class="my-8" />
         </template>
       </template>
       <template #footer>
@@ -33,14 +33,18 @@
     </Modal>
     <SlideOver v-if="showSlideOver" @close="closeSlideOver">
       <template #body>
-        <template v-if="slideOverData">
+        <div v-if="slideOverData" class="flex flex-col gap-2">
+          <CreateList v-if="slideOverData.components.includes('CreateList')" />
+          <MintList v-if="slideOverData.components.includes('MintList')" />
+          <PublishProgress v-if="slideOverData.components.includes('PublishProgress')" v-bind="slideOverData.data" />
           <Token v-if="slideOverData.components.includes('Token')" v-bind="slideOverData.data" />
-        </template>
+        </div>
       </template>
       <template #footer>
-        <div class="flex justify-between">
-          <CTA color="white" size="lg" iconLeft="arrow-left" @click="handlePrev">prev</CTA>
-          <CTA color="white" size="lg" iconRight="arrow-left" iconRightClasses="rotate-180" @click="handleNext">next
+        <div v-if="slideOverData.components.includes('Token')" class="flex justify-between">
+          <CTA class="px-6" color="white" size="lg" iconLeft="arrow-left" @click="handlePrev">prev</CTA>
+          <CTA class="px-6" color="white" size="lg" iconRight="arrow-left" iconRightClasses="rotate-180"
+            @click="handleNext">next
           </CTA>
         </div>
       </template>
@@ -68,7 +72,6 @@ export default {
       this.setCurrentTokenIndex(newTokenIndex)
     },
     handlePrev() {
-      console.log('prev')
       const newTokenIndex = this.currentTokenIndex > 0 ? this.currentTokenIndex - 1 : this.totalTokens - 1
       this.setCurrentTokenIndex(newTokenIndex)
     }

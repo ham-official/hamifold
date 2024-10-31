@@ -1,5 +1,7 @@
 <template>
-  <main class="container mx-auto pb-0 lg:pb-16">
+  <main class="container mx-auto lg:pb-16" :class="{
+    'px-4 lg:px-0': isFetching
+  }">
     <section v-if="isFetching"
       class="flex flex-col w-full gap-4 bg-white border-2 border-gray-900 ham-shadow--active p-12 rounded-3xl text-gray-900 mt-6">
       <p class="font-display font-semibold text-center">
@@ -18,7 +20,7 @@
           <div class="flex flex-col w-full lg:w-1/2">
             <p class="text-lg lg:text-display-sm uppercase font-semibold font-display mb-1">{{
               claimPageData.tokenMetadata.title
-            }}</p>
+              }}</p>
             <p class="text-sm lg:text-md text-gray-500 mb-4">{{ truncate(claimPageData.contract.owner) }}</p>
             <p class="text-sm lg:text-lg text-gray-900 mb-4">{{ claimPageData.tokenMetadata.description }}</p>
             <ul class="flex flex-col gap-1 xs-only:pb-4">

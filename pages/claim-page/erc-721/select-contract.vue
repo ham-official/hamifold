@@ -1,23 +1,8 @@
 <template>
-  <main class="container mx-auto">
-    <ol class="flex items-center gap-6 justify-center my-6">
-      <li class="font-bold">
-
-        <NuxtLink>1. Select contract</NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/claim-page/erc-721/set-up-media">
-          2. Set up Media
-        </NuxtLink>
-      </li>
-      <li>3. Set up Mint Page</li>
-      <li>4. Set mint rules</li>
-      <li>5. Set Audience</li>
-    </ol>
-
-    <Stepper v-if="contracts" :steps="stepper.steps" :currentStep="0" class="mb-6" />
-    <section class="flex flex-col gap-6">
-      <div v-if="!contracts || contracts.length === 0" class="mx-auto container">
+  <main class="container mx-auto px-2 lg:px-0">
+    <Stepper v-if="contracts" :steps="stepper.steps" :currentStep="0" class="my-6" />
+    <section v-if="!contracts || contracts.length === 0" class="flex flex-col gap-6 my-8">
+      <div class="mx-auto container">
         <div
           class="ham-shadow--active bg-white border border-gray-900 rounded-3xl flex flex-col justify-center items-center gap-8 p-5">
           <div class="flex flex-col items-center gap-2">
@@ -31,22 +16,26 @@
         </div>
       </div>
     </section>
-    <section v-if="contracts && contracts.length" class="mx-auto container py-16">
-      <div class="ham-shadow--active bg-white border border-gray-900 rounded-3xl flex flex-col gap-10 p-5">
-        <div class="flex justify-between">
-          <div class="flex flex-col">
-            <h2 class="text-display-sm uppercase font-display font-semibold">Select a contract or create one</h2>
+    <section v-if="contracts && contracts.length" class="pb-8 mx-auto container">
+      <div
+        class="relative ham-shadow--active bg-white border border-gray-900 rounded-2xl flex flex-col gap-3 lg:gap-10 p-5 lg:pb-32">
+        <div class="flex flex-wrap lg:justify-between gap-3">
+          <div class="flex flex-col gap-3">
+            <h2 class="text-display-sm uppercase font-display font-semibold text-gray-900">Select a contract
+              or create one</h2>
             <p class="text-md text-gray-500">Choose which contract you’d like your media to be a part of</p>
           </div>
-          <NuxtLink to="/new-contract/erc-721-edition" class="ml-auto" :disabled="selectedContractIndex !== -1">
-            <CTA size="lg" color="primary" iconLeft="plus" :disabled="selectedContractIndex !== -1">Create a contract
+          <NuxtLink to="/new-contract/erc-721-edition" class="lg:ml-auto flex-1 lg:flex-auto"
+            :disabled="selectedContractIndex !== -1">
+            <CTA class="w-full lg:w-auto lg:ml-auto" size="lg" color="primary" iconLeft="plus"
+              :disabled="selectedContractIndex !== -1">Create a contract
             </CTA>
           </NuxtLink>
         </div>
-        <section class="flex flex-col gap-4 relative">
-          <ul v-if="contracts" class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-col gap-4 relative overflow-x-auto">
+          <ul v-if="contracts" class="flex lg:flex-wrap items-center gap-3 py-2">
             <li v-for="(item, index) in contracts" :key="index" @click="handleSelectContract(index)"
-              class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px] cursor-pointer"
+              class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[300px] max-w-[300px] cursor-pointer"
               :class="{
                 'ham-shadow--active bg-green-100': selectedContractIndex === index,
                 'ham-shadow': selectedContractIndex !== index,
@@ -60,9 +49,9 @@
               </div>
             </li>
           </ul>
-          <CTA @click="handleSave" size="lg" color="primary" cta-type="submit" :disabled="selectedContractIndex === -1"
-            class="absolute right-4 bottom-4">Save & Next</CTA>
-        </section>
+        </div>
+        <CTA @click="handleSave" size="lg" color="primary" cta-type="submit" :disabled="selectedContractIndex === -1"
+          class="flex-1 lg:flex-auto lg:absolute lg:right-8 lg:bottom-8">Save & Next</CTA>
       </div>
     </section>
   </main>

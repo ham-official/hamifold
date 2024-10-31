@@ -21,7 +21,7 @@
       <Icon icon="layers-two-01" class="rounded-full p-2.5 border border-gray-900" />
       <div class="flex flex-col items-start">
         <p class="font-semibold">Series</p>
-        <p class="text-gray-500">ERC-721</p>
+        <p class="text-gray-500">ERC 721 Edition</p>
       </div>
     </li>
     <li class="flex rounded-lg cursor-not-allowed border border-gray-900 bg-gray-300 p-4 gap-x-4">
@@ -39,7 +39,7 @@ import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    ...mapActions(['setModalData', 'setShowGeneralModal']),
+    ...mapActions(['setShowGeneralModal', 'setModalData', 'setShowSlideOver', 'setSlideOverData']),
     handleCreate(type) {
       let route
       switch (type) {
@@ -55,6 +55,8 @@ export default {
       document.body.classList.remove('body-overflow-hidden')
       this.setShowGeneralModal(false)
       this.setModalData(null)
+      this.setShowSlideOver(false)
+      this.setSlideOverData(null)
       this.$router.push(route)
     }
   },

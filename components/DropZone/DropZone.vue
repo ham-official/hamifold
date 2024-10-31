@@ -1,9 +1,11 @@
 <template>
   <div @dragenter.prevent="toggleActive" @dragleave.prevent="toggleActive" @dragover.prevent
-    @drop.prevent="toggleActive" :class="{ 'active-dropzone': active }" class="dropzone">
-    <span>Drag and Drop File</span>
-    <span>OR</span>
-    <CTA color="primary" class="cursor-pointer"><label for="dropzoneFile" class="cursor-pointer">Select File</label>
+    @drop.prevent="toggleActive" :class="{ 'active-dropzone': active }" class="dropzone p-4">
+    <span class="hidden lg:block">Drag and Drop File</span>
+    <span class="hidden lg:block">OR</span>
+    <CTA color="primary" class="cursor-pointer w-full lg:w-auto" size="lg"><label for="dropzoneFile"
+        class="cursor-pointer">Select
+        File</label>
     </CTA>
     <input type="file" id="dropzoneFile" class="dropzoneFile" />
   </div>

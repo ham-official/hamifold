@@ -1,6 +1,6 @@
 <template>
-  <section class="flex justify-between items-center rounded-lg bg-white border border-gray-900 p-5">
-    <div class="flex gap-3 p-4 border border-gray-900 rounded-lg items-center">
+  <section class="flex flex-wrap justify-between items-center rounded-2xl gap-3 bg-white border border-gray-900 p-4">
+    <div class="flex gap-3 items-center">
       <Icon :icon="icon" :no-size="true"
         class="rounded-full border border-gray-900 h-[40px] w-[40px] p-2 flex items-center justify-center" />
       <div class="flex flex-col">
@@ -8,15 +8,17 @@
         <p class="btext-base order text-gray-500">{{ description }}</p>
       </div>
     </div>
-    <ol v-if="steps" class="flex items-center gap-2 justify-center">
-      <li v-for="(step, index) in steps" :key="`step-${index}`" class="h-1.5 w-10 rounded-lg bg-gray-300" :class="{
-        'bg-gray-700': $route.path === step.link,
-      }"></li>
-      <!-- <li class="flex gap-2">
-          <CTA size="lg" color="white" :disabled="currentStep === 0" @click="handlePrev">previous</CTA>
-          <CTA size="lg" color="black" class="" :disabled="currentStep === lastStepIndex" @click="handleNext">next</CTA>
-        </li> -->
-    </ol>
+    <div class="flex flex-col gap-2 lg:mr-0 flex-1 lg:max-w-lg">
+      <h3 v-if="steps" class="text-center font-bold">{{ currentStep + 1 }}. {{ steps[currentStep].title }}</h3>
+      <ol v-if="steps" class="flex items-center gap-2 justify-center">
+        <li v-for="(step, index) in steps" :key="`step-${index}`" class="h-1.5 flex-1 rounded-lg bg-gray-300" :class="{
+          'bg-gray-700': $route.path === step.link || index === currentStep,
+          'bg-green-400': index < currentStep,
+          'bg-gray-300': index > currentStep
+        }">
+        </li>
+      </ol>
+    </div>
   </section>
 </template>
 
