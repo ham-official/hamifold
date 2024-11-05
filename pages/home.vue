@@ -190,27 +190,22 @@ export default {
       this.getStandardContractsForWallet(this.wallet);
     },
     async getTokens() {
-      console.log('getting tokens')
       this.isFetchingTokens = !this.tokens.length;
       const allNfts = await getAllNftsForWallet(this.wallet);
-      console.log({ allNfts })
       if (allNfts) {
         const uniqueContracts = allNfts && allNfts.length && allNfts.map((e) => e.token.address);
         if (allNfts.length === 0) {
           this.isNotTokenOwner = true;
           this.isFetchingTokens = false;
         }
-        console.log({ uniqueContracts })
         uniqueContracts.forEach((e) => {
           getContractType(e).then((res) => {
             const contractType = res;
             const collection = allNfts.find(
               (collection) => collection.token.address === e
             );
-            console.log({ collection, contractType })
             if (contractType === "ERC 721 EDITION") {
               collection.token_instances.forEach((token) => {
-                console.log({ token })
                 this.totalNumberOfTokens++;
                 const nft = editionNormalizer(collection, token);
                 this.updateTokens(nft);
@@ -307,10 +302,8 @@ export default {
     },
     async handleClick(data) {
       const index = data.index
-      console.log({ index })
       if (index !== undefined && index !== -1) {
         const token = this.visibleTokens[index]
-        console.log(token)
         const pageUrl = token && token.url
         if (pageUrl) {
           this.$router.push(`/c/${pageUrl}`)
@@ -324,7 +317,6 @@ export default {
             });
             this.setShowGeneralModal(true);
           } else {
-            console.log({ token })
             this.setSlideOverData({
               title: 'token',
               components: ["Token"],
@@ -377,7 +369,6 @@ export default {
     },
     updateTokens(nft) {
       this.isFetchingTokens = false;
-      console.log({ nft })
       const isNewNft = !this.tokens.some(
         ({ contract: { contractAddress }, tokenId }) =>
           contractAddress === nft.contract.contractAddress &&
