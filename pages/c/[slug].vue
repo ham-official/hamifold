@@ -3,9 +3,11 @@
     'px-4 lg:px-0': isFetching
   }">
     <section v-if="isFetching"
-      class="flex flex-col w-full gap-4 bg-white border-2 border-gray-900 ham-shadow--active p-12 rounded-3xl text-gray-900 mt-6">
-      <p class="font-display font-semibold text-center">
+      class="bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 p-6">
+      <h1 class="font-display text-display-sm uppercase font-semibold pt-6 mb-2 lg:mb-4">Claim Page</h1>
+      <p class="flex gap-2 mx-auto p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
         <span>Retrieving claim page data ...</span>
+        <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
     </section>
     <template v-else>
@@ -20,7 +22,7 @@
           <div class="flex flex-col w-full lg:w-1/2">
             <p class="text-lg lg:text-display-sm uppercase font-semibold font-display mb-1">{{
               claimPageData.tokenMetadata.title
-              }}</p>
+            }}</p>
             <p class="text-sm lg:text-md text-gray-500 mb-4">{{ truncate(claimPageData.contract.owner) }}</p>
             <p class="text-sm lg:text-lg text-gray-900 mb-4">{{ claimPageData.tokenMetadata.description }}</p>
             <ul class="flex flex-col gap-1 xs-only:pb-4">
@@ -211,14 +213,13 @@ export default {
           this.nextTokenTypeId = tokenType.toNumber();
           await this.formatTokenMetadata()
         } catch (error) {
-          console.log(error)
+          console.error(error)
         }
         this.isFetching = false
       }
     },
     async formatTokenMetadata() {
       const tokenEditionMetadata = await getTokenEditionMetadata(this.contractAddressFromURL, this.tokenTypeFromURL)
-      console.log(tokenEditionMetadata, 'GetTOKENS')
       this.tokenEditionMetadata = tokenEditionMetadata.map((val, index) => {
         if (val['_isBigNumber'] && index !== 7) {
           return val.toNumber()
@@ -242,7 +243,7 @@ export default {
         this.isMinting = false
         this.getPageData()
       } catch (error) {
-        console.log(error);
+        console.error(error);
         this.error = error
         this.transactionFinished = true
         this.isMinting = false
