@@ -2,7 +2,7 @@
   <div class="">
     <h2 class="font-display text-display-sm uppercase font-semibold mb-4 pt-6 pl-6">{{ title }}</h2>
     <p v-if="isFetching"
-      class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-100">
+      class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
       <span>Fetching Tokens</span>
       <Icon icon="refresh-cw-03" class="animate-spin" />
     </p>

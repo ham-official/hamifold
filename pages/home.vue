@@ -1,5 +1,5 @@
 <template>
-  <main class="lg:container mx-auto py-0 lg:py-6">
+  <main class="lg:container mx-auto pb-6">
     <section
       class="flex flex-col bg-transparent lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 pb-6 lg:mt-6 gap-2 lg:gap-4">
       <h2 class="font-display text-display-sm uppercase font-semibold pl-6 pt-6 mb-2 lg:mb-4">
@@ -7,7 +7,7 @@
       </h2>
       <template v-if="isFetchingContracts">
         <p
-          class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-100">
+          class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
           <span>Fetching Contracts</span>
           <Icon icon="refresh-cw-03" class="animate-spin" />
         </p>
@@ -48,7 +48,7 @@
         Claim Pages
       </h3>
       <p v-if="isFetchingClaimPages"
-        class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-100">
+        class="flex gap-2 mx-4 lg:mx-6 p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
         <span>Checking if claim pages exist for any of your contracts...</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
