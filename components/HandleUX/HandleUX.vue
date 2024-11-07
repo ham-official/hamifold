@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-0 left-0 z-50">
+  <div v-if="show" class="absolute top-0 left-0 z-50">
     <Modal v-if="showGeneralModal" :show-default-buttons="true" :show-custom-buttons="true" :confirmCancel="false"
       size="xl" class="min-h-[419px]">
       <template #header class="relative">
@@ -56,6 +56,9 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['modalData', 'showGeneralModal', 'slideOverData', 'showSlideOver', 'currentTokenIndex', 'totalTokens']),
+    show() {
+      return this.showGeneralModal || this.showSlideOver
+    }
   },
   methods: {
     ...mapActions(['setShowGeneralModal', 'setShowSlideOver', 'setCurrentTokenIndex', 'setVisibleTokens']),
