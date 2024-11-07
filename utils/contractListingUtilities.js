@@ -7,6 +7,7 @@ import {
   getTokensForWallet as getEditionTokensForWallet,
   nextTokenTypeId,
 } from "./erc721EditionUtils";
+import { getContractType } from "./contractUtilities";
 import axios from "axios";
 
 const ERC721_CONTRACT_DEPLOYER = import.meta.env.VITE_ERC721_CONTRACT_DEPLOYER;
