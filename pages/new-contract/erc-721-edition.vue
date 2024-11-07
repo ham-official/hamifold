@@ -1,15 +1,14 @@
 <template>
   <main class="container mx-auto py-8 px-2 lg:px-0">
-    <div
-      class="mx-auto lg:max-w-200 border border-gray-900 rounded-xl p-6 bg-white ham-shadow--active relative overflow-hidden">
+    <div class="mx-auto border border-gray-900 rounded-xl p-6 bg-white ham-shadow--active relative overflow-hidden">
       <div v-if="isSubmitting"
         class="absolute top-0 left-0 right-0 bottom-0 z-20 w-full h-full flex flex-col gap-2 items-center justify-center text-black bg-slate-300 bg-opacity-75">
         <span>Waiting for Wallet</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </div>
       <h1 class="text-gray-900 text-lg font-display flex items-center gap-2">
-        <span class="font-bold">ERC-721</span>
-        <Badge label="edition" size="md" color="secondary" />
+        <span class="font-bold">Series</span>
+        <Badge label="erc 721 edition" size="sm" color="indigo" />
       </h1>
       <h2 class="text-gray-600 font-display font-semibold mt-4">
         Create an ERC-721 edition contract to mint your tokens on your own claim page.<br /> You can use the same

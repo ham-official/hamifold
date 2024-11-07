@@ -1,12 +1,7 @@
 <template>
   <main class="container mx-auto pb-16">
-    <section class="max-w-100 mx-auto my-6">
-      <ul class="flex items-center gap-2 justify-between text-gray-600">
-        <li>1. Create contract</li>
-        <li>2. Set up media</li>
-        <li class="text-gray-950 font-bold">3. Mint</li>
-      </ul>
-    </section>
+    <Stepper title="1 of 1" description="Create a contract to mint your own tokens" icon="layer-single" :steps="steps"
+      :currentStep="2" class="my-6 mx-auto" />
     <div
       class="mx-auto border border-gray-900 rounded-xl p-6 bg-white ham-shadow--active relative overflow-hidden flex flex-col gap-3">
       <div v-if="isMinting"
@@ -60,7 +55,7 @@
 import { mapGetters } from "vuex";
 import navbarRoutes from "@/data/navbar.json";
 import { safeMint } from "@/utils/erc721Utils.js";
-
+import steps from "@/data/stepper.json"
 definePageMeta({
   middleware: ["auth"],
 });
@@ -96,16 +91,20 @@ export default {
     },
     contractName() {
       return this.contract && this.contract.name
+    },
+    steps() {
+      return steps['erc-721']
     }
   },
   methods: {
     async handleMint() {
+      console.log({ uri: this.uri, contract: this.contractAddress })
       try {
         this.isMinting = true;
         const nft = await safeMint(this.uri, this.contractAddress);
         confirm("Congrats!! You have successfully minted your NFT");
         this.isMinting = false;
-        this.$router.push('/inventory')
+        this.$router.push(`/contract/${this.contractAddress.replaceAll('"', '')}`)
       } catch (error) {
         confirm(error)
         this.isMinting = false;

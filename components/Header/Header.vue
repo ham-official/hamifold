@@ -51,11 +51,11 @@ export default {
   methods: {
     ...mapActions(['setShowGeneralModal', 'setModalData', 'setShowSlideOver', 'setSlideOverData']),
     handleShowCreateModal() {
-      this.setModalData({ title: 'create something new', components: ['CreateList', 'MintList'] })
+      this.setModalData({ components: ['CreatePagesList', 'MintList', 'CreateContractsList'] })
       this.setShowGeneralModal(true)
     },
     handleShowCreateSlideOver() {
-      this.setSlideOverData({ title: 'create something new', components: ['CreateList', 'MintList'] })
+      this.setSlideOverData({ components: ['CreatePagesList', 'MintList', 'CreateContractsList'] })
       this.setShowSlideOver(true)
       this.showMenu = false
     },

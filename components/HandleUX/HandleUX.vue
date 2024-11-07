@@ -10,8 +10,9 @@
       </template>
       <template #body>
         <template v-if="modalData">
-          <CreateList v-if="modalData.components.includes('CreateList')" />
+          <CreatePagesList v-if="modalData.components.includes('CreatePagesList')" />
           <MintList v-if="modalData.components.includes('MintList')" />
+          <CreateContractsList v-if="modalData.components.includes('CreateContractsList')" />
           <PublishProgress v-if="modalData.components.includes('PublishProgress')" v-bind="modalData.data" />
           <Token v-if="modalData.components.includes('Token')" v-bind="modalData.data" class="my-8" />
         </template>
