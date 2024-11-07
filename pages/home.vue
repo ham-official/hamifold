@@ -33,9 +33,9 @@
                 {{ truncate(item.contractAddress) }}
               </p>
               <p class="text-gray-500 mb-3 line-clamp-1">{{ item.name }}</p>
-              <div class="flex justify-between items-center">
-                <Badge :color="item.label === 'ERC 721 EDITION' ? 'indigo' : 'success'" size="sm" :label="item.label" />
-                <p class="text-xs">{{ item.symbol }}</p>
+              <div class="grid grid-cols-2 gap-1 items-center">
+                <Badge :color="item.label === 'ERC 721 EDITION' ? 'indigo' : 'success'" size="xs" :label="item.label" />
+                <p class="max-w-full text-xs ml-auto text-ellipsis overflow-hidden">{{ item.symbol }}</p>
               </div>
             </NuxtLink>
           </li>
