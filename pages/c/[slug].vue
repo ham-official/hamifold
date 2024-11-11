@@ -1,9 +1,7 @@
 <template>
-  <main class="container mx-auto lg:pb-16" :class="{
-    'px-4 lg:px-0': isFetching
-  }">
+  <main class="container mx-auto lg:pb-16">
     <section v-if="isFetching"
-      class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 p-6">
+      class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 p-4 lg:p-6">
       <h1 class="font-display text-display-sm uppercase font-semibold pt-6 mb-2 lg:mb-4">Claim Page</h1>
       <p class="flex gap-2 mx-auto p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
         <span>Retrieving claim page data ...</span>
