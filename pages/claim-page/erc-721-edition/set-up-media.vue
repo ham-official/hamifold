@@ -1,12 +1,13 @@
 <template>
   <main class="container mx-auto pb-16 px-2 lg:px-0">
-    <Stepper :steps="stepper.steps" :currentStep="1" class="my-6" />
+    <Stepper :steps="stepper.steps" :currentStep="1" :description="stepper.steps[1].description"
+      :icon="stepper.steps[1].icon" icon-color="warning" class="my-6" />
     <section class="bg-white border border-gray-900 ham-shadow--active rounded-2xl p-4 lg:p-6 mx-auto">
       <p class="uppercase text-gray-700 text-display-sm font-semibold font-display">set up media</p>
       <p class="text-md text-gray-500 mb-8">Upload media, add artwork detail</p>
       <DropZone @drop.prevent="drop" @change="selectedFile" class="my-3" />
-      <form v-if="dropzoneFileImage" @submit.prevent="handleSave" class="flex flex-col gap-2">
-        <div class="flex flex-wrap gap-4 lg:gap-6 mt-3">
+      <form @submit.prevent="handleSave" class="flex flex-col gap-2">
+        <div v-if="dropzoneFileImage" class="flex flex-wrap gap-4 lg:gap-6 mt-3">
           <div class="lg:w-1/2">
             <div class="w-full h-auto rounded-lg overflow-hidden border border-gray-900">
               <img ref="fileImage" :src="dropzoneFileImage" class="w-full h-full object-cover" />
@@ -32,7 +33,7 @@
           </div>
         </div>
         <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
-          <NuxtLink to="/claim-page/erc-721/select-contract" class="flex-1 lg:flex-initial">
+          <NuxtLink to="/claim-page/erc-721-edition/select-contract" class="flex-1 lg:flex-initial">
             <CTA size="lg" color="gray" class="w-full">Previous </CTA>
           </NuxtLink>
           <CTA class="flex-1 lg:flex-initial" color="primary" cta-type="submit" size="lg" :disabled="!formIsValid"
@@ -138,11 +139,11 @@ export default {
         if (file) {
           fileReader.addEventListener('loadend', function () {
             localStorage.setItem('claimPageMediaFile', fileReader.result);
-            router.push('/claim-page/erc-721/set-up-mint-page')
+            router.push('/claim-page/erc-721-edition/set-up-mint-page')
           });
           fileReader.readAsDataURL(file);
         } else {
-          router.push('/claim-page/erc-721/set-up-mint-page')
+          router.push('/claim-page/erc-721-edition/set-up-mint-page')
         }
       } catch (error) {
         console.log(error);

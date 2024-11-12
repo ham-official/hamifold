@@ -2,37 +2,47 @@
   "steps": [
     {
       "title": "Select contract",
-      "link": "/claim-page/erc-721/select-contract"
+      "link": "/claim-page/erc-721-edition/select-contract",
+      "description": "Create a page to allow minting of your ERC 721 Edition tokens.",
+      "icon": "layout-top"
     },
     {
       "title": "Set up Media",
-      "link": "/claim-page/erc-721/set-up-media"
+      "link": "/claim-page/erc-721-edition/set-up-media",
+      "description": "Create a page to allow minting of your ERC 721 Edition tokens.",
+      "icon": "layout-top"
     },
     {
       "title": "Set up Mint Page",
-      "link": "/claim-page/erc-721/set-up-mint-page"
+      "link": "/claim-page/erc-721-edition/set-up-mint-page",
+      "description": "Create a page to allow minting of your ERC 721 Edition tokens.",
+      "icon": "layout-top"
     },
     {
       "title": "Set mint rules",
-      "link": "/claim-page/erc-721/set-mint-rules"
+      "link": "/claim-page/erc-721-edition/set-mint-rules",
+      "description": "Create a page to allow minting of your ERC 721 Edition tokens.",
+      "icon": "layout-top"
     },
     {
       "title": "Set Audience",
-      "link": "/claim-page/erc-721/set-audience"
+      "link": "/claim-page/erc-721-edition/set-audience",
+      "description": "Create a page to allow minting of your ERC 721 Edition tokens.",
+      "icon": "layout-top"
     }
   ],
   "erc-721": [
     {
-      "title": "Create contract",
-      "link": "/new-contract/erc-721"
+      "title": "Select contract",
+      "link": "/mint/erc-721"
     },
     {
       "title": "Set up Media",
-      "link": "/new-contract/:id"
+      "link": "/mint/:id"
     },
     {
       "title": "Mint",
-      "link": "/new-contract/mint"
+      "link": "/mint"
     }
   ]
 }

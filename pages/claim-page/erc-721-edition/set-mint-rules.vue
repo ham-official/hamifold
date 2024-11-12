@@ -1,6 +1,7 @@
 <template>
   <main class="container mx-auto pb-8 px-2 lg:px-0">
-    <Stepper :steps="stepper.steps" :currentStep="3" class="my-6" />
+    <Stepper :steps="stepper.steps" :currentStep="3" :description="stepper.steps[3].description"
+      :icon="stepper.steps[3].icon" icon-color="warning" class="my-6" />
     <div
       class="flex flex-col gap-y-8 bg-white rounded-2xl p-4 lg:p-6 border border-gray-900 ham-shadow--active mx-auto">
       <form @submit.prevent="handleSubmit" class="my-4 text-gray-700 flex flex-col gap-8 relative">
@@ -16,7 +17,7 @@
                 <input id="price" type="number" v-model="price"
                   class="max-w-32 bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl text-base"
                   step="0.00001" />
-                <Badge v-if="price === 0" color="green" label="free" />
+                <Badge v-if="price === 0" color="success" label="free" class="px-3" />
               </div>
               <select name="currency" id="currency" disabled class="flex-1 border border-gray-900 rounded-xl p-2"
                 v-model="currency">
@@ -42,13 +43,13 @@
               <input type="radio" id="unlimited" name="totalSupply" value="unlimited" v-model="totalSupply"
                 :checked="totalSupply === 'unlimited'" class="hidden peer" />
               <label for="unlimited"
-                class="uppercase p-2 border border-gray-900 rounded-xl peer-checked:border-2 peer-checked:font-semibold cursor-pointer">unlimited</label>
+                class="uppercase px-2 md:px-4 py-3 border border-gray-900 rounded-full peer-checked:border-2 peer-checked:bg-gray-900 peer-checked:text-white font-semibold cursor-pointer">unlimited</label>
             </div>
             <div class="">
               <input type="radio" id="limited" name="totalSupply" value="limited" v-model="totalSupply"
                 :checked="totalSupply === 'limited'" class="hidden peer" />
               <label for="limited"
-                class="uppercase p-2 border border-gray-900 rounded-xl peer-checked:border-2 peer-checked:font-semibold cursor-pointer">limited</label>
+                class="uppercase px-2 md:px-4 py-3 border border-gray-900 rounded-full peer-checked:border-2 peer-checked:bg-gray-900 peer-checked:text-white font-semibold cursor-pointer">limited</label>
             </div>
           </div>
           <div v-if="totalSupply === 'limited'" class="flex flex-col gap-2">
@@ -93,7 +94,7 @@
           </div>
         </div>
         <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
-          <NuxtLink to="/claim-page/erc-721/set-up-mint-page" class="flex-1 lg:flex-initial">
+          <NuxtLink to="/claim-page/erc-721-edition/set-up-mint-page" class="flex-1 lg:flex-initial">
             <CTA size="lg" color="gray" class="w-full">Previous </CTA>
           </NuxtLink>
           <CTA class="flex-1 lg:flex-initial" :disabled="!formIsValid" size="lg" cta-type="submit" color="primary">Save
@@ -184,7 +185,7 @@ export default {
         }
         localStorage.setItem('claimPageMintRules', JSON.stringify(formData))
         setTimeout(() => {
-          this.$router.push('/claim-page/erc-721/set-audience')
+          this.$router.push('/claim-page/erc-721-edition/set-audience')
         }, 300);
       }
     }

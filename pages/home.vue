@@ -168,7 +168,7 @@ export default {
       }
     },
     getContractsFromLocalStorage() {
-      return JSON.parse(localStorage.getItem("contractInventory"));
+      return JSON.parse(localStorage.getItem("contractsInventory"));
     },
     getTokensFromLocalStorage() {
       const tokens = JSON.parse(localStorage.getItem("tokenInventory")) ?? [];
@@ -329,7 +329,7 @@ export default {
       }
     },
     handleShowCreateModal() {
-      this.setModalData({ title: 'create something new', components: ['CreateList', 'MintList'] })
+      this.setModalData({ components: ['CreatePagesList', 'MintList', 'CreateContractsList'] })
       this.setShowGeneralModal(true)
     },
     updateClaimPages(claimPage) {
@@ -354,7 +354,7 @@ export default {
         this.contracts.push(contract);
 
         localStorage.setItem(
-          "contractInventory",
+          "contractsInventory",
           JSON.stringify(this.contracts)
         );
       }
@@ -382,3 +382,4 @@ export default {
   },
 };
 </script>
+z

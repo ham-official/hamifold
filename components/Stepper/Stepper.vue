@@ -1,16 +1,22 @@
 <template>
-  <section class="flex flex-wrap justify-between items-center rounded-2xl gap-3 bg-white border border-gray-900 p-4">
-    <div class="flex gap-3 items-center">
+  <section class="flex flex-wrap items-center rounded-2xl gap-3 bg-white border border-gray-900 p-4">
+    <div class="flex min-w-full lg:min-w-min flex-1 gap-3 items-center">
       <Icon :icon="icon" :no-size="true"
-        class="rounded-full border border-gray-900 h-[40px] w-[40px] p-2 flex items-center justify-center" />
+        class="rounded-full border border-gray-900 h-[40px] w-[40px] min-w-[40px] p-2 flex items-center justify-center"
+        :class="{
+          'border-gray-500 text-gray-500 bg-gray-50': iconColor === 'gray',
+          'border-indigo-500 text-indigo-500 bg-indigo-50': iconColor === 'indigo',
+          'border-warning-500 text-warning-500 bg-warning-50': iconColor === 'warning',
+          'border-success-500 text-success-500 bg-success-50': iconColor === 'success'
+        }" />
       <div class="flex flex-col">
         <p class="text-base font-bold text-gray-900">{{ title }}</p>
         <p class="btext-base order text-gray-500">{{ description }}</p>
       </div>
     </div>
-    <div class="flex flex-col gap-2 lg:mr-0 flex-1 lg:max-w-lg">
-      <h3 v-if="steps" class="text-center font-bold">{{ currentStep + 1 }}. {{ steps[currentStep].title }}</h3>
-      <ol v-if="steps" class="flex items-center gap-2 justify-center">
+    <div v-if="steps" class="flex min-w-full lg:min-w-min flex-1 flex-col gap-2 lg:mr-0 lg:max-w-lg">
+      <h3 class="text-center font-bold">{{ currentStep + 1 }}. {{ steps[currentStep].title }}</h3>
+      <ol class="flex items-center gap-2 justify-center">
         <li v-for="(step, index) in steps" :key="`step-${index}`" class="h-1.5 flex-1 rounded-lg bg-gray-300" :class="{
           'bg-gray-700': $route.path === step.link || index === currentStep,
           'bg-green-400': index < currentStep,
@@ -32,6 +38,10 @@ export default {
     icon: {
       type: String,
       default: 'layers-three-01'
+    },
+    iconColor: {
+      type: String,
+      default: 'gray'
     },
     title: {
       type: String,

@@ -205,6 +205,7 @@ module.exports = {
         16: rem(64),
         100: rem(400),
         200: rem(800),
+        '1/2': '50%'
       },
       minWidth: {
         16: rem(64),

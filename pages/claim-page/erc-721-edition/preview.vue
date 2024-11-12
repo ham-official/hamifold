@@ -1,110 +1,130 @@
 <template>
   <main class="container mx-auto pb-12">
-    <h1 class="text-display-sm font-bold">Ready to publish?</h1>
-    <h2 class="text-lg text-gray-600 mb-4">Review your claim page mint rules. You'll be able to update details
-      after.</h2>
-    <section class="ham-shadow--active p-4 border-2 border-gray-900 bg-white rounded-2xl font-display">
-      <div class="grid grid-cols-4 gap-4">
-        <div v-if="mediaFileSrc">
-          <div class="w-full max-h-96 rounded-lg overflow-hidden border-2 border-gray-900 ham-shadow--active">
-            <img ref="fileImage" :src="mediaFileSrc" class="w-full h-full object-cover" />
+    <h1 class="text-display-sm font-bold mt-4 px-4 lg:px-0">Ready to publish?</h1>
+    <h2 class="text-lg text-gray-500 mb-4 px-4 lg:px-0">Review your claim page minting rules.</h2>
+    <Stepper :description="stepper.steps[0].description" :icon="stepper.steps[0].icon" icon-color="warning"
+      class="my-6 mx-2 lg:mx-0" />
+    <section class="ham-shadow--active p-4 mx-2 lg:mx-0 border-2 border-gray-700 bg-white rounded-3xl font-display">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-400">
+            <img v-if="mediaFileSrc" ref="fileImage" :src="mediaFileSrc" class="w-full h-full object-cover" />
           </div>
-          <ul v-if="media" class="p-2 mt-4">
+          <ul v-if="media" class="p-2 mt-4 text-lg">
             <li class="flex flex-wrap items-center gap-2">
-              <p><span class="font-semibold mr-2">Media Title</span><span class="text-gray-500">{{ media['title']
+              <p><span class="text-gray-500 mr-2">Media Title</span><span class="text-gray-700 font-semibold">{{
+                media['title']
                   }}</span></p>
             </li>
             <li class="flex flex-wrap items-center gap-2">
-              <p><span class="font-semibold mr-2">Media Description</span><span class="text-gray-500">{{
-          media['description'] }}</span>
+              <p><span class="text-gray-500 mr-2">Media Description</span><span class="text-gray-700 font-semibold">{{
+                media['description'] }}</span>
               </p>
             </li>
             <li class="flex flex-wrap items-center gap-2">
-              <p><span class="font-semibold mr-2">Created by</span><span class="text-gray-500">{{
-          media['createdBy'] }}</span>
+              <p><span class="text-gray-500 mr-2">Created by</span><span class="text-gray-700 font-semibold">{{
+                media['createdBy'] }}</span>
               </p>
             </li>
             <li class="flex flex-wrap items-center gap-2">
-              <p><span class="font-semibold mr-2">Details</span><span class="text-gray-500"><span
-                    class="font-semibold mr-1">width:</span>{{
-          media['imgDetails']['width'] }} px / <span class="font-semibold mr-1">height:</span>{{
-          media['imgDetails']['height'] }} px</span>
+              <p><span class="text-gray-500 mr-2">Details</span><span class="text-gray-700 font-semibold"><span
+                    class="text-gray-500 mr-1">width:</span>{{
+                      media['imgDetails']['width'] }} px / <span class="text-gray-500 mr-1">height:</span>{{
+                    media['imgDetails']['height'] }} px</span>
               </p>
             </li>
           </ul>
         </div>
-        <div class="p-4 border-2 border-gray-900 ham-shadow--active rounded-2xl">
-          <h3 class="text-lg uppercase font-semibold mb-4 text-center">mint rules</h3>
-          <ul v-if="mintRules" class="flex flex-col gap-y-3">
-            <li><span class="font-bold mr-2">Price</span><span class="font-normal">{{ mintRules.price }} <span
-                  class="font-normal uppercase">{{ mintRules.currency
-                  }}</span></span></li>
-            <li><span class="font-bold mr-2">Minting Start Date</span><span class="font-normal">{{ mintRules.startDate
-          ??
-          'Not set'
-                }}</span></li>
-            <li><span class="font-bold mr-2">Minting End Date</span><span class="font-normal">{{ mintRules.endDate ??
-          'Not set' }}</span></li>
-            <li><span class="font-bold mr-2">Total supply</span><span class="font-normal">{{
-          mintRules.totalSupply ===
-            'unlimited' ? 'Unlimited' : mintRules.numberOfTokens }}</span></li>
-            <!-- <li><span class="font-bold mr-2">Numbered tokens</span><span class="font-normal">{{
-              mintRules.numberedTokens === false ? 'No' : 'Yes'
-                }}</span>
-            </li> -->
-            <li><span class="font-bold mr-2">Payout address</span><span class="font-normal text-base">{{
-          truncate(mintRules.walletForPayment)
-        }}</span></li>
-          </ul>
-        </div>
-        <div class="flex flex-col gap-4">
-          <div class="flex-1 p-4 border-2 border-gray-900 ham-shadow--active rounded-2xl bg-gray-200 text-gray-900">
-            <h3 class="text-lg uppercase font-semibold mb-4 text-center">contract</h3>
-            <ul v-if="contract" class="flex flex-col gap-y-3">
-              <li><span class="font-bold mr-2">Contract Address</span><span class="font-normal">{{
-          truncate(contract.contractAddress) }}</span></li>
-              <li><span class="font-bold mr-2">Contract Name</span><span class="font-normal">{{ contract.name }}</span>
-              </li>
-              <li><span class="font-bold mr-2">Contract Symbol</span><span class="font-normal">{{ contract.symbol
+        <div class="flex flex-col gap-2">
+          <div>
+            <h3 class="text-lg lg:text-xl uppercase font-semibold mb-4">mint rules</h3>
+            <ul v-if="mintRules" class="flex flex-col gap-y-3">
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Price:</span><span
+                  class="font-semibold text-gray-700">{{
+                    mintRules.price }}
+                  <span class="uppercase">{{ mintRules.currency
+                    }}</span></span></li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500  mr-2">Minting Start Date:</span><span
+                  class="font-semibold text-gray-700">{{
+                    mintRules.startDate
+                    ??
+                    'Not set'
+                  }}</span></li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500  mr-2">Minting End Date:</span><span
+                  class="font-semibold text-gray-700">{{
+                    mintRules.endDate ??
+                    'Not set' }}</span></li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500  mr-2">Total supply:</span><span
+                  class="font-semibold text-gray-700">{{
+                    mintRules.totalSupply ===
+                      'unlimited' ? 'Unlimited' : mintRules.numberOfTokens }}</span></li>
+              <!-- <li class="text-lg flex gap-1"><span class="font-bold mr-2">Numbered tokens</span><span class="font-semibold text-gray-700">{{
+                mintRules.numberedTokens === false ? 'No' : 'Yes'
+                  }}</span>
+              </li> -->
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Payout address:</span><span
+                  class="font-semibold text-gray-700">{{
+                    truncate(mintRules.walletForPayment)
                   }}</span></li>
             </ul>
           </div>
-          <div class="flex-1 p-4 border-2 border-gray-900 ham-shadow--active rounded-2xl bg-gray-200 text-gray-900">
-            <h3 class="text-lg uppercase font-semibold mb-4 text-center">page info</h3>
+          <div class="my-4">
+            <h3 class="text-lg lg:text-xl uppercase font-semibold mb-4">contract</h3>
+            <ul v-if="contract" class="flex flex-col gap-y-3">
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Contract Address:</span><span
+                  class="text-gray-700 font-semibold">{{
+                    truncate(contract.contractAddress) }}</span></li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Contract Name:</span><span
+                  class="text-gray-700 font-semibold">{{
+                    contract.name }}</span>
+              </li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Contract Symbol:</span><span
+                  class="text-gray-700 font-semibold">{{
+                    contract.symbol
+                  }}</span></li>
+            </ul>
+          </div>
+          <div class="my-4">
+            <h3 class="text-lg lg:text-xl uppercase font-semibold mb-4">page info</h3>
             <ul v-if="contract && mintPage" class="flex flex-col gap-y-3">
-              <li class=""><span class="font-bold mr-2">Page URL</span><span class="font-normal line-clamp-2">{{
-          `${baseURL}/${truncate(contract.contractAddress)}-${tokenType}`
-        }}</span></li>
-              <li><span class="font-bold mr-2">Description</span><span class="font-normal line-clamp-3">{{
-            mintPage.description
-          }}</span>
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Page URL:</span><span
+                  class="text-gray-700 font-semibold line-clamp-2">{{
+                    `${baseURL}/${truncate(contract.contractAddress)}-${tokenType}`
+                  }}</span></li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Description:</span><span
+                  class="text-gray-700 font-semibold line-clamp-3">{{
+                    mintPage.description
+                  }}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="my-4">
+            <h3 class="text-lg lg:text-xl uppercase font-semibold mb-4">audience rules</h3>
+            <ul v-if="audience" class="flex flex-col gap-y-3">
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Who can claim:</span><span
+                  class="ftext-gray-700 font-semibold line-clamp-2 capitalize">{{
+                    audience.audience }}</span></li>
+              <li class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Limited:</span><span
+                  class="text-gray-700 font-semibold line-clamp-3">{{
+                    audience.limited ? 'Yes' : 'No'
+                  }}</span>
+              </li>
+              <li v-if="audience.limited" class="text-lg flex gap-1"><span class="text-gray-500 mr-2">Max Tokens Per
+                  Wallet:</span><span class="text-gray-700 font-semibold line-clamp-3">{{
+                    audience.maxTokensPerWallet
+                  }}</span>
               </li>
             </ul>
           </div>
         </div>
-        <div class="p-4 border-2 border-gray-900 ham-shadow--active rounded-2xl ">
-          <h3 class="text-lg uppercase font-semibold mb-4 text-center">audience rules</h3>
-          <ul v-if="audience" class="flex flex-col gap-y-3">
-            <li class=""><span class="font-bold mr-2">Who can claim</span><span
-                class="font-normal line-clamp-2 capitalize">{{
-          audience.audience }}</span></li>
-            <li><span class="font-bold mr-2">Limited</span><span class="font-normal line-clamp-3">{{
-          audience.limited ? 'Yes' : 'No'
-        }}</span>
-            </li>
-            <li v-if="audience.limited"><span class="font-bold mr-2">Max Tokens Per Wallet</span><span
-                class="font-normal line-clamp-3">{{
-                audience.maxTokensPerWallet
-                }}</span>
-            </li>
-          </ul>
-        </div>
       </div>
       <div class="flex items-center flex-end gap-2 pt-6">
-        <CTA @click="$router.push('/claim-page/erc-721/set-audience')" color="gray" class="ml-auto" size="lg">previous
+        <CTA @click="$router.push('/claim-page/erc-721-edition/set-audience')" color="gray"
+          class="flex-1 lg:flex-none lg:ml-auto" size="lg">
+          previous
           step
         </CTA>
-        <CTA @click="handleSave" color="primary" cta-type="submit" size="lg">Publish</CTA>
+        <CTA @click="handleSave" color="primary" cta-type="submit" size="lg" class="flex-1 lg:flex-none">Publish</CTA>
       </div>
     </section>
   </main>
@@ -115,6 +135,7 @@ import axios from "axios";
 import { mapActions } from 'vuex'
 import { setEditionInfo, nextTokenTypeId } from "@/utils/erc721EditionUtils.js";
 import steps from '@/data/publish.json'
+import stepper from "@/data/stepper.json"
 import { delay } from '@/utils/timeUtil'
 import { lambdasPath } from "@/utils/netlify.js";
 import { truncateAddress } from "@/utils/truncateAddress";
@@ -141,6 +162,9 @@ export default {
     },
     baseURL() {
       return baseURL
+    },
+    stepper() {
+      return stepper
     },
   },
   async mounted() {

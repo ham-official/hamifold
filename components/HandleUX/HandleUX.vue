@@ -35,8 +35,9 @@
     <SlideOver v-if="showSlideOver" @close="closeSlideOver">
       <template #body>
         <div v-if="slideOverData" class="flex flex-col gap-2">
-          <CreateList v-if="slideOverData.components.includes('CreateList')" />
+          <CreatePagesList v-if="slideOverData.components.includes('CreatePagesList')" />
           <MintList v-if="slideOverData.components.includes('MintList')" />
+          <CreateContractsList v-if="slideOverData.components.includes('CreateContractsList')" />
           <PublishProgress v-if="slideOverData.components.includes('PublishProgress')" v-bind="slideOverData.data" />
           <Token v-if="slideOverData.components.includes('Token')" v-bind="slideOverData.data" />
         </div>

@@ -1,9 +1,9 @@
 <template>
   <h4 class="font-display font-semibold uppercase text-display-sm text-gray-600">Pages</h4>
-  <ul class="grid grid-cols-2 gap-4 text-md w-full">
+  <ul class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-md w-full">
     <li @click="handleCreate('claim')"
       class="flex items-center rounded-lg cursor-pointer border border-gray-900 ham-shadow p-4 gap-x-4">
-      <Icon icon="layout-top" class="rounded-full p-2.5 border border-gray-900" />
+      <Icon icon="layout-top" class="rounded-full p-2.5 border border-warning-500 text-warning-500 bg-warning-50" />
       <div class="flex flex-col items-start">
         <p class="font-semibold">Claim page</p>
         <p class="text-gray-500 text-left">Create a page to allow minting of your <span class="font-bold">ERC 721
@@ -30,7 +30,7 @@ export default {
       let route
       switch (type) {
         case 'claim':
-          route = '/claim-page/erc-721/select-contract'
+          route = '/claim-page/erc-721-edition/select-contract'
           break;
 
         default:

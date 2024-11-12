@@ -1,6 +1,7 @@
 <template>
   <main class="container mx-auto pb-8 px-2 lg:px-0">
-    <Stepper :steps="stepper.steps" :currentStep="2" class="my-6" />
+    <Stepper :steps="stepper.steps" :currentStep="2" :description="stepper.steps[2].description"
+      :icon="stepper.steps[2].icon" icon-color="warning" class="my-6" />
     <div
       class="flex flex-col gap-y-8 bg-white rounded-2xl p-4 lg:p-6 border border-gray-900 ham-shadow--active mx-auto">
       <form @submit.prevent="handleSubmit" class=" text-gray-700 flex flex-col gap-8 relative">
@@ -12,7 +13,7 @@
             class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl text-base" />
         </div>
         <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
-          <NuxtLink to="/claim-page/erc-721/set-up-media" class="flex-1 lg:flex-initial">
+          <NuxtLink to="/claim-page/erc-721-edition/set-up-media" class="flex-1 lg:flex-initial">
             <CTA size="lg" color="gray" class="w-full">Previous </CTA>
           </NuxtLink>
           <CTA class="flex-1 lg:flex-initial" :disabled="!formIsValid" size="lg" cta-type="submit" color="primary">Save
@@ -75,7 +76,7 @@ export default {
         };
         localStorage.setItem('mintPage', JSON.stringify({ ...mintPage }))
         setTimeout(() => {
-          this.$router.push('/claim-page/erc-721/set-mint-rules')
+          this.$router.push('/claim-page/erc-721-edition/set-mint-rules')
         }, 300);
       } catch (error) {
         console.log({ error });

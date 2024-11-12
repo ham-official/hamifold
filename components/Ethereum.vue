@@ -117,7 +117,7 @@ export default {
         this.modal.open({ view: "Networks" });
         localStorage.removeItem('creations')
         localStorage.removeItem('tokenInventory')
-        localStorage.removeItem('contractInventory')
+        localStorage.removeItem('contractsInventory')
       }
     },
     truncate(address) {
