@@ -49,40 +49,54 @@
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
     </section>
-    <section class="bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6">
+    <section
+      class="lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop p-6 lg:rounded-3xl text-gray-900 mt-6">
       <h2 class="font-display font-semibold text-display-sm uppercase mb-4">Your Tokens</h2>
-      <p v-if="fetchingTokens" class="flex gap-2"><span>Fetching the contract tokens</span>
-        <Icon icon="refresh-cw-03" class="animate-spin" />
-      </p>
-      <template v-else>
-        <ul v-if="tokenInventory && tokenInventory.length" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          <li v-for="(card, index) in tokenInventory" :key="`token-card-${index}`" @click="handleClick(index)">
-            <Card class="ham-shadow cursor-pointer" v-bind="card.metadata" />
-          </li>
-        </ul>
+      <div
+        class="flex flex-col gap-2 p-4 lg:p-36 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
+        <p v-if="fetchingTokens" class="flex gap-2"><span>Fetching the contract tokens</span>
+          <Icon icon="refresh-cw-03" class="animate-spin" />
+        </p>
         <template v-else>
-          <p>You don't own tokens of this contract</p>
+          <ul v-if="tokenInventory && tokenInventory.length"
+            class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <li v-for="(card, index) in tokenInventory" :key="`token-card-${index}`" @click="handleClick(index)">
+              <Card class="ham-shadow cursor-pointer" v-bind="card.metadata" />
+            </li>
+          </ul>
+          <template v-else>
+            <p>You don't own tokens of this contract</p>
+          </template>
         </template>
-      </template>
+      </div>
     </section>
-    <section class="bg-white border-2 border-gray-900 ham-shadow--active p-6 rounded-3xl text-gray-900 mt-6">
+    <section
+      class="lg:bg-white lg:border-2 border-gray-900 lg:ham-shadow--active p-6 lg:rounded-3xl text-gray-900 mt-6">
       <h3 class="font-display font-semibold text-display-sm uppercase mb-4">Claim Pages</h3>
-      <p v-if="fetchingClaimPages" class="flex gap-2"><span>Checking if claim pages exits to mint some ...</span>
-        <Icon icon="refresh-cw-03" class="animate-spin" />
-      </p>
-      <p v-else class="mb-4">
-        <template v-if="contractType === 'ERC 721 EDITION'">
-          <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint the
-            tokens</span>
-          <span v-else class="font-semibold">There are not</span>
+      <div
+        class="flex flex-col gap-2 p-4 lg:p-36 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
+        <p v-if="fetchingClaimPages" class="flex gap-2"><span>Checking if claim pages exits to mint some ...</span>
+          <Icon icon="refresh-cw-03" class="animate-spin" />
+        </p>
+        <template v-else>
+          <p v-if="contractType === 'ERC 721 EDITION'" class="lg:max-w-sm">
+            <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint
+              the
+              tokens</span>
+            <span v-else class="font-semibold">There are not</span>
+          </p>
+          <p v-if="contractType === 'ERC 721'" class="lg:max-w-sm flex flex-col gap-3">
+            <span>Regular ERC-721 contracts are not suitable to have Claim Pages, which
+              allow people
+              to mint
+              your NFTs.
+            </span>
+            <span>You can use the ERC-721 contract <span class="font-semibold">to mint your own
+                NFTs</span>, although no
+              one else will be able to mint any.</span>
+          </p>
         </template>
-        <template v-if="contractType === 'ERC 721'">
-          <span class="mb-4">Regular ERC-721 contracts are not suitable to have Claim Pages, which allow people to mint
-            your NFTs.
-            <br />You can use the ERC-721 contract <span class="font-semibold">to mint your own NFTs</span>, although no
-            one else will be able to mint any.</span>
-        </template>
-      </p>
+      </div>
       <ul v-if="claimPages" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <li v-for="c, i in claimPages" :key="`claim-page-${i}`">
           <NuxtLink :to="`/c/${c.url}`">
@@ -145,7 +159,6 @@ export default {
       this.contract = { ...contract }
     }
     this.fetchingContract = false
-    console.log({ contract: this.contract })
     if (!this.contract.label) {
       console.log({ label: this.contract.label })
       const contractType = await getContractType(this.contractAddress)
@@ -254,7 +267,7 @@ export default {
       if (this.contractType === 'ERC 721') {
         localStorage.setItem('contractAddress', JSON.stringify(this.contractAddress))
         localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
-        this.$router.push(`/new-contract/${this.contractAddress}`)
+        this.$router.push(`/mint-erc-721/${this.contractAddress}`)
       }
     },
     truncate(address) {
