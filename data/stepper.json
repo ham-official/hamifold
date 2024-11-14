@@ -34,15 +34,15 @@
   "erc-721": [
     {
       "title": "Select contract",
-      "link": "/mint/erc-721"
+      "link": "/mint-erc-721/select-contract"
     },
     {
       "title": "Set up Media",
-      "link": "/mint/:id"
+      "link": "/mint-erc-721/:id"
     },
     {
       "title": "Mint",
-      "link": "/mint"
+      "link": "/mint-erc-721"
     }
   ]
 }

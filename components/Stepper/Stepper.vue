@@ -11,7 +11,7 @@
         }" />
       <div class="flex flex-col">
         <p class="text-base font-bold text-gray-900">{{ title }}</p>
-        <p class="btext-base order text-gray-500">{{ description }}</p>
+        <p class="btext-base order text-gray-500" v-html="description"></p>
       </div>
     </div>
     <div v-if="steps" class="flex min-w-full lg:min-w-min flex-1 flex-col gap-2 lg:mr-0 lg:max-w-lg">

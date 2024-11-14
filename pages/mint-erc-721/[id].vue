@@ -1,7 +1,7 @@
 <template>
   <main class="container mx-auto pb-16">
-    <Stepper title="1 of 1" description="Create a contract to mint your own tokens" icon="layer-single" :steps="steps"
-      :currentStep="1" class="my-6 mx-auto" />
+    <Stepper title="1 of 1" :description="`User your contract o${truncate(routeId)} to mint your own ERC 721 token`"
+      icon="grid-02" :steps="steps" :currentStep="1" class="my-6 mx-auto" :icon="steps[1].icon" icon-color="success" />
     <div class="mx-auto 0 border border-gray-900 rounded-xl relative p-6 bg-white overflow-hidden">
       <div v-if="isPinningImg || isPinningJson"
         class="absolute top-0 left-0 right-0 bottom-0 z-20 w-full h-full flex flex-col gap-2 items-center justify-center text-black bg-slate-300 bg-opacity-75">
@@ -13,31 +13,41 @@
         Upload media, add a title, and share more about your work
       </h2>
       <DropZone @drop.prevent="drop" @change="selectedFile" class="my-3" />
-      <form v-if="dropzoneFileImage" @submit.prevent="handleSave" class="flex gap-2">
-        <section class="w-64">
-          <div class="w-full h-auto rounded-lg overflow-hidden">
-            <img ref="fileImage" :src="dropzoneFileImage" class="w-full h-full object-cover" />
-          </div>
-          <span class="file-info">File: {{ dropzoneFile.name }}</span>
-        </section>
-        <section class="flex-1 text-gray-900 flex flex-col gap-3">
-          <div class="flex flex-col gap-2">
-            <label for="title" class="">Add a Title</label>
-            <input id="title" type="text" v-model="title" placeholder="e.g. Replicator"
-              class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="description" class="">Description</label>
-            <input id="description" type="text" v-model="description" placeholder="e.g. May 2023"
-              class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="created-by" class="">Created By</label>
-            <input id="created-by" type="text" v-model="createdBy" placeholder="e.g. the media creator"
-              class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
-          </div>
-          <CTA @click="handleSave" color="primary" cta-type="submit" :disabled="!formIsValid">Save Media</CTA>
-        </section>
+      <form @submit.prevent="handleSave" class="flex gap-2">
+        <div v-if="dropzoneFileImage" class="flex flex-wrap gap-4 lg:gap-6 mt-3">
+          <section class="lg:w-1/2">
+            <div class="w-full h-auto rounded-lg overflow-hidden border border-gray-900">
+              <img ref="fileImage" :src="dropzoneFileImage" class="w-full h-full object-cover" />
+            </div>
+            <span class="file-info line-clamp-3 mt-2">File: {{ dropzoneFile.name }}</span>
+          </section>
+          <section class="flex-1 text-gray-900 flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
+              <label for="title" class="">Add a Title</label>
+              <input id="title" type="text" v-model="title" placeholder="e.g. Replicator"
+                class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="description" class="">Description</label>
+              <input id="description" type="text" v-model="description" placeholder="e.g. May 2023"
+                class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="created-by" class="">Created By</label>
+              <input id="created-by" type="text" v-model="createdBy" placeholder="e.g. the media creator"
+                class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+            </div>
+          </section>
+        </div>
+        <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
+          <NuxtLink to="/mint-erc-721/select-contract" class="flex-1 lg:flex-initial">
+            <CTA size="lg" color="gray" class="w-full">Previous</CTA>
+          </NuxtLink>
+          <CTA class="flex-1 lg:flex-initial" color="primary" cta-type="submit" size="lg" :disabled="!formIsValid"
+            @click="handleSave">
+            Save & Next
+          </CTA>
+        </div>
       </form>
     </div>
   </main>
@@ -49,6 +59,7 @@ import navbarRoutes from "@/data/navbar.json";
 import { ref } from "vue";
 import { lambdasPath } from "@/utils/netlify.js";
 import { patterns, testRegex } from "@/utils/regex.js";
+import { truncateAddress } from "@/utils/truncateAddress";
 import axios from "axios";
 import steps from "@/data/stepper.json"
 definePageMeta({
@@ -137,7 +148,7 @@ export default {
         localStorage.setItem("uri", pinJsonResponse.jsonUrl);
         localStorage.setItem("imgUrl", pinImageResponse.imgUrl);
 
-        this.$router.push(`/new-contract/mint`);
+        this.$router.push(`/mint-erc-721/token`);
       } catch (error) {
         console.log(error);
       }
@@ -188,6 +199,9 @@ export default {
           reject(error);
         }
       });
+    },
+    truncate(address) {
+      return truncateAddress(address)
     },
   },
 };
