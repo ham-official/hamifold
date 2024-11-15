@@ -4,7 +4,7 @@
     <span class="hidden lg:block">Drag and Drop File</span>
     <span class="hidden lg:block">OR</span>
     <label for="dropzoneFile"
-      class="cursor-pointer w-full lg:w-auto bg-primary-400 text-black hover:bg-primary-700 hover:text-primary-25 border border-gray-900 font-display uppercase font-semibold rounded-full transition ease-in-out p-3 lg:px-12">Select
+      class="cursor-pointer w-full lg:w-auto bg-primary-400 text-black hover:bg-primary-700 hover:text-primary-25 border border-gray-900 font-display uppercase font-semibold rounded-full transition ease-in-out p-3 lg:px-12 text-center">Select
       File</label>
     <input type="file" id="dropzoneFile" class="dropzoneFile" />
   </div>
