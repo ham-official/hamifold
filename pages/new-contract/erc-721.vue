@@ -75,6 +75,15 @@ export default {
       return steps['erc-721']
     }
   },
+  beforeRouteEnter(to, from, next) {
+    const origin = from.path
+    next(vm => {
+      const query = { from: origin }
+      vm.$router.replace({
+        query: { ...query }
+      });
+    })
+  },
   mounted() {
     const deployTx = JSON.parse(localStorage.getItem("deployTx"));
 
@@ -120,17 +129,19 @@ export default {
           const contractAddress = res.logs[0].address
           inventory.push({
             contractAddress: contractAddress,
-            contractName: deployTx.contractName,
+            name: deployTx.contractName,
             symbol: deployTx.symbol,
-            asciiMark: deployTx.asciiMark,
-            gasUsed: res.gasUsed,
-            transactionHash: res.transactionHash,
-            blockNumber: res.blockNumber,
+            label: 'ERC 721'
           });
 
           this.inventory = inventory;
           this.isSubmitting = false;
-          this.$router.push('/home');
+          const to = this.$route.query.from
+          if (to) {
+            this.$router.push(to);
+          } else {
+            this.$router.push('/home')
+          }
         })
         .catch((err) => {
           localStorage.removeItem("deployTx");

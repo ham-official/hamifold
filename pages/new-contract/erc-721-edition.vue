@@ -36,9 +36,6 @@
 import { mapGetters } from "vuex";
 import navbarRoutes from "@/data/navbar.json";
 import { hamERC721EditionContractDeployer } from "@/utils/contractDeployer.js";
-import {
-  hamERC721EditionListOfContracts
-} from '@/utils/contractListingUtilities.js'
 import { patterns, testRegex } from "@/utils/regex.js";
 
 definePageMeta({
@@ -49,7 +46,6 @@ export default {
     return {
       contractName: null,
       symbol: null,
-      // asciiMark: null,
       deployInProgress: false,
       deployTransaction: null,
       isContractDeployed: false,
@@ -71,7 +67,7 @@ export default {
 
     this.deployTx = deployTx ? deployTx : null;
 
-    const inventory = JSON.parse(localStorage.getItem("inventory"));
+    const inventory = JSON.parse(localStorage.getItem("contractsInventory"));
     this.inventory = inventory ? inventory : null;
 
   },
@@ -124,20 +120,16 @@ export default {
       deployTx
         .wait()
         .then(async (res) => {
-          const contracts = await hamERC721EditionListOfContracts(this.wallet)
           const contractAddress = res.logs[0].address
           inventory.push({
             contractAddress: contractAddress,
-            contractName: deployTx.contractName,
+            name: deployTx.contractName,
             symbol: deployTx.symbol,
-            // asciiMark: deployTx.asciiMark,
-            gasUsed: res.gasUsed,
-            transactionHash: res.transactionHash,
-            blockNumber: res.blockNumber,
+            label: 'ERC 721 EDITION'
           });
 
           this.inventory = inventory;
-          localStorage.setItem("inventory", JSON.stringify(inventory));
+          localStorage.setItem("contractsInventory", JSON.stringify(inventory));
           localStorage.setItem(
             "contractAddress",
             contractAddress
