@@ -73,12 +73,10 @@ export default {
       document.body.classList.remove('body-overflow-hidden')
     },
     handleNext() {
-      const newTokenIndex = this.currentTokenIndex === this.totalTokens - 1 ? 0 : this.currentTokenIndex + 1
-      this.setCurrentTokenIndex(newTokenIndex)
+      this.setCurrentTokenIndex(this.currentTokenIndex + 1)
     },
     handlePrev() {
-      const newTokenIndex = this.currentTokenIndex > 0 ? this.currentTokenIndex - 1 : this.totalTokens - 1
-      this.setCurrentTokenIndex(newTokenIndex)
+      this.setCurrentTokenIndex(this.currentTokenIndex - 1)
     }
   },
   beforeRouteLeave() {

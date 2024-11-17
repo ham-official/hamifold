@@ -3,8 +3,9 @@
     <section v-if="isFetching"
       class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 p-4 lg:p-6">
       <h1 class="font-display text-display-sm uppercase font-semibold pt-6 mb-2 lg:mb-4">Claim Page</h1>
-      <p class="flex gap-2 mx-auto p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
-        <span>Retrieving claim page data ...</span>
+      <p
+        class="flex gap-2 mx-auto px-12 py-36 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
+        <span class="font-display font-semibold">Retrieving claim page data ...</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
     </section>
@@ -57,7 +58,14 @@
           </div>
         </section>
       </template>
-      <span v-else class="font-display font-semibold">This is not a valid Claim Page</span>
+      <section v-else
+        class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 p-4 lg:p-6">
+        <h1 class="font-display text-display-sm uppercase font-semibold pt-6 mb-2 lg:mb-4">Claim Page</h1>
+        <p
+          class="font-display font-semibold border border-gray-900 rounded-3xl text-gray-900 text-center py-36 bg-gray-200">
+          This
+          is not a valid Claim Page</p>
+      </section>
     </template>
   </main>
   <div class="absolute top-0 left-0 z-50">

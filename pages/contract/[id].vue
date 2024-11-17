@@ -1,7 +1,7 @@
 <template>
   <main class="container mx-auto pb-8">
     <section
-      class="relative lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop p-6 lg:rounded-3xl text-gray-900 mt-6">
+      class="relative sm:bg-white border-b-2 sm:border-2 border-gray-900 ham-shadow--active--desktop p-4 sm:p-6 sm:rounded-3xl text-gray-900 mt-6">
       <h1 class="font-display font-semibold text-display-sm uppercase mb-4">Contract</h1>
       <p v-if="contractType === 'ERC 721'" class="text-gray-500 mb-4">
         <span>You can use the same ERC-721 contract to mint NFTs for yourself</span>
@@ -15,14 +15,14 @@
         <span v-else>You can use the same contract to enable minting for different NFTs through several Claim
           Pages</span>
       </p>
-      <div v-if="contract && contractType" class="lg:grid grid-cols-3 gap-4 mb-4">
+      <div v-if="contract && contractType" class="lg:grid lg:grid-cols-3 gap-4 mb-4">
         <div>
           <p class="flex items-center">
             <span class="font-semibold mr-2">Contract Address</span>
             <a :href="`https://explorer.ham.fun/address/${contractAddress}`" target="_blank"
               class="text-gray-500 hover:text-black flex items-center gap-2">
               <span>{{ truncate(contractAddress) }}</span>
-              <Icon icon="link-external-01" />
+              <Icon icon="link-external-01" :no-size="true" class="w-4 h-4" />
             </a>
           </p>
           <p><span class="font-semibold mr-2">Name</span><span class="text-gray-500">{{ contract.name }}</span></p>
@@ -44,67 +44,42 @@
         </template>
       </div>
       <p v-else
-        class="flex gap-2 mx-auto p-12 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
+        class="flex gap-2 mx-auto px-4 py-36 sm:px-0  items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
         <span>Fetching contract</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
     </section>
-    <section
-      class="lg:bg-white border-b-2 lg:border-2 border-gray-900 ham-shadow--active--desktop p-6 lg:rounded-3xl text-gray-900 mt-6">
-      <h2 class="font-display font-semibold text-display-sm uppercase mb-4">Your Tokens</h2>
-      <div
-        class="flex flex-col gap-2 p-4 lg:p-36 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
-        <p v-if="fetchingTokens" class="flex gap-2"><span>Fetching the contract tokens</span>
-          <Icon icon="refresh-cw-03" class="animate-spin" />
+    <SectionWithListOfCards title="your tokens" name="tokens" :list="tokens" :isFetching="fetchingTokens"
+      fetchingText="Fetching the contract tokens..." :listItemIsLink="false">
+      <template #empty>
+        <p class="text-center">
+          You don't have tokens of this contract yet.
         </p>
-        <template v-else>
-          <ul v-if="tokenInventory && tokenInventory.length"
-            class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <li v-for="(card, index) in tokenInventory" :key="`token-card-${index}`" @click="handleClick(index)">
-              <Card class="ham-shadow cursor-pointer" v-bind="card.metadata" />
-            </li>
-          </ul>
-          <template v-else>
-            <p>You don't own tokens of this contract</p>
-          </template>
-        </template>
-      </div>
-    </section>
-    <section
-      class="lg:bg-white lg:border-2 border-gray-900 lg:ham-shadow--active p-6 lg:rounded-3xl text-gray-900 mt-6">
-      <h3 class="font-display font-semibold text-display-sm uppercase mb-4">Claim Pages</h3>
-      <div
-        class="flex flex-col gap-2 p-4 lg:p-36 items-center justify-center border border-gray-900 rounded-xl bg-gray-200">
-        <p v-if="fetchingClaimPages" class="flex gap-2"><span>Checking if claim pages exits to mint some ...</span>
-          <Icon icon="refresh-cw-03" class="animate-spin" />
+      </template>
+    </SectionWithListOfCards>
+    <SectionWithListOfCards title="claim pages" name="claims"
+      content-subtitle="By visiting these Claim Pages you can mint the tokens" :list="claimPages"
+      :isFetching="fetchingClaimPages" :hasBorderBottomInMobile="false"
+      fetchingText="Checking if claim pages exist to mint some...">
+      <template #empty>
+        <p v-if="contractType === 'ERC 721 EDITION'" class="lg:max-w-sm mx-auto">
+          <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint
+            the
+            tokens</span>
+          <span v-else class="font-semibold">There are not</span>
         </p>
-        <template v-else>
-          <p v-if="contractType === 'ERC 721 EDITION'" class="lg:max-w-sm">
-            <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint
-              the
-              tokens</span>
-            <span v-else class="font-semibold">There are not</span>
-          </p>
-          <p v-if="contractType === 'ERC 721'" class="lg:max-w-sm flex flex-col gap-3">
-            <span>Regular ERC-721 contracts are not suitable to have Claim Pages, which
-              allow people
-              to mint
-              your NFTs.
-            </span>
-            <span>You can use the ERC-721 contract <span class="font-semibold">to mint your own
-                NFTs</span>, although no
-              one else will be able to mint any.</span>
-          </p>
-        </template>
-      </div>
-      <ul v-if="claimPages" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <li v-for="c, i in claimPages" :key="`claim-page-${i}`">
-          <NuxtLink :to="`/c/${c.url}`">
-            <Card class="ham-shadow cursor-pointer" v-bind="c.metadata" />
-          </NuxtLink>
-        </li>
-      </ul>
-    </section>
+        <p v-if="contractType === 'ERC 721'" class="lg:max-w-sm mx-auto flex flex-col gap-3">
+          <span>Regular ERC-721 contracts are not suitable to have Claim Pages, which
+            allow people
+            to mint
+            your NFTs.
+          </span>
+          <span>You can use the ERC-721 contract <span class="font-semibold">to mint your own
+              NFTs</span>, although no
+            one else will be able to mint any.</span>
+        </p>
+      </template>
+    </SectionWithListOfCards>
   </main>
 </template>
 
@@ -117,16 +92,16 @@ import stepper from "@/data/stepper.json"
 export default {
   data() {
     return {
-      claimPages: null,
       contract: null,
+      claimPages: null,
+      tokens: null,
       fetchingClaimPages: false,
       fetchingContract: false,
       fetchingTokens: false,
-      tokenInventory: null,
     }
   },
   computed: {
-    ...mapGetters(["wallet"]),
+    ...mapGetters(['wallet', 'isDesktop', 'currentTokenIndex']),
     contractAddress() {
       return this.$route && this.$route.params.id
     },
@@ -137,57 +112,119 @@ export default {
       return this.contract && this.contract.owner
     },
   },
-  async mounted() {
-    this.fetchingContract = true
-    this.fetchingTokens = true
-    this.fetchingClaimPages = true
-    const contractFromStorage = localStorage.getItem(this.contractAddress)
-    if (contractFromStorage) {
-      this.contract = JSON.parse(contractFromStorage)
-      const claims = localStorage.getItem(`claims-${this.contractAddress}`)
-      if (claims) {
-        this.claimPages = JSON.parse(claims)
-      }
-      this.fetchingClaimPages = false
-      const tokens = localStorage.getItem(`tokens-${this.contractAddress}`)
-      if (tokens) {
-        this.tokenInventory = JSON.parse(tokens)
-        this.fetchingTokens = false
-      }
-    } else {
-      const contract = await getContractInfo(this.contractAddress)
-      this.contract = { ...contract }
-    }
-    this.fetchingContract = false
-    if (!this.contract.label) {
-      console.log({ label: this.contract.label })
-      const contractType = await getContractType(this.contractAddress)
-      console.log({ contractType })
-      this.contract['label'] = contractType
-      localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
-    }
-    if (this.contract['label'] === 'ERC 721 EDITION') {
-      listClaimPages(this.contract.owner).then(pages => {
-        this.fetchingClaimPages = false;
-        if (pages) {
-          const contractPages = pages.filter(p => p.contract.contractAddress === this.contractAddress)
-          if (contractPages && contractPages.length && (!this.claimPages || this.claimPages.length !== contractPages.length)) {
-            this.claimPages = contractPages.map(p => { p.metadata.type = p.type; p.metadata.badgeColor = 'primary-invert'; return { ...p } })
-            localStorage.setItem(`claims-${this.contractAddress}`, JSON.stringify(this.claimPages))
-          }
-        }
-      })
-    } else {
-      this.fetchingClaimPages = false;
-    }
-    if (this.wallet) {
-      this.getTokenNFTsForWallet()
-    } else {
-      this.fetchingTokens = false
-    }
+  mounted() {
+    this.fetchData()
   },
   methods: {
-    ...mapActions(['setModalData', 'setShowGeneralModal']),
+    ...mapActions(['setCurrentTokenIndex', 'setModalData', 'setShowGeneralModal', 'setSlideOverData', 'setShowSlideOver']),
+    async fetchData() {
+      this.fetchFromLocalStorage()
+      if (this.fetchingContract) {
+        await this.fetchContractFromApi()
+      }
+      // Even if claims and tokens exist in local storage, api is used to update in background
+      this.fetchClaimsFromApi()
+      this.fetchTokensFromApi()
+
+    },
+    fetchFromLocalStorage() {
+      this.fetchingContract = true
+      this.fetchingTokens = true
+      this.fetchingClaimPages = true
+      this.fetchContractFromLocalStorage()
+      this.fetchClaimsFromLocalStorage()
+      this.fetchTokensFromLocalStorage()
+    },
+    fetchContractFromLocalStorage() {
+      const contractFromStorage = localStorage.getItem(this.contractAddress)
+      if (contractFromStorage) {
+        // First try for contract Item
+        this.contract = JSON.parse(contractFromStorage)
+        this.fetchingContract = false
+      } else {
+        // If not found, filter from contracts Inventory item
+        const contractInventoryFromStorage = localStorage.getItem('contractsInventory')
+        if (contractInventoryFromStorage) {
+          const inventory = JSON.parse(contractInventoryFromStorage)
+          const contracts = inventory.filter(c => c.contractAddress === this.contractAddress)
+          this.contract = contracts.length ? contracts[0] : null
+          // Store contract info as item for faster access on next load
+          localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
+          this.fetchingContract = false
+        }
+      }
+    },
+    fetchClaimsFromLocalStorage() {
+      const contractClaimsFromStorage = localStorage.getItem(`claims-${this.contractAddress}`)
+      if (contractClaimsFromStorage) {
+        // First try for contract Claims Item
+        const claims = JSON.parse(contractClaimsFromStorage)
+        this.claimPages = claims
+        this.fetchingClaimPages = false
+      } else {
+        // If not found, filter from claims Inventory item
+        const claimsInventoryFromStorage = localStorage.getItem('claimPagesInventory')
+        if (claimsInventoryFromStorage) {
+          const claimPages = JSON.parse(claimsInventoryFromStorage)
+          this.claimPages = claimPages.filter(page => page.c === this.contractAddress)
+          // Store contract claims as item for faster access on next load
+          localStorage.setItem(`claims-${this.contractAddress}`, JSON.stringify(this.claimPages))
+          this.fetchingClaimPages = false
+        }
+      }
+    },
+    fetchTokensFromLocalStorage() {
+      const contractTokensFromStorage = localStorage.getItem(`tokens-${this.contractAddress}`)
+      if (contractTokensFromStorage) {
+        // First try for contract Tokens Item
+        const tokens = JSON.parse(contractTokensFromStorage)
+        this.tokens = tokens
+        this.fetchingTokens = false
+      } else {
+        // If not found, filter from token Inventory item
+        const tokensInventoryFromStorage = localStorage.getItem('tokensInventory')
+        if (tokensInventoryFromStorage) {
+          const tokens = JSON.parse(tokensInventoryFromStorage)
+          this.tokens = tokens.filter(page => page.contract.contractAddress === this.contractAddress)
+          // Store contract claims as item for faster access on next load
+          localStorage.setItem(`tokens-${this.contractAddress}`, JSON.stringify(this.tokens))
+          this.fetchingClaimPages = false
+        }
+      }
+    },
+    async fetchContractFromApi() {
+      const contract = await getContractInfo(this.contractAddress)
+      this.contract = { ...contract }
+      if (!this.contract.label) {
+        const contractType = await getContractType(this.contractAddress)
+        this.contract['label'] = contractType
+        localStorage.setItem(this.contractAddress, JSON.stringify(this.contract))
+      }
+    },
+    fetchClaimsFromApi() {
+      if (this.contract['label'] === 'ERC 721 EDITION') {
+        listClaimPages(this.contract.owner).then(pages => {
+          if (pages) {
+            const contractPages = pages.filter(p => p.contract.contractAddress === this.contractAddress)
+            if (contractPages && contractPages.length && (!this.claimPages || this.claimPages.length !== contractPages.length)) {
+              this.claimPages = contractPages.map(p => { p.metadata.type = p.type; p.metadata.badgeColor = 'warning'; p.metadata.url = p.url; return { ...p } })
+              localStorage.setItem(`claims-${this.contractAddress}`, JSON.stringify(this.claimPages))
+            }
+          }
+          this.fetchingClaimPages = false;
+        })
+      } else {
+        // ERC 721 don't have claim pages, therefore no need to fetch
+        this.fetchingClaimPages = false;
+      }
+    },
+    fetchTokensFromApi() {
+      if (this.wallet) {
+        this.getTokenNFTsForWallet()
+      } else {
+        this.fetchingTokens = false
+      }
+    },
     async getTokenNFTsForWallet() {
       const BLOCK_EXPLORER_URL = import.meta.env.VITE_BLOCK_EXPLORER_URL;
       const getNFTsURL = `${BLOCK_EXPLORER_URL}/api/v2/addresses/${this.wallet}/nft?type=ERC-721`;
@@ -203,9 +240,10 @@ export default {
           this.contract.label = isEdition ? 'ERC 721 EDITION' : 'ERC 721'
         }
         if (isEdition) {
-          if (!this.tokenInventory || this.tokenInventory.length !== tokens.length) {
-            this.tokenInventory = tokens.map(t => {
-              t.metadata.type = 'ERC 721 EDITION'
+          if (!this.tokens || this.tokens.length !== tokens.length) {
+            this.tokens = tokens.map(t => {
+              t.metadata.type = 'ERC 721 EDITION',
+                t.metadata.badgeColor = 'indigo'
               return { ...t }
             })
             localStorage.setItem(`tokens-${this.contractAddress}`, JSON.stringify(tokens))
@@ -225,13 +263,14 @@ export default {
                       symbol: this.contract.symbol,
                     },
                   };
+                  nft.metadata.badgeColor = 'success'
                   erc721Tokens.push(nft)
                   if (this.fetchingTokens) {
                     this.fetchingTokens = false
                   }
                   if (erc721Tokens.length === tokens.length) {
-                    if (!this.tokenInventory || this.tokenInventory.length !== erc721Tokens.length) {
-                      this.tokenInventory = [...erc721Tokens]
+                    if (!this.tokens || this.tokens.length !== erc721Tokens.length) {
+                      this.tokens = [...erc721Tokens]
                       localStorage.setItem(`tokens-${this.contractAddress}`, JSON.stringify(erc721Tokens))
                     }
                   }
@@ -240,20 +279,8 @@ export default {
             );
           });
         }
-        this.fetchingTokens = false
-      } else {
-        this.fetchingTokens = false
       }
-    },
-    async handleClick(index) {
-      const creation = this.tokenInventory[index]
-      const data = creation.metadata
-      this.setModalData({
-        title: 'token',
-        components: ["Token"],
-        data: { ...data, tokenId: creation.tokenId ? creation.tokenId : creation.id }
-      });
-      this.setShowGeneralModal(true);
+      this.fetchingTokens = false
     },
     handleCreate() {
       if (this.contractType === 'ERC 721 EDITION') {

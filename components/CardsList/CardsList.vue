@@ -19,7 +19,7 @@
           </ul>
         </div>
         <ul class="flex lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 px-6 max-h-[1000px] overflow-auto">
-          <li v-for="(card, index) in visibleTokens" :key="`token-card-${index}`" @click="$emit('view', { index })">
+          <li v-for="(card, index) in visibleTokens" :key="`token-card-${index}`" @click="$emit('view', index)">
             <Card class="ham-shadow cursor-pointer" v-bind="card" />
           </li>
         </ul>

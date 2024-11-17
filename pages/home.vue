@@ -122,6 +122,9 @@ export default {
     numberOfContracts() {
       return (this.contracts && this.contracts.length) ?? 0;
     },
+    numberOfVisibleTokens() {
+      return this.visibleTokens ? this.visibleTokens.length : 0
+    },
     isNotClaimPageOwner() {
       return (
         this.isNotEditionContractOwner ||
@@ -133,11 +136,29 @@ export default {
     },
   },
   watch: {
-    isNotEditionContractOwner(newValue, oldValue) {
+    isNotEditionContractOwner() {
       this.checkIsNotContractOwner();
     },
     currentTokenIndex(newValue, oldValue) {
-      this.handleClick({ index: newValue })
+      console.log({ newValue, oldValue })
+      if (oldValue === 0 && newValue === -1) {
+        // Prev has been pressed on first element
+        console.log('prev')
+        const newIndex = this.numberOfVisibleTokens - 1
+        console.log({ newIndex })
+        this.setCurrentTokenIndex(newIndex)
+        this.handleClick(newIndex)
+      }
+      if (oldValue === this.numberOfVisibleTokens - 1 && newValue === this.numberOfVisibleTokens) {
+        // Next has been pressed on last element
+        console.log('next')
+        const newIndex = 0
+        this.setCurrentTokenIndex(newIndex)
+      }
+      if (oldValue !== -1 && newValue !== oldValue) {
+        // Element has been pressed
+        this.handleClick(newValue)
+      }
     }
   },
   async mounted() {
@@ -208,6 +229,7 @@ export default {
               collection.token_instances.forEach((token) => {
                 this.totalNumberOfTokens++;
                 const nft = editionNormalizer(collection, token);
+                nft.metadata.badgeColor = 'indigo'
                 this.updateTokens(nft);
               });
             }
@@ -226,6 +248,7 @@ export default {
                           symbol: collection.token.symbol,
                         },
                       };
+                      nft.metadata.badgeColor = 'success'
                       this.updateTokens(nft);
                     });
                   }
@@ -300,15 +323,16 @@ export default {
       }
       return null;
     },
-    async handleClick(data) {
-      const index = data.index
+    async handleClick(index) {
       if (index !== undefined && index !== -1) {
+        console.log({ index })
         const token = this.visibleTokens[index]
         const pageUrl = token && token.url
         if (pageUrl) {
           this.$router.push(`/c/${pageUrl}`)
         } else {
           const data = token
+          console.log({ token })
           if (this.isDesktop) {
             this.setModalData({
               title: 'token',
@@ -338,7 +362,10 @@ export default {
       );
 
       if (isNewClaimPage) {
-        this.claimPages.push(claimPage);
+        const claim = claimPage
+        claim.metadata.badgeColor = 'warning'
+        claim.metadata.url = claim.url
+        this.claimPages.push(claim);
         localStorage.setItem(
           "claimPagesInventory",
           JSON.stringify(this.claimPages)
