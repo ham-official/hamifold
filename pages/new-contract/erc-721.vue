@@ -89,7 +89,7 @@ export default {
 
     this.deployTx = deployTx ? deployTx : null;
 
-    const inventory = JSON.parse(localStorage.getItem("inventory"));
+    const inventory = JSON.parse(localStorage.getItem("contractsInventory"));
     this.inventory = inventory ? inventory : null;
 
   },
@@ -134,7 +134,11 @@ export default {
             label: 'ERC 721'
           });
 
-          this.inventory = inventory;
+          localStorage.setItem('contractsInventory', JSON.stringify(inventory))
+          localStorage.setItem(
+            "contractAddress",
+            contractAddress
+          );
           this.isSubmitting = false;
           const to = this.$route.query.from
           if (to) {
