@@ -115,7 +115,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isConnected", "wallet", "chainId", "isDesktop", "currentTokenIndex", "visibleTokens"]),
+    ...mapGetters(['isConnected', 'wallet', 'chainId', 'isDesktop', 'currentTokenIndex', 'visibleTokens']),
     navbarRoutes() {
       return navbarRoutes.routes;
     },
@@ -158,7 +158,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setCurrentTokenIndex", "setModalData", "setShowGeneralModal", "setSlideOverData", "setShowSlideOver"]),
+    ...mapActions(['setCurrentTokenIndex', 'setModalData', 'setShowGeneralModal', 'setSlideOverData', 'setShowSlideOver']),
     truncate(address) {
       return truncateAddress(address);
     },
@@ -171,7 +171,7 @@ export default {
       return JSON.parse(localStorage.getItem("contractsInventory"));
     },
     getTokensFromLocalStorage() {
-      const tokens = JSON.parse(localStorage.getItem("tokenInventory")) ?? [];
+      const tokens = JSON.parse(localStorage.getItem("tokensInventory")) ?? [];
       return tokens;
     },
     getClaimPagesFromLocalStorage() {
@@ -376,7 +376,7 @@ export default {
       );
       if (isNewNft) {
         this.tokens.push(nft);
-        localStorage.setItem("tokenInventory", JSON.stringify(this.tokens));
+        localStorage.setItem("tokensInventory", JSON.stringify(this.tokens));
       }
     },
   },
