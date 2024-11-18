@@ -1,5 +1,5 @@
 <template>
-  <main class="container mx-auto pb-16">
+  <main class="container mx-auto pb-16 px-2 lg:px-0">
     <Stepper title="1 of 1" :description="`User your contract o${truncate(routeId)} to mint your own ERC 721 token`"
       icon="grid-02" :steps="steps" :currentStep="1" class="my-6 mx-auto" :icon="steps[1].icon" icon-color="success" />
     <div class="mx-auto 0 border border-gray-900 rounded-xl relative p-6 bg-white overflow-hidden">
@@ -13,7 +13,7 @@
         Upload media, add a title, and share more about your work
       </h2>
       <DropZone @drop.prevent="drop" @change="selectedFile" class="my-3" />
-      <form @submit.prevent="handleSave" class="flex gap-2">
+      <form @submit.prevent="handleSave" class="flex flex-wrap gap-2">
         <div v-if="dropzoneFileImage" class="flex flex-wrap gap-4 lg:gap-6 mt-3">
           <section class="lg:w-1/2">
             <div class="w-full h-auto rounded-lg overflow-hidden border border-gray-900">

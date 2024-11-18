@@ -18,7 +18,7 @@
 
       <section v-if="contracts && contracts.length" class="pb-8 mx-auto container">
         <div
-          class="relative ham-shadow--active bg-white border border-gray-900 rounded-2xl flex flex-col gap-3 lg:gap-10 p-5 lg:pb-32">
+          class="relative ham-shadow--active bg-white border border-gray-900 rounded-2xl flex flex-col gap-3 lg:gap-10 p-4 sm:p-6 lg:pb-32">
           <div class="flex flex-wrap lg:justify-between gap-3">
             <div class="flex flex-col gap-3">
               <h2 class="flex items-center gap-2 text-display-sm uppercase font-display font-semibold text-gray-900">

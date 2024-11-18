@@ -1,9 +1,9 @@
 <template>
-  <main class="container mx-auto pb-16">
+  <main class="container mx-auto pb-16 px-2 lg:px-0">
     <Stepper title="1 of 1" description="Create a contract to mint your own tokens" icon="grid-02" icon-color="success"
       :steps="steps" :currentStep="2" class="my-6 mx-auto" />
     <div
-      class="mx-auto border border-gray-900 rounded-xl p-6 bg-white ham-shadow--active relative overflow-hidden flex flex-col gap-3">
+      class="mx-auto border border-gray-900 rounded-xl p-4 sm:p-6 bg-white ham-shadow--active relative overflow-hidden flex flex-col gap-3">
       <div v-if="isMinting"
         class="absolute top-0 left-0 right-0 bottom-0 z-20 w-full flex flex-col gap-2 items-center justify-center text-black bg-slate-300 bg-opacity-75">
         <span>Waiting for Wallet</span>
@@ -68,10 +68,9 @@ export default {
     fetch(uri).then(async (res) => {
       this.nftData = await res.json()
     })
-    const contractAddress = localStorage.getItem("contractAddress");
-    const contract = localStorage.getItem(contractAddress)
-    console.log({ contract })
-    this.contractAddress = contractAddress ? contractAddress : null;
+    const contract = localStorage.getItem('mintERC721Contract')
+    this.contract = JSON.parse(contract)
+    this.contractAddress = this.contract ? this.contract.contractAddress : null
   },
   computed: {
     ...mapGetters(["isConnected"]),
@@ -87,7 +86,6 @@ export default {
   },
   methods: {
     async handleMint() {
-      console.log({ uri: this.uri, contract: this.contractAddress })
       try {
         this.isMinting = true;
         const nft = await safeMint(this.uri, this.contractAddress);
