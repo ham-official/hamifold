@@ -67,7 +67,6 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      console.log('asdfasdfasdf')
       try {
         this.isSubmitting = true;
         const mintPage = {

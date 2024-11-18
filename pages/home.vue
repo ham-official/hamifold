@@ -295,7 +295,6 @@ export default {
           this.$router.push(`/c/${pageUrl}`)
         } else {
           const data = token
-          console.log({ token })
           if (this.isDesktop) {
             this.setModalData({
               title: 'token',
