@@ -316,8 +316,13 @@ export default {
       }
     },
     handleShowCreateModal() {
-      this.setModalData({ components: ['CreatePagesList', 'MintList', 'CreateContractsList'] })
-      this.setShowGeneralModal(true)
+      if (this.isDesktop) {
+        this.setModalData({ components: ['CreatePagesList', 'MintList', 'CreateContractsList'] })
+        this.setShowGeneralModal(true)
+      } else {
+        this.setSlideOverData({ components: ['CreatePagesList', 'MintList', 'CreateContractsList'] })
+        this.setShowSlideOver(true)
+      }
     },
     updateClaimPages(claimPage) {
       const isNewClaimPage = !this.claimPages.some(
