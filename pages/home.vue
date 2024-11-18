@@ -13,15 +13,15 @@
         </p>
       </template>
       <template v-else>
-        <template v-if="numberOfContracts === 0">
-          <p class="text-center text-gray-400">
-            Once you create a contract, it will be displayed here
+        <div v-if="numberOfContracts === 0" class="border border-gray-900 bg-gray-200 rounded-3xl py-36 mx-4 sm:mx-6">
+          <p class="text-center pb-2">
+            There are no contracts yet. Once you create one, it will be displayed here
           </p>
           <CTA v-if="numberOfContracts === 0" color="primary" size="lg" iconLeft="plus" class="max-w-fit mx-auto"
             @click="handleShowCreateModal">
             Create
           </CTA>
-        </template>
+        </div>
         <ul v-else class="flex max-h-[300px] overflow-y-auto lg:flex-wrap items-center gap-3 overflow-x-auto px-6 pt-1">
           <li v-for="(item, index) in contracts" :key="index"
             class="border-2 border-gray-900 rounded-xl bg-white p-4 gap-4 min-w-[288px] max-w-[288px] ham-shadow"
@@ -52,19 +52,25 @@
         <span>Checking if claim pages exist for any of your contracts...</span>
         <Icon icon="refresh-cw-03" class="animate-spin" />
       </p>
-      <p v-else class="mb-4 pl-6">
-        <span v-if="claimPages && claimPages.length" class="font-semibold">Visiting these Claim Pages you can mint the
-          tokens</span>
-        <span v-if="isNotClaimPageOwner" class="font-semibold">There are no claim pages</span>
-      </p>
-      <ul v-if="claimPages"
-        class="flex max-h-[1000px] overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 px-6">
-        <li v-for="(c, i) in claimPages" :key="`claim-page-${i}`">
-          <NuxtLink :to="`/c/${c.url}`">
-            <Card class="ham-shadow cursor-pointer" v-bind="{ ...c.metadata, badgeColor: 'warning' }" />
-          </NuxtLink>
-        </li>
-      </ul>
+      <template v-else>
+        <template v-if="claimPages && claimPages.length">
+          <p class="mb-4 pl-6 font-semibold">
+            Visiting these Claim Pages you can mint the
+            tokens
+          </p>
+          <ul v-if="claimPages"
+            class="flex max-h-[1000px] overflow-auto lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1 px-6">
+            <li v-for="(c, i) in claimPages" :key="`claim-page-${i}`">
+              <NuxtLink :to="`/c/${c.url}`">
+                <Card class="ham-shadow cursor-pointer" v-bind="{ ...c.metadata, badgeColor: 'warning' }" />
+              </NuxtLink>
+            </li>
+          </ul>
+        </template>
+        <p v-else class="border border-gray-900 bg-gray-200 rounded-3xl py-36 mx-4 sm:mx-6 text-center">There are no
+          claim
+          pages</p>
+      </template>
     </section>
     <section
       class="bg-transparent lg:bg-white lg:border-2 border-gray-900 ham-shadow--active--desktop pb-6 rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6">
@@ -100,18 +106,12 @@ export default {
   data() {
     return {
       contracts: [],
-      tokens: [],
       claimPages: [],
-      ethersRPCProvider: null,
-      ethersRPCSigner: null,
-      isFetchingClaimPages: true,
+      tokens: [],
       isFetchingContracts: false,
+      isFetchingClaimPages: false,
       isFetchingTokens: false,
       isNotTokenOwner: false,
-      numberOfStandardContracts: 0,
-      isNotEditionContractOwner: false,
-      isNotStandardContractOwner: false,
-      totalNumberOfContracts: 0,
     };
   },
   computed: {
@@ -125,33 +125,17 @@ export default {
     numberOfVisibleTokens() {
       return this.visibleTokens ? this.visibleTokens.length : 0
     },
-    isNotClaimPageOwner() {
-      return (
-        this.isNotEditionContractOwner ||
-        (!this.isFetchingContracts && !this.claimPages.length)
-      );
-    },
-    fetchingClaimPages() {
-      return !this.isNotClaimPageOwner && !this.claimPages.length;
-    },
   },
   watch: {
-    isNotEditionContractOwner() {
-      this.checkIsNotContractOwner();
-    },
     currentTokenIndex(newValue, oldValue) {
-      console.log({ newValue, oldValue })
       if (oldValue === 0 && newValue === -1) {
         // Prev has been pressed on first element
-        console.log('prev')
         const newIndex = this.numberOfVisibleTokens - 1
-        console.log({ newIndex })
         this.setCurrentTokenIndex(newIndex)
         this.handleClick(newIndex)
       }
       if (oldValue === this.numberOfVisibleTokens - 1 && newValue === this.numberOfVisibleTokens) {
         // Next has been pressed on last element
-        console.log('next')
         const newIndex = 0
         this.setCurrentTokenIndex(newIndex)
       }
@@ -166,7 +150,7 @@ export default {
     const localTokens = this.getTokensFromLocalStorage();
     const localClaimPages = this.getClaimPagesFromLocalStorage();
 
-    this.contracts = localContracts ? localContracts : [];
+    this.contracts = localContracts ? localContracts : []
     this.getContracts();
 
     this.tokens = localTokens ? localTokens : [];
@@ -174,30 +158,23 @@ export default {
 
     // Claim pages are fetched at this.getContracts()
     this.claimPages = localClaimPages ? localClaimPages : [];
-    if (this.claimPages.length > 0) {
-      this.isFetchingClaimPages = false
-    }
   },
   methods: {
     ...mapActions(['setCurrentTokenIndex', 'setModalData', 'setShowGeneralModal', 'setSlideOverData', 'setShowSlideOver']),
     truncate(address) {
       return truncateAddress(address);
     },
-    checkIsNotContractOwner() {
-      if (this.isNotEditionContractOwner && this.isNotStandardContractOwner) {
-        this.isFetchingContracts = false;
-      }
-    },
     getContractsFromLocalStorage() {
-      return JSON.parse(localStorage.getItem("contractsInventory"));
+      const contracts = JSON.parse(localStorage.getItem(`contractsInventory-${this.wallet}`)) ?? []
+      return contracts;
     },
     getTokensFromLocalStorage() {
-      const tokens = JSON.parse(localStorage.getItem("tokensInventory")) ?? [];
+      const tokens = JSON.parse(localStorage.getItem(`tokensInventory-${this.wallet}`)) ?? [];
       return tokens;
     },
     getClaimPagesFromLocalStorage() {
       const claimPages =
-        JSON.parse(localStorage.getItem("claimPagesInventory")) ?? [];
+        JSON.parse(localStorage.getItem(`claimPagesInventory-${this.wallet}`)) ?? [];
       return claimPages;
     },
     async getClaimPagesForContract(address) {
@@ -206,20 +183,17 @@ export default {
       claimPages.forEach((e) => this.updateClaimPages(e));
     },
     getContracts() {
-      this.isFetchingContracts = this.numberOfContracts === 0;
       this.getEditionContractsForWallet(this.wallet);
       this.getStandardContractsForWallet(this.wallet);
     },
     async getTokens() {
-      this.isFetchingTokens = !this.tokens.length;
       const allNfts = await getAllNftsForWallet(this.wallet);
       if (allNfts) {
         const uniqueContracts = allNfts && allNfts.length && allNfts.map((e) => e.token.address);
         if (allNfts.length === 0) {
-          this.isNotTokenOwner = true;
           this.isFetchingTokens = false;
         }
-        uniqueContracts.forEach((e) => {
+        uniqueContracts && uniqueContracts.forEach((e) => {
           getContractType(e).then((res) => {
             const contractType = res;
             const collection = allNfts.find(
@@ -260,33 +234,27 @@ export default {
       } else {
         this.isFetchingTokens = false;
       }
-
-      return null;
     },
     async getEditionContractsForWallet(wallet) {
       try {
-        const numberOfContractsForCreator = parseInt(
+        const numberOfEditionContractsOfCreator = parseInt(
           await getNumberOfEditionContractsForCreator(this.wallet)
         );
-        this.totalNumberOfContracts += numberOfContractsForCreator;
+        this.totalNumberOfContractsOfCreator += numberOfEditionContractsOfCreator;
 
-        if (numberOfContractsForCreator === 0) {
-          this.isNotEditionContractOwner = true;
-        } else {
-          for (let i = 0; i < numberOfContractsForCreator; i++) {
-            getEditionCreatorContractAtIndex(wallet, i).then((res) => {
-              const contractAddress = res;
-              getEditionContractNameAndSymbol(contractAddress).then((res) => {
-                const { name, symbol } = res;
-                this.updateContracts({
-                  contractAddress,
-                  name,
-                  symbol,
-                  label: "ERC 721 EDITION",
-                });
+        for (let i = 0; i < numberOfEditionContractsOfCreator; i++) {
+          getEditionCreatorContractAtIndex(wallet, i).then((res) => {
+            const contractAddress = res;
+            getEditionContractNameAndSymbol(contractAddress).then((res) => {
+              const { name, symbol } = res;
+              this.updateContracts({
+                contractAddress,
+                name,
+                symbol,
+                label: "ERC 721 EDITION",
               });
             });
-          }
+          });
         }
       } catch (error) {
         console.error(error);
@@ -295,28 +263,24 @@ export default {
     },
     async getStandardContractsForWallet(wallet) {
       try {
-        const numberOfContractsForCreator = parseInt(
+        const numberOfStandardContractsOfCreator = parseInt(
           await getNumberOfStandardContractsForCreator(this.wallet)
         );
-        this.totalNumberOfContracts += numberOfContractsForCreator;
+        this.totalNumberOfContractsOfCreator += numberOfStandardContractsOfCreator;
 
-        if (numberOfContractsForCreator === 0) {
-          this.isNotEditionContractOwner = true;
-        } else {
-          for (let i = 0; i < numberOfContractsForCreator; i++) {
-            getStandardCreatorContractAtIndex(wallet, i).then((res) => {
-              const contractAddress = res;
-              getStandardContractNameAndSymbol(contractAddress).then((res) => {
-                const { name, symbol } = res;
-                this.updateContracts({
-                  contractAddress,
-                  name,
-                  symbol,
-                  label: "ERC 721",
-                });
+        for (let i = 0; i < numberOfStandardContractsOfCreator; i++) {
+          getStandardCreatorContractAtIndex(wallet, i).then((res) => {
+            const contractAddress = res;
+            getStandardContractNameAndSymbol(contractAddress).then((res) => {
+              const { name, symbol } = res;
+              this.updateContracts({
+                contractAddress,
+                name,
+                symbol,
+                label: "ERC 721",
               });
             });
-          }
+          });
         }
       } catch (error) {
         console.error(error);
@@ -325,7 +289,6 @@ export default {
     },
     async handleClick(index) {
       if (index !== undefined && index !== -1) {
-        console.log({ index })
         const token = this.visibleTokens[index]
         const pageUrl = token && token.url
         if (pageUrl) {
@@ -367,7 +330,7 @@ export default {
         claim.metadata.url = claim.url
         this.claimPages.push(claim);
         localStorage.setItem(
-          "claimPagesInventory",
+          `claimPagesInventory-${this.wallet}`,
           JSON.stringify(this.claimPages)
         );
       }
@@ -379,9 +342,8 @@ export default {
 
       if (isNewContract) {
         this.contracts.push(contract);
-
         localStorage.setItem(
-          "contractsInventory",
+          `contractsInventory-${this.wallet}`,
           JSON.stringify(this.contracts)
         );
       }
@@ -390,7 +352,7 @@ export default {
         this.getClaimPagesForContract(contract.contractAddress);
       }
 
-      if (this.numberOfContracts === this.totalNumberOfContracts) {
+      if (this.numberOfContracts === this.totalNumberOfContractsOfCreator) {
         this.isFetchingContracts = false;
       }
     },
@@ -403,7 +365,7 @@ export default {
       );
       if (isNewNft) {
         this.tokens.push(nft);
-        localStorage.setItem("tokensInventory", JSON.stringify(this.tokens));
+        localStorage.setItem(`tokensInventory-${this.wallet}`, JSON.stringify(this.tokens));
       }
     },
   },

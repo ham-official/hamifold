@@ -7,7 +7,9 @@
       <Icon icon="refresh-cw-03" class="animate-spin" />
     </p>
     <template v-else>
-      <p v-if="noTokens" class="text-center text-gray-400">You haven't minted any token yet</p>
+      <p v-if="noTokens" class="text-center border border-gray-900 rounded-xl bg-gray-200 mx-4 sm:mx-6 py-36">You
+        haven't minted any token
+        yet</p>
       <template v-else>
         <div class="flex justify-between items-center mb-4 pl-6">
           <ul class="flex justify-between gap-x-2">

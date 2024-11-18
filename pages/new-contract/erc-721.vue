@@ -59,7 +59,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["isConnected"]),
+    ...mapGetters(['isConnected', 'wallet']),
     navbarRoutes() {
       return navbarRoutes.routes;
     },
@@ -89,7 +89,7 @@ export default {
 
     this.deployTx = deployTx ? deployTx : null;
 
-    const inventory = JSON.parse(localStorage.getItem("contractsInventory"));
+    const inventory = JSON.parse(localStorage.getItem(`contractsInventory-${this.wallet}`));
     this.inventory = inventory ? inventory : null;
 
   },
@@ -134,7 +134,7 @@ export default {
             label: 'ERC 721'
           });
 
-          localStorage.setItem('contractsInventory', JSON.stringify(inventory))
+          localStorage.setItem(`contractsInventory-${this.wallet}`, JSON.stringify(inventory))
           localStorage.setItem(
             "contractAddress",
             contractAddress

@@ -143,7 +143,7 @@ export default {
         this.fetchingContract = false
       } else {
         // If not found, filter from contracts Inventory item
-        const contractInventoryFromStorage = localStorage.getItem('contractsInventory')
+        const contractInventoryFromStorage = localStorage.getItem(`contractsInventory-${this.wallet}`)
         if (contractInventoryFromStorage) {
           const inventory = JSON.parse(contractInventoryFromStorage)
           const contracts = inventory.filter(c => c.contractAddress === this.contractAddress)
@@ -163,7 +163,7 @@ export default {
         this.fetchingClaimPages = false
       } else {
         // If not found, filter from claims Inventory item
-        const claimsInventoryFromStorage = localStorage.getItem('claimPagesInventory')
+        const claimsInventoryFromStorage = localStorage.getItem(`claimPagesInventory-${this.wallet}`)
         if (claimsInventoryFromStorage) {
           const claimPages = JSON.parse(claimsInventoryFromStorage)
           this.claimPages = claimPages.filter(page => page.c === this.contractAddress)
@@ -182,7 +182,7 @@ export default {
         this.fetchingTokens = false
       } else {
         // If not found, filter from token Inventory item
-        const tokensInventoryFromStorage = localStorage.getItem('tokensInventory')
+        const tokensInventoryFromStorage = localStorage.getItem(`tokensInventory-${this.wallet}`)
         if (tokensInventoryFromStorage) {
           const tokens = JSON.parse(tokensInventoryFromStorage)
           this.tokens = tokens.filter(page => page.contract.contractAddress === this.contractAddress)

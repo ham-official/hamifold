@@ -100,7 +100,7 @@ export default {
   },
   async mounted() {
     const contractFromLocalStorage = localStorage.getItem('claimPageContract')
-    const contractsFromLocalStorage = localStorage.getItem('contractsInventory')
+    const contractsFromLocalStorage = localStorage.getItem(`contractsInventory-${this.wallet}`)
     let contracts
     if (contractsFromLocalStorage) {
       contracts = JSON.parse(contractsFromLocalStorage).filter(c => c.label === 'ERC 721 EDITION')

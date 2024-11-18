@@ -115,9 +115,9 @@ export default {
       if (!isDevEnv && !this.isNetworkSwitchRequested) {
         this.isNetworkSwitchRequested = true;
         this.modal.open({ view: "Networks" });
-        localStorage.removeItem('creations')
-        localStorage.removeItem('tokenInventory')
-        localStorage.removeItem('contractsInventory')
+        localStorage.removeItem(`contractsInventory-${this.wallet}`)
+        localStorage.removeItem(`claimPagesInventory-${this.wallet}`)
+        localStorage.removeItem(`tokensInventory-${this.wallet}`)
       }
     },
     truncate(address) {
