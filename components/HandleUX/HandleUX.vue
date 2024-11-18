@@ -13,13 +13,14 @@
           <CreatePagesList v-if="modalData.components.includes('CreatePagesList')" />
           <MintList v-if="modalData.components.includes('MintList')" />
           <CreateContractsList v-if="modalData.components.includes('CreateContractsList')" />
-          <PublishProgress v-if="modalData.components.includes('PublishProgress')" v-bind="modalData.data" />
+          <PublishProgress v-if="modalData.components.includes('PublishProgress')" v-bind="modalData.data"
+            class="flex items-center w-full" />
           <Token v-if="modalData.components.includes('Token')" v-bind="modalData.data" class="my-8" />
         </template>
       </template>
       <template #footer>
         <ul v-if="modalData && modalData.ctas">
-          <li v-for="cta, i in modalData.ctas" :key="`modal-cta-${i}`">
+          <li v-for="cta, i in modalData.ctas" :key="`modal-cta-${i}`" class="flex justify-center items-center w-full">
             <CTA :color="cta.color" :disabled="cta.disabled" size="md" @click="cta.handleClick">{{ cta.label }}</CTA>
           </li>
         </ul>
