@@ -14,14 +14,14 @@
         <section
           class="w-full bg-white border-0 lg:border-2 border-gray-900 ham-shadow--active p-4 lg:p-6 rounded-none lg:rounded-3xl text-gray-900 mt-0 lg:mt-6 flex flex-col lg:flex-row justify-between gap-4 lg:gap-8">
 
-          <div class="border-2 border-gray-900 rounded-2xl w-full lg:w-1/2 h-auto overflow-hidden">
+          <div class="border-2 border-gray-900 rounded-2xl w-full lg:w-1/2 aspect-square h-auto overflow-hidden">
             <IMG v-if="claimPageData.tokenMetadata.imgURL" :image="claimPageData.tokenMetadata.imgURL" alt="NFT Image"
               class="h-full w-full object-cover" />
           </div>
           <div class="flex flex-col w-full lg:w-1/2">
             <p class="text-lg lg:text-display-sm uppercase font-semibold font-display mb-1">{{
               claimPageData.tokenMetadata.title
-              }}</p>
+            }}</p>
             <p class="text-sm lg:text-md text-gray-500 mb-4">{{ truncate(claimPageData.contract.owner) }}</p>
             <p class="text-sm lg:text-lg text-gray-900 mb-4">{{ claimPageData.tokenMetadata.description }}</p>
             <ul class="flex flex-col gap-1 xs-only:pb-4">
