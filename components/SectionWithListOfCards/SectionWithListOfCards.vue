@@ -83,7 +83,7 @@ export default {
       return this.list && this.list.map(item => { delete item.metadata.attributes; return item.metadata })
     },
     numberOfCards() {
-      return this.cards.length
+      return (this.cards && this.cards.length) ?? 0
     }
   },
   watch: {
@@ -94,7 +94,7 @@ export default {
         this.setCurrentTokenIndex(newIndex)
         this.handleClick(newIndex)
       }
-      if (oldValue === this.numberOfCards - 1 && newValue === this.numberOfCards && (this.slideOverData || this.modalData)) {
+      if (newValue === this.numberOfCards && !this.listItemIsLink) {
         // Next has been pressed on last element
         const newIndex = 0
         this.setCurrentTokenIndex(newIndex)
@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     ...mapActions(['setCurrentTokenIndex', 'setModalData', 'setShowGeneralModal', 'setSlideOverData', 'setShowSlideOver']),
-    async handleClick(index) {
+    handleClick(index) {
       const card = this.cards[index]
       if (card) {
         const UXData = { title: 'token', components: ['Token'], data: card }
@@ -118,9 +118,12 @@ export default {
           this.setSlideOverData(UXData);
           this.setShowSlideOver(true);
         }
-        this.setCurrentTokenIndex(index);
+        if (this.currentTokenIndex !== index) {
+          this.setCurrentTokenIndex(index);
+        }
       }
     },
+
   },
 }
 </script>
