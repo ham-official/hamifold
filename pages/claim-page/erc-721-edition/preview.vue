@@ -7,7 +7,7 @@
     <section class="ham-shadow--active p-4 mx-2 lg:mx-0 border-2 border-gray-700 bg-white rounded-3xl font-display">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
-          <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-400">
+          <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-400 border-2 border-gray-900">
             <img v-if="mediaFileSrc" ref="fileImage" :src="mediaFileSrc" class="w-full h-full object-cover" />
           </div>
           <ul v-if="media" class="p-2 mt-4 text-lg">
@@ -244,7 +244,6 @@ export default {
         if (pinImageResponse) {
           modalData.data.current = 2;
           this.currentPublishStep = 2;
-          modalData.ctas[0].disabled = false;
           this.setModalData(null)
           await delay(10)
           this.setModalData(modalData)
@@ -263,6 +262,7 @@ export default {
           const txSetEdition = await setEditionInfo(editionData, this.contract.contractAddress).catch(err => console.error(err))
           if (txSetEdition) {
             modalData.data.current = 3;
+            modalData.ctas[0].disabled = false;
             this.currentPublishStep = 3;
             this.setModalData(null)
             await delay(10)

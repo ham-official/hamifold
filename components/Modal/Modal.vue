@@ -3,7 +3,7 @@
     @click="handleBackdropClick">
 
     <div
-      class="relative flex flex-col w-[760px] gap-y-4 bg-white overflow-hidden rounded-t-xl lg:rounded-xl p-6 border-0 lg:border lg:border-gray-900 lg:ham-shadow--active z-30 lg:text-center"
+      class="relative flex flex-col w-[760px] max-w-screen--6 mx-auto gap-y-4 bg-white overflow-hidden rounded-xl p-6 border border-gray-900 ham-shadow--active z-30 text-center"
       :class="{
         'w-80 sm:w-100': size === 'md',
         'w-100 sm:w-141.75': size === 'lg',
