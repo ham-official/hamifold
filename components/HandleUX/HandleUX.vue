@@ -3,8 +3,9 @@
     <Modal v-if="showGeneralModal" :show-default-buttons="true" :show-custom-buttons="true" :confirmCancel="false"
       size="xl" class="min-h-[419px]">
       <template #header class="relative">
-        <p v-if="modalData && modalData.title" class="font-display font-semibold uppercase text-display-sm">{{
-          modalData.title }}</p>
+        <p v-if="modalData && modalData.title"
+          class="font-display font-semibold uppercase text-display-xs sm:text-display-sm">{{
+            modalData.title }}</p>
         <Icon @click="closeGeneralModal" icon="x-close"
           class="absolute top-4 right-4 rounded-full border border-gray-900 p-2.5 cursor-pointer hover:bg-black hover:text-white" />
       </template>

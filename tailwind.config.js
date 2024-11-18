@@ -102,6 +102,13 @@ module.exports = {
           lineHeight: '1.1875rem'
         }
       ],
+      'display-xs': [
+        '1.65rem',
+        {
+          letterSpacing: '0',
+          lineHeight: '2rem',
+        },
+      ],
       'display-sm': [
         '1.85rem',
         {
