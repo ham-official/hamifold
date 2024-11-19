@@ -7,6 +7,7 @@ import {
   getTokensForWallet as getEditionTokensForWallet,
   nextTokenTypeId,
 } from "./erc721EditionUtils";
+import { getContractType } from "./contractUtilities";
 import axios from "axios";
 
 const ERC721_CONTRACT_DEPLOYER = import.meta.env.VITE_ERC721_CONTRACT_DEPLOYER;
@@ -204,28 +205,6 @@ export const listClaimPages = (address) => {
       resolve(claimPages);
     } catch (error) {
       reject(error);
-    }
-  });
-};
-
-export const getContractType = (address) => {
-  return new Promise(async (resolve, reject) => {
-    const getContractUrl = `${BLOCK_EXPLORER_URL}/api/v2/smart-contracts/${address}`;
-    const contract = await axios.get(getContractUrl).catch((err) => {
-      reject(err);
-    });
-    const implementation = contract.data.verified_twin_address_hash;
-
-    switch (implementation) {
-      case ERC721_CONTRACT_IMPLEMENTATION:
-        resolve("ERC-721");
-        break;
-      case ERC721_EDITION_CONTRACT_IMPLEMENTATION:
-        resolve("ERC-721-EDITION");
-        break;
-      default:
-        resolve(null);
-        break;
     }
   });
 };

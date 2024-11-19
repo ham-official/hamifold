@@ -1,23 +1,10 @@
 <template>
-  <main class="container mx-auto pb-16">
-    <ol class="flex items-center gap-6 justify-center my-6">
-      <li>1. Select contract</li>
-      <li>
-        <NuxtLink to="/claim-page/erc-721/set-up-media">
-          2. Set up Media
-        </NuxtLink>
-      </li>
-      <li class="font-bold">3. Set up Mint Page</li>
-      <li>
-        <NuxtLink to="/claim-page/erc-721/set-mint-rules">
-          4. Set mint rules
-        </NuxtLink>
-      </li>
-      <li>5. Set Audience</li>
-    </ol>
-    <Stepper :steps="stepper.steps" :currentStep="2" class="mb-6" />
-    <div class="flex flex-col gap-y-8 bg-white rounded-xl p-6 border border-gray-900 ham-shadow--active mx-auto">
-      <form @submit.prevent="handleSubmit" class="my-4 text-gray-700 flex flex-col gap-8 relative">
+  <main class="container mx-auto pb-8 px-2 lg:px-0">
+    <Stepper :steps="stepper.steps" :currentStep="2" :description="stepper.steps[2].description"
+      :icon="stepper.steps[2].icon" icon-color="warning" class="my-6" />
+    <div
+      class="flex flex-col gap-y-8 bg-white rounded-2xl p-4 lg:p-6 border border-gray-900 ham-shadow--active mx-auto">
+      <form @submit.prevent="handleSubmit" class=" text-gray-700 flex flex-col gap-8 relative">
         <p class="text-display-sm font-semibold uppercase font-display">Set up mint page</p>
         <div class="flex flex-col gap-2">
           <label for="description"
@@ -25,11 +12,13 @@
           <textarea id="description" rows="4" v-model="description"
             class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl text-base" />
         </div>
-        <div class="flex justify-end items-center gap-4">
-          <NuxtLink to="/claim-page/erc-721/set-up-media">
-            <CTA size="lg" color="gray">Previous </CTA>
+        <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
+          <NuxtLink to="/claim-page/erc-721-edition/set-up-media" class="flex-1 lg:flex-initial">
+            <CTA size="lg" color="gray" class="w-full">Previous </CTA>
           </NuxtLink>
-          <CTA :disabled="!formIsValid" size="lg" cta-type="submit" color="primary">Save & Next</CTA>
+          <CTA class="flex-1 lg:flex-initial" :disabled="!formIsValid" size="lg" cta-type="submit" color="primary">Save
+            &
+            Next</CTA>
         </div>
       </form>
     </div>
@@ -86,7 +75,7 @@ export default {
         };
         localStorage.setItem('mintPage', JSON.stringify({ ...mintPage }))
         setTimeout(() => {
-          this.$router.push('/claim-page/erc-721/set-mint-rules')
+          this.$router.push('/claim-page/erc-721-edition/set-mint-rules')
         }, 300);
       } catch (error) {
         console.log({ error });

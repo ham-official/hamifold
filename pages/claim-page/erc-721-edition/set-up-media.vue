@@ -1,56 +1,46 @@
 <template>
-  <main class="container mx-auto pb-16">
-    <ol class="flex items-center gap-6 justify-center my-6">
-      <li>
-        <NuxtLink to="/claim-page/erc-721/select-contract">
-          1. Select contract
-        </NuxtLink>
-      </li>
-      <li class="font-bold">2. Set up Media</li>
-      <li>
-        <NuxtLink to="/claim-page/erc-721/set-up-mint-page">
-          3. Set up Mint Page
-        </NuxtLink>
-      </li>
-      <li>4. Set mint rules</li>
-      <li>5. Set Audience</li>
-    </ol>
-    <Stepper :steps="stepper.steps" :currentStep="1" class="mb-6" />
-    <section class="bg-white border-2 border-gray-900 ham-shadow--active rounded-3xl p-6 mx-auto">
+  <main class="container mx-auto pb-16 px-2 lg:px-0">
+    <Stepper :steps="stepper.steps" :currentStep="1" :description="stepper.steps[1].description"
+      :icon="stepper.steps[1].icon" icon-color="warning" class="my-6" />
+    <section class="bg-white border border-gray-900 ham-shadow--active rounded-2xl p-4 lg:p-6 mx-auto">
       <p class="uppercase text-gray-700 text-display-sm font-semibold font-display">set up media</p>
       <p class="text-md text-gray-500 mb-8">Upload media, add artwork detail</p>
       <DropZone @drop.prevent="drop" @change="selectedFile" class="my-3" />
-      <form v-if="dropzoneFileImage" @submit.prevent="handleSave" class="flex gap-2">
-        <section class="w-64">
-          <div class="w-full h-auto rounded-lg overflow-hidden">
-            <img ref="fileImage" :src="dropzoneFileImage" class="w-full h-full object-cover" />
+      <form @submit.prevent="handleSave" class="flex flex-col gap-2">
+        <div v-if="dropzoneFileImage" class="flex flex-wrap gap-4 lg:gap-6 mt-3">
+          <div class="lg:w-1/2">
+            <div class="w-full h-auto rounded-lg overflow-hidden border border-gray-900">
+              <img ref="fileImage" :src="dropzoneFileImage" class="w-full h-full object-cover" />
+            </div>
+            <span class="file-info line-clamp-3 mt-2">File: {{ dropzoneFile.name }}</span>
           </div>
-          <span class="file-info">File: {{ dropzoneFile.name }}</span>
-        </section>
-        <section class="flex-1 text-gray-900 flex flex-col gap-3">
-          <div class="flex flex-col gap-2">
-            <label for="title" class="">Add a Title</label>
-            <input id="title" type="text" v-model="title" placeholder="e.g. Replicator"
-              class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+          <div class="flex-1 text-gray-900 flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
+              <label for="title" class="">Add a Title</label>
+              <input id="title" type="text" v-model="title" placeholder="e.g. Replicator"
+                class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="description" class="">Description</label>
+              <input id="description" type="text" v-model="description" placeholder="e.g. May 2023"
+                class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="created-by" class="">Created By</label>
+              <input id="created-by" type="text" v-model="createdBy" placeholder="e.g. the media creator"
+                class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
+            </div>
           </div>
-          <div class="flex flex-col gap-2">
-            <label for="description" class="">Description</label>
-            <input id="description" type="text" v-model="description" placeholder="e.g. May 2023"
-              class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="created-by" class="">Created By</label>
-            <input id="created-by" type="text" v-model="createdBy" placeholder="e.g. the media creator"
-              class="bg-transparent px-3 py-1.5 border border-gray-900 rounded-xl" />
-          </div>
-          <div class="flex justify-end items-center gap-4">
-            <NuxtLink to="/claim-page/erc-721/select-contract">
-              <CTA size="lg" color="gray">Previous </CTA>
-            </NuxtLink>
-            <CTA @click="handleSave" color="primary" cta-type="submit" size="lg" :disabled="!formIsValid">Save & Next
-            </CTA>
-          </div>
-        </section>
+        </div>
+        <div class="flex flex-1 lg:flex-auto lg:ml-auto items-center gap-4 mt-4 lg:justify-end">
+          <NuxtLink to="/claim-page/erc-721-edition/select-contract" class="flex-1 lg:flex-initial">
+            <CTA size="lg" color="gray" class="w-full">Previous </CTA>
+          </NuxtLink>
+          <CTA class="flex-1 lg:flex-initial" color="primary" cta-type="submit" size="lg" :disabled="!formIsValid"
+            @click="handleSave">
+            Save & Next
+          </CTA>
+        </div>
       </form>
     </section>
   </main>
@@ -149,11 +139,11 @@ export default {
         if (file) {
           fileReader.addEventListener('loadend', function () {
             localStorage.setItem('claimPageMediaFile', fileReader.result);
-            router.push('/claim-page/erc-721/set-up-mint-page')
+            router.push('/claim-page/erc-721-edition/set-up-mint-page')
           });
           fileReader.readAsDataURL(file);
         } else {
-          router.push('/claim-page/erc-721/set-up-mint-page')
+          router.push('/claim-page/erc-721-edition/set-up-mint-page')
         }
       } catch (error) {
         console.log(error);

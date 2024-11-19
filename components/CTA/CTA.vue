@@ -31,7 +31,15 @@ export default {
       type: String,
       default: null,
     },
+    iconLeftClasses: {
+      type: String,
+      default: null,
+    },
     iconRight: {
+      type: String,
+      default: null,
+    },
+    iconRightClasses: {
       type: String,
       default: null,
     },
@@ -66,18 +74,18 @@ export default {
       }
     },
     leftIconClasses() {
-      return this.iconSize ? `h-${this.iconSize} w-${this.iconSize}` : 'h-5 w-5'
+      return this.iconSize ? `h-${this.iconSize} w-${this.iconSize} ${this.iconLeftClasses}` : 'h-5 w-5'
     },
     rightIconClasses() {
-      return this.iconSize ? `h-${this.iconSize} w-${this.iconSize}` : 'h-5 w-5'
+      return this.iconSize ? `h-${this.iconSize} w-${this.iconSize} ${this.iconRightClasses}` : 'h-5 w-5'
     },
     buttonClasses() {
       return {
-        "md:px-3.5 py-2 gap-x-2 text-sm": this.size === "sm",
-        "md:px-4 py-2.5 gap-x-2 text-sm": this.size === "md",
-        "md:px-4 py-2.5 gap-x-2 text-md": this.size === "lg",
-        "p-5 gap-x-2 text-button-xl": this.size === "xl",
-        "md:px-7 py-4 gap-x-3 text-lg": this.size === "xxl",
+        "px-1 md:px-3.5 py-2 gap-x-2 text-sm": this.size === "sm",
+        "px-2 md:px-4 py-2.5 gap-x-2 text-sm": this.size === "md",
+        "px-2 md:px-4 py-3 gap-x-2 text-md": this.size === "lg",
+        "p-5 gap-x-2": this.size === "xl",
+        "px-3 md:px-7 py-4 gap-x-3 text-lg": this.size === "xxl",
 
 
         "bg-primary-400 text-black hover:bg-primary-700 hover:text-primary-25 border border-gray-900 font-display uppercase font-semibold":

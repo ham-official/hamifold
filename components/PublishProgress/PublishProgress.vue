@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2 w-80">
-    <ul v-if="steps" class="flex flex-col gap-4">
+    <ul v-if="steps" class="flex flex-col gap-4  ">
       <li v-for="s, index in steps" class="flex gap-4 py-4" :class="{
         'border-b border-black': index < numberOfSteps - 1
       }">

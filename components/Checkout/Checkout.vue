@@ -1,5 +1,5 @@
 <template>
-  <div class="border-2 border-gray-900 p-6 rounded-lg w-1/2 text-left">
+  <div class="border-2 border-gray-900 p-6 rounded-lg w-full lg:w-1/2 text-left mx-auto">
     <p class="font-semibold">{{ isLimited ? 'Limited edition' : 'Unlimited edition' }}</p>
     <p><span class="font-semibold">Max tokens per wallet:</span> <span class="float-right">{{
       maxTokensPerWallet === 0 ?
@@ -10,8 +10,8 @@
     <p><span class="font-semibold">Available Tokens:</span> <span class="float-right">{{ availableTokens === Infinity ?
       'Limitless' : availableTokens }}</span></p>
   </div>
-  <div v-if="!maxTokensMinted" class="flex flex-col gap-2">
-    <div class="flex gap-x-10 items-center">
+  <div v-if="!maxTokensMinted" class="flex flex-col gap-2 mx-auto">
+    <div class="flex gap-x-10 items-center xs-only:justify-center">
       <CTA color="white" @click="removeItemsClaimed" :disabled="itemsClaimed === 1 || isMinting" onlyIcon
         iconLeft="minus">
       </CTA>

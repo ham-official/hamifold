@@ -8,6 +8,6 @@ export const metadataNormalizer = (data) => {
     imageDetails: data.image_details,
     image: data.image,
     imageUrl: data.image_url,
-    type: 'ERC-721' // TODO: fix this when we include the ERC-1155
+    type: 'ERC 721' // TODO: fix this when we include the ERC-1155
   });
 };

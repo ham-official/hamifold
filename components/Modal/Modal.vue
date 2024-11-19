@@ -3,7 +3,7 @@
     @click="handleBackdropClick">
 
     <div
-      class="relative flex flex-col w-[760px] items-center gap-y-8 bg-white overflow-hidden rounded-xl p-6 border border-gray-900 ham-shadow--active z-30 text-center"
+      class="relative flex flex-col w-[760px] max-w-screen--6 mx-auto gap-y-4 bg-white overflow-hidden rounded-xl p-6 border border-gray-900 ham-shadow--active z-30 text-center"
       :class="{
         'w-80 sm:w-100': size === 'md',
         'w-100 sm:w-141.75': size === 'lg',
@@ -15,6 +15,9 @@
       <slot v-if="showDefaultButtons" name="footer">
         <div class="flex xs-only:flex-col items-center gap-4">
         </div>
+      </slot>
+      <slot v-if="showCustomButtons" name="footer-custom-buttons">
+
       </slot>
     </div>
   </div>
@@ -28,6 +31,10 @@ export default {
       default: false,
     },
     confirmCancel: {
+      type: Boolean,
+      default: false,
+    },
+    showCustomButtons: {
       type: Boolean,
       default: false,
     },
@@ -69,8 +76,21 @@ export default {
       if (this.backdropClick === true) {
         this.handleCancel()
       }
-
     },
   },
 }
 </script>
+
+<style lang="css">
+@keyframes smooth-appear {
+  to {
+    bottom: 0%;
+    opacity: 1;
+  }
+}
+
+.appear {
+  bottom: -100%;
+  animation: smooth-appear 0.5s ease both;
+}
+</style>

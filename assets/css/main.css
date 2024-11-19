@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  @variants responsive {
-      .masonry {
-          column-gap: 1.5em;
-          column-count: 1;
-      }
-      .masonry-sm {
-          column-gap: 1.5em;
-          column-count: 2;
-      }
-      .masonry-md {
-          column-gap: 1.5em;
-          column-count: 3;
-      }
-      .break-inside {
-          break-inside: avoid;
-      }
-
-  }
-}
-
 @font-face {
   font-family: 'Instrument';
   font-style: normal;
@@ -99,10 +78,7 @@ html {
   overflow: hidden;
 }
 
-.ham-shadow:not([disabled]):hover {
-  box-shadow: 0 4px 0 0 #121926 ;
-  transform: translate(0px, -4px);
-}
+
 .ham-shadow--active {
   box-shadow: 0 4px 0 0 #121926;
 }
@@ -110,4 +86,25 @@ html {
 .ham-shadow:not([disabled]):focus {
   box-shadow: 0 0 0 0 #121926;
   transform: translate(0px, 0px);
+}
+
+.ham-shadow:not([disabled]):hover {
+  box-shadow: 0 4px 0 0 #121926 ;
+  transform: translate(0px, -4px);
+}
+
+@media only screen and (min-width: 1024px) {
+  .ham-shadow--active--desktop {
+    box-shadow: 0 4px 0 0 #121926;
+  }
+}
+
+.max-w-screen--4 {
+  max-width: calc(100vw - 1rem)
+}
+.max-w-screen--6 {
+  max-width: calc(100vw - 1.5rem)
+}
+.max-w-screen--8 {
+  max-width: calc(100vw - 2rem)
 }

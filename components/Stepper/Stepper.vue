@@ -1,22 +1,30 @@
 <template>
-  <section class="flex justify-between items-center rounded-lg bg-white border border-gray-900 p-5">
-    <div class="flex gap-3 p-4 border border-gray-900 rounded-lg items-center">
-      <Icon :icon="icon" :no-size="true"
-        class="rounded-full border border-gray-900 h-[40px] w-[40px] p-2 flex items-center justify-center" />
+  <section class="flex flex-wrap items-center rounded-2xl gap-3 bg-white border border-gray-900 p-4">
+    <div class="flex min-w-full lg:min-w-min flex-1 gap-3 items-center">
+      <div class="min-h-[44px] min-w-[44px] flex items-center justify-center sm:ml-2 border rounded-full p-2" :class="{
+        'border-gray-500 text-gray-500 bg-gray-50': iconColor === 'gray',
+        'border-indigo-500 text-indigo-500 bg-indigo-50': iconColor === 'indigo',
+        'border-warning-500 text-warning-500 bg-warning-50': iconColor === 'warning',
+        'border-success-500 text-success-500 bg-success-50': iconColor === 'success'
+      }">
+        <Icon :icon="icon" />
+      </div>
       <div class="flex flex-col">
         <p class="text-base font-bold text-gray-900">{{ title }}</p>
-        <p class="btext-base order text-gray-500">{{ description }}</p>
+        <p class="btext-base order text-gray-500" v-html="description"></p>
       </div>
     </div>
-    <ol v-if="steps" class="flex items-center gap-2 justify-center">
-      <li v-for="(step, index) in steps" :key="`step-${index}`" class="h-1.5 w-10 rounded-lg bg-gray-300" :class="{
-        'bg-gray-700': $route.path === step.link,
-      }"></li>
-      <!-- <li class="flex gap-2">
-          <CTA size="lg" color="white" :disabled="currentStep === 0" @click="handlePrev">previous</CTA>
-          <CTA size="lg" color="black" class="" :disabled="currentStep === lastStepIndex" @click="handleNext">next</CTA>
-        </li> -->
-    </ol>
+    <div v-if="steps" class="flex min-w-full lg:min-w-min flex-1 flex-col gap-2 lg:mr-0 lg:max-w-lg">
+      <h3 class="text-center font-bold">{{ currentStep + 1 }}. {{ steps[currentStep].title }}</h3>
+      <ol class="flex items-center gap-2 justify-center">
+        <li v-for="(step, index) in steps" :key="`step-${index}`" class="h-1.5 flex-1 rounded-lg bg-gray-300" :class="{
+          'bg-gray-700': $route.path === step.link || index === currentStep,
+          'bg-green-400': index < currentStep,
+          'bg-gray-300': index > currentStep
+        }">
+        </li>
+      </ol>
+    </div>
   </section>
 </template>
 
@@ -30,6 +38,10 @@ export default {
     icon: {
       type: String,
       default: 'layers-three-01'
+    },
+    iconColor: {
+      type: String,
+      default: 'gray'
     },
     title: {
       type: String,

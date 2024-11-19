@@ -7,11 +7,11 @@ export const editionNormalizer = (collection, token) => {
     metadata: {
       description: token.metadata.description,
       name: token.metadata.name,
-      type: "ERC-721-EDITION",
+      type: "ERC 721 EDITION",
       image: token.metadata.image,
       imageUrl: token.metadata.image,
     },
-    type: "ERC-721-EDITION",
+    type: "ERC 721 EDITION",
     contract: {
       contractAddress: collection.token.address,
       name: collection.token.name,

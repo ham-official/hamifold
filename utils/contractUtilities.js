@@ -93,19 +93,14 @@ export const getContractType = (address) => {
       reject(err);
     });
     const data = await request.json();
-    const implementation = data.verified_twin_address_hash;
-
-    switch (implementation) {
-      case ERC721_CONTRACT_IMPLEMENTATION:
-        resolve("ERC-721");
-        break;
-      case ERC721_EDITION_CONTRACT_IMPLEMENTATION:
-        resolve("ERC-721-EDITION");
-        break;
-      default:
-        resolve(null);
-        break;
+    let contractType = null
+    if (data.implementations.some(e => e.address === ERC721_CONTRACT_IMPLEMENTATION)) {
+      contractType = 'ERC 721'
     }
+    if (data.implementations.some(e => e.address === ERC721_EDITION_CONTRACT_IMPLEMENTATION)) {
+      contractType = 'ERC 721 EDITION'
+    }
+    resolve(contractType)
   });
 };
 
@@ -132,11 +127,11 @@ export const getMetadataFromTokenUri = (uri) => {
         metadata: {
           description: data.description,
           name: data.title,
-          type: "ERC-721",
+          type: "ERC 721",
           image: data.image_url.replace("io//ipfs", "io/ipfs"),
           imageUrl: data.image_url.replace("io//ipfs", "io/ipfs"),
         },
-        type: "ERC-721",
+        type: "ERC 721",
       });
     } catch (error) {
       reject(error);
@@ -177,7 +172,7 @@ export const getClaimPages = (contractAddress) => {
         claimPages[index].metadata = {
           description: metadata[2],
           name: metadata[0],
-          type: "ERC-721-EDITION",
+          type: "CLAIM PAGE",
           image: metadata[1],
           imageUrl: metadata[1],
         };

@@ -109,15 +109,15 @@ export default {
       this.setChainId(null);
       this.setIsConnected(false);
       this.setWallet(null);
-      this.$router.push("/sign-in");
+      this.$router.push("/");
     },
     handleChainSwitch() {
       if (!isDevEnv && !this.isNetworkSwitchRequested) {
         this.isNetworkSwitchRequested = true;
         this.modal.open({ view: "Networks" });
-        localStorage.removeItem('creations')
-        localStorage.removeItem('tokenInventory')
-        localStorage.removeItem('contractInventory')
+        localStorage.removeItem(`contractsInventory-${this.wallet}`)
+        localStorage.removeItem(`claimPagesInventory-${this.wallet}`)
+        localStorage.removeItem(`tokensInventory-${this.wallet}`)
       }
     },
     truncate(address) {

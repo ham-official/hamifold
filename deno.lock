@@ -68,7 +68,7 @@
         "npm:@pinata/sdk@2.1.0",
         "npm:@tailwindcss/typography@^0.5.10",
         "npm:@types/node@^18",
-        "npm:@web3modal/ethers5@^5.0.4",
+        "npm:@web3modal/ethers5@~5.0.4",
         "npm:axios@^1.7.2",
         "npm:busboy@^1.6.0",
         "npm:crypto-js@^4.2.0",

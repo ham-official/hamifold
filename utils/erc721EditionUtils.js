@@ -13,7 +13,6 @@ export const setEditionInfo = (editionData, contractAddress) => {
       const contract = new Contract(contractAddress, abi, signer);
 
       // Get the number of tokens for this contract and this is what we should use for the type
-      console.log({ contract, editionData });
       const transaction = await contract.createEditionInfo(
         editionData.tokenName,
         editionData.image,
