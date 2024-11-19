@@ -1,14 +1,14 @@
 <template>
   <section class="flex flex-wrap items-center rounded-2xl gap-3 bg-white border border-gray-900 p-4">
     <div class="flex min-w-full lg:min-w-min flex-1 gap-3 items-center">
-      <Icon :icon="icon" :no-size="true"
-        class="rounded-full border border-gray-900 h-[40px] w-[40px] min-w-[40px] p-2 flex items-center justify-center"
-        :class="{
-          'border-gray-500 text-gray-500 bg-gray-50': iconColor === 'gray',
-          'border-indigo-500 text-indigo-500 bg-indigo-50': iconColor === 'indigo',
-          'border-warning-500 text-warning-500 bg-warning-50': iconColor === 'warning',
-          'border-success-500 text-success-500 bg-success-50': iconColor === 'success'
-        }" />
+      <div class="min-h-[44px] min-w-[44px] flex items-center justify-center sm:ml-2 border rounded-full p-2" :class="{
+        'border-gray-500 text-gray-500 bg-gray-50': iconColor === 'gray',
+        'border-indigo-500 text-indigo-500 bg-indigo-50': iconColor === 'indigo',
+        'border-warning-500 text-warning-500 bg-warning-50': iconColor === 'warning',
+        'border-success-500 text-success-500 bg-success-50': iconColor === 'success'
+      }">
+        <Icon :icon="icon" />
+      </div>
       <div class="flex flex-col">
         <p class="text-base font-bold text-gray-900">{{ title }}</p>
         <p class="btext-base order text-gray-500" v-html="description"></p>
